@@ -12,13 +12,13 @@ class LogoText(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     private val paint= Paint().apply {
         color= Color.WHITE
-        textSize=220f
         textAlign=Paint.Align.LEFT
         typeface=Typeface.DEFAULT_BOLD
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+        paint.textSize=220f
         canvas?.drawText("BMI",150f,150f,paint)
         paint.textAlign=Paint.Align.LEFT
         paint.textSize=150f
