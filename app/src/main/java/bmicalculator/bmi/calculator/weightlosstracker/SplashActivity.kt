@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.ActivitySplashBinding
-import bmicalculator.bmi.calculator.weightlosstracker.interpolator.BezierInterpolator
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.interpolator.BezierInterpolator
 import flashlight.flashlightapp.ledlight.torch.uitl.Utils
 import java.util.Timer
 import kotlin.concurrent.schedule
@@ -67,7 +67,7 @@ class SplashActivity : AppCompatActivity(), Animator.AnimatorListener {
     }
 
     fun toMainActivity(){
-        val intent=Intent(this,MainActivity::class.java)
+        val intent=Intent(this, MainActivity::class.java)
         finish()
         startActivity(intent)
     }

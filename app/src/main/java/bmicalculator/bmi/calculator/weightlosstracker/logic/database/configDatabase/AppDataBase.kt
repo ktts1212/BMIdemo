@@ -1,13 +1,17 @@
-package bmicalculator.bmi.calculator.weightlosstracker.configDatabase
+package bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import bmicalculator.bmi.calculator.weightlosstracker.entity.BmiInfo
+import bmicalculator.bmi.calculator.weightlosstracker.logic.model.dao.BmiInfoDao
+import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 
 @Database(version = 1, entities = [BmiInfo::class])
 abstract class AppDataBase : RoomDatabase() {
+
+    abstract fun bmiInfoDao(): BmiInfoDao
+
     companion object {
         private var instance: AppDataBase? = null
 

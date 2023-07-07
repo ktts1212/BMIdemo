@@ -1,4 +1,4 @@
-package bmicalculator.bmi.calculator.weightlosstracker.entity
+package bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

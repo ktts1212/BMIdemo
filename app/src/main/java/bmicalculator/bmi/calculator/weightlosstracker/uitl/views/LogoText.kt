@@ -1,4 +1,4 @@
-package bmicalculator.bmi.calculator.weightlosstracker.views
+package bmicalculator.bmi.calculator.weightlosstracker.uitl.views
 
 import android.content.Context
 import android.graphics.Canvas

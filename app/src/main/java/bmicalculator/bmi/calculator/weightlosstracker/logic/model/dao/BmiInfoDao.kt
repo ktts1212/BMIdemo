@@ -1,9 +1,9 @@
-package bmicalculator.bmi.calculator.weightlosstracker.dao
+package bmicalculator.bmi.calculator.weightlosstracker.logic.model.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import bmicalculator.bmi.calculator.weightlosstracker.entity.BmiInfo
+import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 
 @Dao
 interface BmiInfoDao {
