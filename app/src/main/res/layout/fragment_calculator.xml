@@ -38,6 +38,7 @@
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:imeOptions="actionDone"
                 android:id="@+id/wt_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

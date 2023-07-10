@@ -2,7 +2,6 @@ package bmicalculator.bmi.calculator.weightlosstracker.ui.calculator
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
@@ -16,8 +15,46 @@ class CalculatorViewModel : ViewModel() {
             queryAllInfo()
         }
     }
+
+    //体重lb
+    private val _wt_lb:MutableLiveData<Double> = MutableLiveData(140.00)
+
+    val wt_lb:LiveData<Double>get() = _wt_lb
+
+    fun setwtlb(value: Double){
+        _wt_lb.value=value
+    }
+    //体重kg
+    private val _wt_kg:MutableLiveData<Double> = MutableLiveData(65.00)
+
+    val wt_kg:LiveData<Double>get() = _wt_kg
+
+    fun setwtkg(value:Double){
+        _wt_kg.value=value
+    }
+    //身高fin
+    private val _ht_ft:MutableLiveData<Int> = MutableLiveData(5)
+    val ht_ft:LiveData<Int>get() = _ht_ft
+    fun sethtft(value: Int){
+        _ht_ft.value=value
+    }
+
+    private val _ht_in:MutableLiveData<Int> = MutableLiveData(7)
+    val ht_ni:LiveData<Int>get() = _ht_in
+    fun sethtin(value: Int){
+        _ht_in.value=value
+    }
+
+    //身高ht_cm
+    val _ht_cm:MutableLiveData<Double> = MutableLiveData(170.0)
+    val ht_cm:LiveData<Double>get()=_ht_cm
+    fun sethtcm(value: Double){
+        _ht_cm.value=value
+    }
+
     //计算时获取到bmiInfo，
-    val bmiInfo=MutableLiveData<BmiInfo>()
+    val bmiInfo=BmiInfo()
+
     //判断查询到的bimInfo数量
     val infoCount: Int?
         get() = _bmiInfos.value?.size ?:0
@@ -26,7 +63,7 @@ class CalculatorViewModel : ViewModel() {
         Repository.queryAllInfo()
     }
 
-    //改方法返回的是插入数据的ID值
+    //该方法返回的是插入数据的ID值
     fun insertBmiInfo(bmiInfo: BmiInfo)=viewModelScope.launch {
         Repository.insertBmiInfo(bmiInfo)
     }
