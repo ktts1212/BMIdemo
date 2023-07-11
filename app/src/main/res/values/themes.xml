@@ -8,4 +8,8 @@
     <style name="Theme.BMICalculatorWeightLossTracker.Splash" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimaryDark">#ff0099cc</item>
     </style>
+    
+    <style name="DatePickerStyle" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:textColorPrimary">@color/black</item>
+    </style>
 </resources>

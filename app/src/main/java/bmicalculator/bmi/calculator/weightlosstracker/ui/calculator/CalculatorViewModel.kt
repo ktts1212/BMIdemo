@@ -40,7 +40,7 @@ class CalculatorViewModel : ViewModel() {
     }
 
     private val _ht_in:MutableLiveData<Int> = MutableLiveData(7)
-    val ht_ni:LiveData<Int>get() = _ht_in
+    val ht_in:LiveData<Int>get() = _ht_in
     fun sethtin(value: Int){
         _ht_in.value=value
     }
