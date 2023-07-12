@@ -14,21 +14,23 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.DatePicker
-import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.FragmentDatePickerBinding
-import com.google.android.material.datepicker.MaterialDatePicker
-import java.util.Calendar
 
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener{
 
     private lateinit var binding:FragmentDatePickerBinding
 
+    val months= mutableListOf<String>("Jan","Feb","Mar","Apr","May","June"
+    ,"July","Aug","Sep","Oct","Nov","Dec")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding= FragmentDatePickerBinding.inflate(layoutInflater,container,false)
+        binding.wheelPickerDateYearWheel.setRange(2000,2035,1)
+        binding.wheelPickerDateMonthWheel.setData(months)
+
         return binding.root
     }
 

@@ -1,14 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/shape_date_selector"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <DatePicker
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:datePickerMode="spinner"
-        style="@style/DatePickerStyle"
-        android:calendarViewShown="false"/>
+    <TextView
+        android:id="@+id/date_display"
+        android:layout_marginStart="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:text="DATE"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:fontFamily="sans-serif-medium"/>
 
-</FrameLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        >
+
+        <com.github.gzuliyujiang.wheelview.widget.WheelView
+            style="@style/WheelDefault"
+            android:layout_width="80dp"
+            android:layout_marginStart="50dp"
+            app:wheel_itemTextSize="25sp"
+            app:wheel_itemTextColor="@color/black"
+            app:wheel_itemTextColorSelected="@color/black"
+            app:wheel_itemTextSizeSelected="25sp"
+            android:layout_height="match_parent"
+            android:id="@+id/wheel_picker_date_month_wheel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="visible"/>
+
+        <com.github.gzuliyujiang.wheelview.widget.NumberWheelView
+            android:id="@+id/wheel_picker_date_day_wheel"
+            style="@style/WheelDefault"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:wheel_itemSpace="60dp"
+            app:layout_constraintStart_toEndOf="@id/wheel_picker_date_month_wheel"
+            app:layout_constraintEnd_toStartOf="@id/wheel_picker_date_year_wheel"
+            android:visibility="visible" />
+
+
+        <com.github.gzuliyujiang.wheelview.widget.NumberWheelView
+            android:id="@+id/wheel_picker_date_year_wheel"
+            style="@style/WheelDefault"
+            android:layout_width="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="50dp"
+            app:wheel_itemTextColorSelected="@color/black"
+            app:wheel_itemTextColor="@color/black"
+            app:wheel_itemTextSize="25sp"
+            app:wheel_itemSpace="60dp"
+            app:wheel_itemTextSizeSelected="25sp"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="160dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:text="CANCEL"
+            android:textSize="30dp"
+
+            app:backgroundTint="@color/white"
+            android:fontFamily="@font/montserrat_extrabold"
+            android:background="@drawable/shape_btn_cancel"
+            android:gravity="center"/>
+
+    </LinearLayout>
+</LinearLayout>

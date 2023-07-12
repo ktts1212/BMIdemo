@@ -1,27 +1,29 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.calculator
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
 import android.os.Bundle
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
+import android.widget.AbsListView
 import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.FragmentCalculatorBinding
+import bmicalculator.bmi.calculator.weightlosstracker.ui.adapter.AgeSelectorAdapter
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.DatePickerFragment
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.MaterialDatePicker
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.CenterItemUtils
 import com.google.android.material.tabs.TabLayout
-import java.text.DateFormat
+import flashlight.flashlightapp.ledlight.torch.uitl.Utils
 import java.text.DateFormatSymbols
 import java.text.DecimalFormat
 import java.util.Calendar
@@ -37,9 +39,17 @@ private const val Mult_htin = 2.54
 
 class CalculatorFragment : Fragment(), LifecycleOwner {
 
+    private val ageList = ArrayList<String?>()
+
+    private val CHILDVIEWSIZE = 70
+
     private lateinit var binding: FragmentCalculatorBinding
 
     private lateinit var viewModel: CalculatorViewModel
+
+    private var centerToLiftDistance: Int = 0
+
+    private var childViewHalfCount: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,9 +80,9 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
         val df = DecimalFormat("#.00")
         //用于身高保留一位小数
-        var tf = DecimalFormat("#.0")
+        val tf = DecimalFormat("#.0")
 
-        var ff = DecimalFormat("#")
+        val ff = DecimalFormat("#")
 //        df.minimumFractionDigits = 2
 //        df.maximumFractionDigits = 6
         binding.htInputFtin1.text = Editable.Factory.getInstance().newEditable("5" + "'")
@@ -85,7 +95,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         binding.wtInput.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (!binding.wtInput.text.isNullOrEmpty()) {
-                    var t = binding.wtInput.text.toString()
+                    val t = binding.wtInput.text.toString()
                     if (binding.wtTab.getTabAt(0)?.isSelected == true) {
                         if (t.toDouble() < 2) {
                             Toast.makeText(
@@ -172,7 +182,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                var p0: Editable? = binding.wtInput.text
+                val p0: Editable? = binding.wtInput.text
                 if (tab?.position == 0) {
                     if (!p0.isNullOrEmpty()) {
                         if (p0.toString().toDouble() >= 2 && p0.toString().toDouble() <= 551) {
@@ -293,7 +303,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         binding.wtInput.setError("小数位数不能超过2位")
                     }
 
-                    if (str.substring(0,str.indexOf(".")).length>3){
+                    if (str.substring(0, str.indexOf(".")).length > 3) {
                         binding.wtInput.setText(
                             str.substring(1)
                         )
@@ -413,8 +423,10 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         ff.format((viewModel.ht_cm.value!! / Mult_htft).toInt()).toInt()
                     )
                     viewModel.sethtin(
-                        ff.format((viewModel.ht_cm.value!! - viewModel.ht_ft.value!! * Mult_htft)
-                                / Mult_htin).toInt()
+                        ff.format(
+                            (viewModel.ht_cm.value!! - viewModel.ht_ft.value!! * Mult_htft)
+                                    / Mult_htin
+                        ).toInt()
                     )
                 }
             }
@@ -468,7 +480,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 }
 
                 if (!str.isEmpty() && !str.contains(".")) {
-                    if (str.length>1){
+                    if (str.length > 1) {
                         binding.htInputFtin1.setText(
                             str.substring(1)
                         )
@@ -668,16 +680,156 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         })
 
         //日期
-        val calendar=Calendar.getInstance()
-        val year=calendar.get(Calendar.YEAR)
-        val month=calendar.get(Calendar.MONTH)
-        val day=calendar.get(Calendar.DAY_OF_MONTH)
-        val monthName=DateFormatSymbols(Locale.ENGLISH).shortMonths[month]
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val monthName = DateFormatSymbols(Locale.ENGLISH).shortMonths[month]
         binding.timeInputDate.setText("${monthName} ${day},${year}")
         binding.timeInputDate.setOnClickListener {
-            val dialog=DatePickerFragment()
-            dialog.show(childFragmentManager,"DatePicker")
+            val dialog = DatePickerFragment()
+            dialog.show(childFragmentManager, "DatePicker")
         }
+
+        //年龄
+        ageinit()
+    }
+
+    fun ageinit() {
+        binding.ageRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.ageRecyclerView.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.ageRecyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                //rv中心到两边的距离
+                centerToLiftDistance = binding.ageRecyclerView.width / 2
+
+                val childViewHeight = Utils.dip2px(requireContext(), CHILDVIEWSIZE.toFloat())
+                //获取中心元素到两侧的元素个数
+                Log.d(TAG, "rvWidth:${binding.ageRecyclerView.width}")
+                childViewHalfCount = (binding.ageRecyclerView.width / childViewHeight) / 2 + 1
+                Log.d(TAG, "$childViewHeight + $childViewHalfCount ")
+                initData()
+                findView()
+            }
+        })
+        //滑动之后100ms后移动到中心位置
+        binding.ageRecyclerView.postDelayed({
+            binding.ageRecyclerView.scrollToPosition(childViewHalfCount+25)
+        }, 100L)
+    }
+
+    fun initData() {
+        if (ageList.isEmpty()) {
+            for (i in 2..99) {
+                ageList.add(i.toString())
+            }
+
+            for (j in 0 until childViewHalfCount) {
+                ageList.add(0, null)
+            }
+
+            for (k in 0 until childViewHalfCount) {
+                ageList.add(null)
+            }
+        }
+    }
+
+    private val centerViewItems = ArrayList<CenterItemUtils.CenterViewItem>()
+    private var isTouch = false
+    private lateinit var adapter: AgeSelectorAdapter
+
+    @SuppressLint("ClickableViewAccessibility")
+    fun findView() {
+        Log.d(TAG, ageList.toString())
+        adapter = AgeSelectorAdapter(ageList)
+        binding.ageRecyclerView.adapter = adapter
+
+        binding.ageRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    //当滑动滚动状态为空闲时执行
+                    val linearLayoutManager =
+                        recyclerView.layoutManager as LinearLayoutManager
+                    //获取当前可见元素的位置
+                    val fi = linearLayoutManager.findFirstVisibleItemPosition()
+                    val la = linearLayoutManager.findLastVisibleItemPosition()
+                    if (isTouch) {
+                        isTouch = false
+                        //获取最中间的itemview
+                        val centerPositionDiffer = (la - fi) / 2
+                        Log.i(TAG, "onScrollStateChanged:  fi: ${fi}  la:${la}")
+                        var centerChildViewPosition = fi + centerPositionDiffer
+                        Log.d(TAG, "centerposition:${centerChildViewPosition}")
+                        centerViewItems.clear()
+                        //遍历循环，获取到和中线相差最小的条目索引
+                        if (centerChildViewPosition != 0) {
+                            for (i in centerChildViewPosition - 1 until centerChildViewPosition + 2) {
+                                val cView =
+                                    recyclerView.layoutManager!!.findViewByPosition(i)
+                                val viewLeft = cView!!.left + (cView.width) / 2
+                                centerViewItems.add(
+                                    CenterItemUtils.CenterViewItem(
+                                        i,
+                                        Math.abs(centerToLiftDistance - viewLeft)
+                                    )
+                                )
+                            }
+                            val centerViewItem = CenterItemUtils.getMinDifferItem(centerViewItems)
+                            centerChildViewPosition = centerViewItem.position
+                        }
+                        scrollToCenter(centerChildViewPosition)
+                    }
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                for (i in 0 until binding.ageRecyclerView.childCount) {
+                    binding.ageRecyclerView.getChildAt(i).invalidate()
+                }
+            }
+        })
+        binding.ageRecyclerView.setOnTouchListener { view, motionEvent ->
+            isTouch = true
+            false
+        }
+    }
+
+    private val decelerateInterpolator = DecelerateInterpolator()
+    fun scrollToCenter(position: Int) {
+        //var pos = if (position < childViewHalfCount) childViewHalfCount else position
+
+        Log.d(TAG, "itemCOunt :${adapter.itemCount}")
+//        var pos = if (position < adapter.itemCount - childViewHalfCount - 1) position
+//        else adapter.itemCount - childViewHalfCount - 1
+
+        var pos = if (position < childViewHalfCount) childViewHalfCount
+        else if (position >= childViewHalfCount && position < adapter.itemCount - childViewHalfCount - 1)
+            position
+        else adapter.itemCount - childViewHalfCount - 1
+
+        Log.d(TAG, "pos: ${pos}")
+
+        val linearLayoutManager = binding.ageRecyclerView.layoutManager
+                as LinearLayoutManager
+
+
+        val childView = linearLayoutManager.findViewByPosition(pos)
+        Log.d(TAG, "childView:${childView}")
+        if (childView == null) return
+        val childVhalf = childView.width / 2
+        val childViewLeft = childView.left
+        val viewCTop = centerToLiftDistance
+        val smoothDistance = childViewLeft - viewCTop + childVhalf
+        binding.ageRecyclerView.smoothScrollBy(smoothDistance, 0, decelerateInterpolator)
+        adapter.setSelectPosition(pos)
+
+
+        Log.d(TAG, "当前选中:${ageList.get(pos)}")
     }
 
 }
