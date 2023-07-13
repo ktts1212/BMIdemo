@@ -13,67 +13,28 @@
         android:layout_marginStart="20dp"
         android:fontFamily="@font/montserrat_extrabold"
         android:gravity="center_vertical"
-        android:text="DATE"
+        android:text="TIME"
         android:textColor="@color/black"
         android:textSize="30sp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
         android:layout_width="match_parent"
         android:layout_height="230dp">
 
         <com.github.gzuliyujiang.wheelview.widget.WheelView
-            android:id="@+id/wheel_picker_date_month_wheel"
+            android:id="@+id/wheel_picker_time_phase"
             style="@style/WheelDefault"
-            android:layout_width="80dp"
+            android:layout_width="150dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="50dp"
             android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:wheel_indicatorColor="#4169E1"
             app:wheel_itemTextColor="@color/black"
             app:wheel_itemTextColorSelected="@color/black"
-            app:wheel_itemTextSize="23sp"
-            app:wheel_itemTextSizeSelected="23sp"
-            app:wheel_visibleItemCount="7" />
-
-        <com.github.gzuliyujiang.wheelview.widget.NumberWheelView
-            android:id="@+id/wheel_picker_date_day_wheel"
-            style="@style/WheelDefault"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:visibility="visible"
-            app:layout_constraintEnd_toStartOf="@id/wheel_picker_date_year_wheel"
-            app:layout_constraintStart_toEndOf="@id/wheel_picker_date_month_wheel"
-            app:layout_constraintTop_toTopOf="parent"
-            app:wheel_indicatorColor="#4169E1"
-            app:wheel_itemSpace="60dp"
-            app:wheel_itemTextColor="@color/black"
-            app:wheel_itemTextColorSelected="@color/black"
-            app:wheel_itemTextSize="23sp"
-            app:wheel_itemTextSizeSelected="23sp"
-            app:wheel_visibleItemCount="7" />
-
-
-        <com.github.gzuliyujiang.wheelview.widget.NumberWheelView
-            android:id="@+id/wheel_picker_date_year_wheel"
-            style="@style/WheelDefault"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="50dp"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:wheel_indicatorColor="#4169E1"
-            app:wheel_itemSpace="60dp"
-            app:wheel_itemTextColor="@color/black"
-            app:wheel_itemTextColorSelected="@color/black"
-            app:wheel_itemTextSize="23sp"
-            app:wheel_itemTextSizeSelected="23sp"
-            app:wheel_visibleItemCount="7" />
+            app:wheel_itemTextSize="22sp"
+            app:wheel_itemTextSizeSelected="22sp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -82,7 +43,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/btn_cancel"
+            android:id="@+id/btn_cancel_phase"
             android:layout_width="160dp"
             android:layout_height="70dp"
             android:layout_marginStart="30dp"
@@ -99,7 +60,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/btn_done"
+            android:id="@+id/btn_done_phase"
             android:layout_width="160dp"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
@@ -115,6 +76,5 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </LinearLayout>

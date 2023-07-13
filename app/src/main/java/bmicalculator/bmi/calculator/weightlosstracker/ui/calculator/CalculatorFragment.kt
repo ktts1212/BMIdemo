@@ -1,17 +1,22 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.calculator
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
 import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
@@ -19,13 +24,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.FragmentCalculatorBinding
+import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.adapter.AgeSelectorAdapter
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.DatePickerFragment
+import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.TimePickerFragment
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.CenterItemUtils
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.textfield.TextInputLayout
 import flashlight.flashlightapp.ledlight.torch.uitl.Utils
 import java.text.DateFormatSymbols
 import java.text.DecimalFormat
+import java.time.LocalDateTime
 import java.util.Calendar
 import java.util.Locale
 
@@ -56,27 +65,29 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCalculatorBinding.inflate(layoutInflater, container, false)
-        viewModel = ViewModelProvider(this).get(CalculatorViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(CalculatorViewModel::class.java)
+
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.root.setOnTouchListener { view, motionEvent ->
-//            if (view is TextInputLayout&&motionEvent.action==MotionEvent.ACTION_DOWN){
-//                val rect= Rect()
-//                view.getGlobalVisibleRect(rect)
-//                if (!rect.contains(motionEvent.rawX.toInt(),motionEvent.rawY.toInt())){
-//                    view.clearFocus()
-//                    val inputMethodManager=
-//                        requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as
-//                                InputMethodManager
-//                    inputMethodManager.hideSoftInputFromWindow(view.windowToken,0)
-//                }
-//            }
-//            false
-//        }
+        binding.root.setOnTouchListener { view, motionEvent ->
+            if (view is TextInputLayout &&motionEvent.action== MotionEvent.ACTION_DOWN){
+                val rect= Rect()
+                view.getGlobalVisibleRect(rect)
+                if (!rect.contains(motionEvent.rawX.toInt(),motionEvent.rawY.toInt())){
+                    view.clearFocus()
+                    val inputMethodManager=
+                        requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as
+                                InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(view.windowToken,0)
+                }
+            }
+            false
+        }
 
         val df = DecimalFormat("#.00")
         //用于身高保留一位小数
@@ -686,14 +697,95 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
         val monthName = DateFormatSymbols(Locale.ENGLISH).shortMonths[month]
         binding.timeInputDate.setText("${monthName} ${day},${year}")
+        viewModel.setDate(binding.timeInputDate.text.toString())
         binding.timeInputDate.setOnClickListener {
             val dialog = DatePickerFragment()
             dialog.show(childFragmentManager, "DatePicker")
         }
+        viewModel.selectedDate.observe(requireActivity()){
+            binding.timeInputDate.text=viewModel.selectedDate.value.toString()
+        }
 
+        val current=LocalDateTime.now()
+
+        Log.d(TAG,"current: ${current.hour}:${current.minute}:${current.second}")
+        val phase:String= if (current.hour>=23&&current.hour<8){
+            "Night"
+        }else if (current.hour>=8&&current.hour<14){
+            "Morning"
+        }else if (current.hour>=14&&current.hour<19){
+            "Afternoon"
+        }else{
+            "Evening"
+        }
+        binding.timeInputPhase.text=phase
+        viewModel.setPhase(binding.timeInputPhase.text.toString())
+        //时间
+        binding.timeInputPhase.setOnClickListener {
+            val dialog=TimePickerFragment()
+            dialog.show(childFragmentManager,"TimePicker")
+        }
+        viewModel.selectedPhase.observe(requireActivity()){
+            binding.timeInputPhase.setText(viewModel.selectedPhase.value)
+        }
         //年龄
         ageinit()
+
+        binding.genderSelectedMale.isSelected=false
+        binding.genderSelectedFemale.isSelected=false
+        //性别
+        binding.genderSelectedMale.setOnClickListener {
+            if (!it.isSelected){
+                it.isSelected=true
+
+                binding.genderSelectedFemale.also {
+                    it.isSelected=false
+                    it.alpha=0.5f
+                }
+                binding.genderSelectedFemalePic.visibility=View.INVISIBLE
+                it.alpha=1f
+                binding.genderSelectedMalePic.visibility=View.VISIBLE
+                viewModel.setGender('0')
+            }
+        }
+
+        binding.genderSelectedFemale.setOnClickListener {
+            if (!it.isSelected){
+                it.isSelected=true
+
+                binding.genderSelectedMale.also {
+                    it.isSelected=false
+                    it.alpha=0.5f
+                }
+                binding.genderSelectedMalePic.visibility=View.INVISIBLE
+                it.alpha=1f
+                binding.genderSelectedFemalePic.visibility=View.VISIBLE
+                viewModel.setGender('1')
+            }
+        }
+
+        binding.btnCalculate.setOnClickListener {
+
+            Toast.makeText(requireContext(),"yo clic calca",Toast.LENGTH_SHORT).show()
+            if (viewModel.selectedGender.value!=null){
+                val bmiInfo=BmiInfo(viewModel.wt_lb.value!!.toDouble(),
+                    viewModel.wt_kg.value!!.toDouble(),
+                    viewModel.ht_ft.value!!.toInt()
+                    ,viewModel.ht_in.value!!.toInt(),
+                    viewModel.ht_cm.value!!.toDouble(),
+                    viewModel.selectedDate.value
+                    ,viewModel.selectedPhase.value,
+                viewModel.selectedAge.value!!.toInt(),
+                    viewModel.selectedGender.value!!.toChar())
+                Log.d(TAG,bmiInfo.toString())
+                Log.d(TAG,viewModel.infoCount.toString())
+                Log.d(TAG,viewModel.allBmiInfos.toString())
+                viewModel.insertInfo(bmiInfo)
+            }
+        }
     }
+
+
 
     fun ageinit() {
         binding.ageRecyclerView.layoutManager =
@@ -827,8 +919,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         val smoothDistance = childViewLeft - viewCTop + childVhalf
         binding.ageRecyclerView.smoothScrollBy(smoothDistance, 0, decelerateInterpolator)
         adapter.setSelectPosition(pos)
-
-
+        viewModel.setAge(pos.toInt())
         Log.d(TAG, "当前选中:${ageList.get(pos)}")
     }
 

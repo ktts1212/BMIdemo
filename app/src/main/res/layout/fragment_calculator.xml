@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:fontFamily="sans-serif-medium"
+                android:fontFamily="@font/montserrat_extrabold"
                 android:gravity="center"
                 android:inputType="numberDecimal"
                 android:text="@string/Default_140_00"
@@ -123,7 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:fontFamily="sans-serif-medium"
+                android:fontFamily="@font/montserrat_extrabold"
                 android:inputType="numberDecimal"
                 android:text="@string/default_170_0"
                 android:textAlignment="center"
@@ -155,7 +155,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:fontFamily="sans-serif-medium"
+                android:fontFamily="@font/montserrat_extrabold"
                 android:inputType="numberDecimal"
                 android:text="@string/default_5"
                 android:textAlignment="center"
@@ -188,7 +188,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:fontFamily="sans-serif-medium"
+                android:fontFamily="@font/montserrat_extrabold"
                 android:inputType="numberDecimal"
                 android:text="@string/default_7"
                 android:textAlignment="center"
@@ -257,12 +257,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="@font/montserrat_extrabold"
             android:gravity="center"
             android:inputType="numberDecimal"
             android:text="@string/date"
             android:textColor="@color/black"
-            android:textSize="28sp" />
+            android:textSize="25sp" />
 
 
     </com.google.android.material.card.MaterialCardView>
@@ -284,12 +284,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="@font/montserrat_extrabold"
             android:gravity="center"
             android:inputType="numberDecimal"
             android:text="@string/phase"
             android:textColor="@color/black"
-            android:textSize="35sp" />
+            android:textSize="28sp" />
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -348,6 +348,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/age_card">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.5"
+            android:id="@+id/gender_selected_male"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="140dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/gender_selected_male_pic"
+                android:visibility="invisible"
+                android:src="@drawable/gender_selected"/>
+
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:id="@+id/gender_male_pic"
+                android:src="@drawable/gender_male"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/gender_male_text"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                android:gravity="center"
+                android:text="Male"/>
+
+        </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
@@ -361,18 +397,56 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/age_card">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.5"
+            android:clickable="true"
+            android:id="@+id/gender_selected_female"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="140dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/gender_selected_female_pic"
+                android:visibility="invisible"
+                android:src="@drawable/gender_selected"/>
+
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:id="@+id/gender_female_pic"
+                android:src="@drawable/gender_female"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/gender_female_text"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                android:gravity="center"
+                android:text="Female"/>
+
+        </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
 
-    <Button
+    <TextView
         android:id="@+id/btn_calculate"
         style="@style/ThemeOverlay.Material3.Button"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_marginStart="18dp"
         android:layout_marginTop="15dp"
+        android:gravity="center"
         android:layout_marginEnd="18dp"
         android:background="@drawable/btn_selector"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="@font/montserrat_extrabold"
         android:text="@string/calculate"
         android:textColor="@color/white"
         android:textSize="35sp"
@@ -380,6 +454,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:letterSpacing="-0.05"
+        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/gender_card_male" />
 
 

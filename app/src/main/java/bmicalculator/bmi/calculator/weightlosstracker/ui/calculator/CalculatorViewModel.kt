@@ -1,19 +1,65 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.calculator
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
+import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CalculatorViewModel : ViewModel() {
+class CalculatorViewModel (application: Application):AndroidViewModel(application) {
+
+     val allBmiInfos:LiveData<List<BmiInfo>>
+     val repository: Repository
+
+    init {
+        val dao=AppDataBase.getDatabase(application).bmiInfoDao()
+        repository=Repository(dao)
+        allBmiInfos=repository.allInfos
+    }
+
     //记录查询到的BimInfo，查不到就为null
-    private val _bmiInfos: MutableLiveData<List<BmiInfo>> by lazy {
-        MutableLiveData<List<BmiInfo>>().also {
-            queryAllInfo()
-        }
+//    private val _bmiInfos: MutableLiveData<List<BmiInfo>> by lazy {
+//        MutableLiveData<List<BmiInfo>>().also {
+//            queryAllInfo()
+//        }
+//    }
+
+    //共享日期
+    var selectedDate=MutableLiveData<String>()
+
+    fun setDate(data:String){
+        selectedDate.value=data
+    }
+
+    fun insertInfo(bmiInfo: BmiInfo)=viewModelScope.launch{
+        repository.insertBmiInfo(bmiInfo)
+    }
+
+    //共享时段
+    var selectedPhase=MutableLiveData<String>()
+
+    fun setPhase(data:String){
+        selectedPhase.value=data
+    }
+
+    //性别
+    var selectedGender=MutableLiveData<Char>()
+
+    fun setGender(data:Char){
+        selectedGender.value=data
+    }
+
+    //年龄
+    val selectedAge=MutableLiveData<Int>(25)
+
+    fun setAge(data:Int){
+        selectedAge.value=data
     }
 
     //体重lb
@@ -57,16 +103,16 @@ class CalculatorViewModel : ViewModel() {
 
     //判断查询到的bimInfo数量
     val infoCount: Int?
-        get() = _bmiInfos.value?.size ?:0
+        get() = allBmiInfos.value?.size ?:0
 
-    fun queryAllInfo() = viewModelScope.launch {
-        Repository.queryAllInfo()
-    }
-
-    //该方法返回的是插入数据的ID值
-    fun insertBmiInfo(bmiInfo: BmiInfo)=viewModelScope.launch {
-        Repository.insertBmiInfo(bmiInfo)
-    }
+//    fun queryAllInfo() = viewModelScope.launch {
+//        Repository.queryAllInfo()
+//    }
+//
+//    //该方法返回的是插入数据的ID值
+//    fun insertBmiInfo(bmiInfo: BmiInfo)=viewModelScope.launch {
+//        Repository.insertBmiInfo(bmiInfo)
+//    }
 
 
 }
