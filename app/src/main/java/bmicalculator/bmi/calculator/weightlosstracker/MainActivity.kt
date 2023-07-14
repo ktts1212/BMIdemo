@@ -2,6 +2,7 @@ package bmicalculator.bmi.calculator.weightlosstracker
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -10,9 +11,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.ActivityMainBinding
+import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
+import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
+import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFactory
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
 
+private const val TAG="MainActivity"
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -29,24 +34,44 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
+        val dao=AppDataBase.getDatabase(application).bmiInfoDao()
+        val factory=ViewModelFactory(Repository(dao))
+
         //获取viewModel实例
-        viewModel = ViewModelProvider(this).get(
+        viewModel = ViewModelProvider(this, factory).get(
             CalculatorViewModel::class.java
         )
 
-        //判断底部导航栏是否显示
-        if (viewModel.infoCount == 0) {
-            binding.bottomNavigationView.visibility = View.GONE
-        } else {
-            binding.bottomNavigationView.post{
-                val height=binding.bottomNavigationView.height
-                val params =
-                    binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
-                params.bottomMargin=height
-                binding.fragmentContainer.layoutParams=params
+        viewModel.message.observe(this){
+            it.getContentIfNotHandled()?.let {
+                Toast.makeText(this,it,Toast.LENGTH_SHORT).show()
             }
-            binding.fragmentContainer.visibility = View.VISIBLE
         }
+
+        viewModel.getAllInfo()
+
+        Log.d(TAG,"num:${viewModel.infoCount.value}")
+        //判断底部导航栏是否显示
+
+        viewModel.infoCount.observe(this){
+            Log.d(TAG,it.toString())
+            if (it!=-1) {
+                binding.bottomNavigationView.post{
+                    val height=binding.bottomNavigationView.height
+                    val params =
+                        binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
+                    params.bottomMargin=height
+                    binding.fragmentContainer.layoutParams=params
+                }
+                //binding.fragmentContainer.visibility = View.VISIBLE
+                binding.bottomNavigationView.visibility=View.VISIBLE
+                Log.d(TAG,"执行到了这里>>>>")
+            } else {
+                binding.bottomNavigationView.visibility = View.GONE
+            }
+        }
+
+
 
         //更改状态栏字体颜色
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

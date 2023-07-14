@@ -10,12 +10,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 
-class Repository(private val bmiInfoDao:BmiInfoDao) {
+class Repository(private val bmiInfoDao: BmiInfoDao) {
 
 
-
-    val allInfos:LiveData<List<BmiInfo>> = bmiInfoDao.queryAllInfo()
-
+    suspend fun getAllInfos():List<BmiInfo>{
+        return bmiInfoDao.queryAllInfo()
+    }
 //    suspend fun queryAllInfo(): List<BmiInfo>? {
 //        return withContext(Dispatchers.IO){
 //            bmiInfoDao?.queryAllInfo()
@@ -28,7 +28,15 @@ class Repository(private val bmiInfoDao:BmiInfoDao) {
 //        }
 //    }
 
-    suspend fun insertBmiInfo(bmiInfo: BmiInfo){
-        bmiInfoDao.insertBmiInfo(bmiInfo)
+    suspend fun insertBmiInfo(bmiInfo: BmiInfo): Long {
+        return bmiInfoDao.insertBmiInfo(bmiInfo)
+    }
+
+//    suspend fun deleteAllInfos(): Int {
+//        return bmiInfoDao.deleteALlInfo()
+//    }
+
+    suspend fun deleteBmiInfo(bmiInfo: BmiInfo): Int {
+        return bmiInfoDao.deleteBmiInfo(bmiInfo)
     }
 }

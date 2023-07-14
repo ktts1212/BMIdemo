@@ -5,6 +5,8 @@ import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
+import android.text.Spanned
 import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -24,6 +26,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.FragmentCalculatorBinding
+import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
+import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
+import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFactory
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.adapter.AgeSelectorAdapter
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.DatePickerFragment
@@ -65,8 +70,12 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCalculatorBinding.inflate(layoutInflater, container, false)
-        viewModel = ViewModelProvider(requireActivity()).get(CalculatorViewModel::class.java)
-
+        //viewModel = ViewModelProvider(requireActivity()).get(CalculatorViewModel::class.java)
+        val dao = AppDataBase.getDatabase(requireContext().applicationContext).bmiInfoDao()
+        val repository = Repository(dao)
+        val factory = ViewModelFactory(repository)
+        viewModel =
+            ViewModelProvider(requireActivity(), factory).get(CalculatorViewModel::class.java)
         return binding.root
     }
 
@@ -74,16 +83,17 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //当输入完后点击键盘的done
         binding.root.setOnTouchListener { view, motionEvent ->
-            if (view is TextInputLayout &&motionEvent.action== MotionEvent.ACTION_DOWN){
-                val rect= Rect()
+            if (view is TextInputLayout && motionEvent.action == MotionEvent.ACTION_DOWN) {
+                val rect = Rect()
                 view.getGlobalVisibleRect(rect)
-                if (!rect.contains(motionEvent.rawX.toInt(),motionEvent.rawY.toInt())){
+                if (!rect.contains(motionEvent.rawX.toInt(), motionEvent.rawY.toInt())) {
                     view.clearFocus()
-                    val inputMethodManager=
+                    val inputMethodManager =
                         requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as
                                 InputMethodManager
-                    inputMethodManager.hideSoftInputFromWindow(view.windowToken,0)
+                    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
                 }
             }
             false
@@ -94,12 +104,11 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         val tf = DecimalFormat("#.0")
 
         val ff = DecimalFormat("#")
-//        df.minimumFractionDigits = 2
-//        df.maximumFractionDigits = 6
+
         binding.htInputFtin1.text = Editable.Factory.getInstance().newEditable("5" + "'")
         binding.htInputFtin2.text = Editable.Factory.getInstance().newEditable("7" + "''")
         binding.htInputCm.text = Editable.Factory.getInstance().newEditable("170.0")
-        Log.d(TAG, "${viewModel.bmiInfo}")
+        //Log.d(TAG, "${viewModel.bmiInfo}")
         //判断体重计量标准
 
         //当输入完edittext内容点击done对edittext内容进行修改
@@ -172,117 +181,63 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         //点击单位转换按钮
         var firstConvert = true
         binding.wtTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab?.position == 0) {
-                    if (viewModel.wt_lb.value!! < 2) {
-                        binding.wtInput.setText(df.format(1))
-                    } else if (viewModel.wt_lb.value!! > 551) {
-                        binding.wtInput.setText(df.format(551))
-                    } else {
-                        binding.wtInput.setText(df.format(viewModel.wt_lb.value))
-                    }
+                    binding.wtInput.setText(df.format(viewModel.wt_lb.value))
                 } else {
-                    if (viewModel.wt_kg.value!! < 1) {
-                        binding.wtInput.setText(df.format(1))
-                    } else if (viewModel.wt_kg.value!! > 250) {
-                        binding.wtInput.setText(df.format(250))
-                    } else {
-                        binding.wtInput.setText(df.format(viewModel.wt_kg.value))
-                    }
+                    binding.wtInput.setText(df.format(viewModel.wt_kg.value))
                 }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
                 val p0: Editable? = binding.wtInput.text
+                val str = binding.wtInput.text.toString()
                 if (tab?.position == 0) {
-                    if (!p0.isNullOrEmpty()) {
-                        if (p0.toString().toDouble() >= 2 && p0.toString().toDouble() <= 551) {
-                            viewModel.setwtlb(
-                                df.format(binding.wtInput.text.toString().toDouble()).toDouble()
-                            )
-                            if (firstConvert == false) {
-                                viewModel.setwtkg(
-                                    df.format(viewModel.wt_lb.value!! * Mult_1).toDouble()
-                                )
-                            }
-                            firstConvert = false
-                        } else if (p0.toString().toDouble() > 551) {
-                            Toast.makeText(
-                                requireContext(),
-                                "Please input a valid weight to calculate your BMI accurately",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            viewModel.setwtlb(
-                                df.format(551.00).toDouble()
-                            )
-                        } else {
-                            Toast.makeText(
-                                requireContext(),
-                                "Please input a valid weight to calculate your BMI accurately",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            viewModel.setwtlb(
-                                df.format(2).toDouble()
-                            )
-                        }
-                    } else if (p0.isNullOrEmpty()) {
+                    if (str.toDouble() < 2) {
                         Toast.makeText(
                             requireContext(),
                             "Please input a valid weight to calculate your BMI accurately",
                             Toast.LENGTH_SHORT
                         ).show()
-                        binding.wtInput.setText(df.format(140))
                         viewModel.setwtlb(
-                            df.format(140.00).toDouble()
+                            df.format(2).toDouble()
                         )
-                        viewModel.setwtkg(
-                            df.format(65).toDouble()
+                    } else {
+                        viewModel.setwtlb(
+                            df.format(str.toDouble()).toDouble()
                         )
                     }
-                }
-
-                if (tab?.position == 1) {
-                    if (!p0.isNullOrEmpty()) {
-                        if (p0.toString().toDouble() >= 1 && p0.toString().toDouble() <= 250) {
-                            viewModel.setwtkg(
-                                df.format(binding.wtInput.text.toString().toDouble()).toDouble()
-                            )
-                            viewModel.setwtlb(
-                                df.format(viewModel.wt_kg.value!! / Mult_1).toDouble()
-                            )
-                        } else if (p0.toString().toDouble() > 250) {
-                            Toast.makeText(
-                                requireContext(),
-                                "Please input a valid weight to calculate your BMI accurately",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                            viewModel.setwtkg(
-                                df.format(250).toDouble()
-                            )
-                        } else {
-                            Toast.makeText(
-                                requireContext(),
-                                "Please input a valid weight to calculate your BMI accurately",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                    if (firstConvert == false) {
+                        if (df.format(viewModel.wt_lb.value!! * Mult_1).toDouble() < 1) {
                             viewModel.setwtkg(
                                 df.format(1).toDouble()
                             )
+                        } else {
+                            viewModel.setwtkg(
+                                df.format(viewModel.wt_lb.value!! * Mult_1).toDouble()
+                            )
                         }
-                    } else if (p0.isNullOrEmpty()) {
+                    }
+                    firstConvert = false
+                } else {
+                    if (str.toDouble() < 1) {
                         Toast.makeText(
                             requireContext(),
                             "Please input a valid weight to calculate your BMI accurately",
                             Toast.LENGTH_SHORT
                         ).show()
                         viewModel.setwtkg(
-                            df.format(65).toDouble()
+                            df.format(1).toDouble()
                         )
-                        viewModel.setwtlb(
-                            df.format(140).toDouble()
+                    } else {
+                        viewModel.setwtkg(
+                            df.format(str.toDouble()).toDouble()
                         )
                     }
+                    viewModel.setwtlb(
+                        df.format(viewModel.wt_kg.value!! / Mult_1).toDouble()
+                    )
                 }
             }
 
@@ -304,53 +259,13 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     return
                 }
                 val str = p0.toString()
-                if (str.contains(".")) {
-                    val decimalPart = str.substring(str.indexOf(".") + 1)
-                    val decimalnumber = decimalPart.length
-                    if (decimalnumber > 2) {
-                        isChanged = true
-                        val subStr = str.substring(0, str.indexOf(".") + 3)
-                        binding.wtInput.setText(subStr)
-                        binding.wtInput.setError("小数位数不能超过2位")
-                    }
 
-                    if (str.substring(0, str.indexOf(".")).length > 3) {
-                        binding.wtInput.setText(
-                            str.substring(1)
-                        )
-                    }
-                }
-                if (!str.isEmpty()) {
-                    if (binding.wtTab.getTabAt(0)?.isSelected == true) {
-                        if (str.toDouble() < 2) {
-                            isChanged = true
-                            binding.wtInput.setText(
-                                df.format(2)
-                            )
-                            binding.wtInput.setError("最小值为2")
-                        } else if (str.toDouble() > 551) {
-                            isChanged = true
-                            binding.wtInput.setText(
-                                df.format(551)
-                            )
-                            binding.wtInput.setError("最大值为551")
-                        }
-                    } else if (binding.wtTab.getTabAt(1)?.isSelected == true) {
-                        if (str.toDouble() < 1) {
-                            isChanged = true
-                            binding.wtInput.setError("最小值为1")
-                            binding.wtInput.setText(
-                                df.format(1)
-                            )
-                        } else if (str.toDouble() > 250) {
-                            isChanged = true
-                            binding.wtInput.setError("最大值为250")
-                            binding.wtInput.setText(
-                                df.format(250)
-                            )
-                        }
-                    }
-                } else {
+                if (str.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Please input a valid weight to calculate your BMI accurately",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     if (binding.wtTab.getTabAt(0)?.isSelected == true) {
                         isChanged = true
                         binding.wtInput.setText(
@@ -362,10 +277,166 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                             df.format(65)
                         )
                     }
+                } else {
+
+                    if (str.contains(".")) {
+                        val decimalPart = str.substring(str.indexOf(".") + 1)
+                        val decimalnumber = decimalPart.length
+                        if (decimalnumber > 2) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Please input a valid weight to calculate your BMI accurately",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            isChanged = true
+                            val subStr = str.substring(0, str.indexOf(".") + 3)
+                            binding.wtInput.setText(subStr)
+                            binding.wtInput.setError("小数位数不能超过2位")
+                        } else if (binding.wtTab.getTabAt(0)?.isSelected == true) {
+                            if (str.toDouble() > 551) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Please input a valid weight to calculate your BMI accurately",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                isChanged = true
+                                binding.wtInput.setText(
+                                    df.format(551)
+                                )
+                            } else if (str.substring(0, str.indexOf(".")).length > 3) {
+                                isChanged
+                                binding.wtInput.setText(
+                                    df.format(str.substring(str.indexOf(".") - 3).toDouble())
+                                )
+                            }
+                        } else if (binding.wtTab.getTabAt(1)!!.isSelected == true) {
+                            if (str.toDouble() > 250) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Please input a valid weight to calculate your BMI accurately",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                isChanged = true
+                                binding.wtInput.setText(
+                                    df.format(250)
+                                )
+                            } else if (str.substring(0, str.indexOf(".")).length > 3) {
+                                isChanged
+                                binding.wtInput.setText(
+                                    df.format(str.substring(str.indexOf(".") - 3).toDouble())
+                                )
+                            }
+                        }
+                    } else {
+                        if (binding.wtTab.getTabAt(0)?.isSelected == true) {
+
+                            if (str.length>3){
+                                str.substring(str.length-4)
+                                isChanged=true
+                                binding.wtInput.setText(df.format(str.toInt()))
+                            }
+
+                            if (str.toDouble() > 551) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Please input a valid weight to calculate your BMI accurately",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                isChanged = true
+                                binding.wtInput.setText(
+                                    df.format(551)
+                                )
+                            }
+                        } else if (binding.wtTab.getTabAt(1)?.isSelected == true) {
+
+                            if (str.length>3){
+                                str.substring(str.length-4)
+                                isChanged=true
+                                binding.wtInput.setText(df.format(str.toInt()))
+                            }
+                            if (str.toDouble() > 250) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Please input a valid weight to calculate your BMI accurately",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                isChanged = true
+                                binding.wtInput.setText(
+                                    df.format(250)
+                                )
+                            }
+                        }
+                    }
+
                 }
+//                if (!str.isEmpty()) {
+//                    if (binding.wtTab.getTabAt(0)?.isSelected == true) {
+//                        if (str.toDouble() < 2) {
+//                            isChanged = true
+//                            binding.wtInput.setText(
+//                                df.format(2)
+//                            )
+//                            binding.wtInput.setError("最小值为2")
+//                        } else if (str.toDouble() > 551) {
+//                            isChanged = true
+//                            binding.wtInput.setText(
+//                                df.format(551)
+//                            )
+//                            binding.wtInput.setError("最大值为551")
+//                        }
+//                    } else if (binding.wtTab.getTabAt(1)?.isSelected == true) {
+//                        if (str.toDouble() < 1) {
+//                            isChanged = true
+//                            binding.wtInput.setError("最小值为1")
+//                            binding.wtInput.setText(
+//                                df.format(1)
+//                            )
+//                        } else if (str.toDouble() > 250) {
+//                            isChanged = true
+//                            binding.wtInput.setError("最大值为250")
+//                            binding.wtInput.setText(
+//                                df.format(250)
+//                            )
+//                        }
+//                    }
+//                } else {
+//                    if (binding.wtTab.getTabAt(0)?.isSelected == true) {
+//                        isChanged = true
+//                        binding.wtInput.setText(
+//                            df.format(140)
+//                        )
+//                    } else {
+//                        isChanged = true
+//                        binding.wtInput.setText(
+//                            df.format(65)
+//                        )
+//                    }
+//                }
                 isChanged = false
             }
         })
+
+        //使用文本过滤
+//        val wtlengthFilter= InputFilter.LengthFilter(6)
+//        binding.wtInput.filters= arrayOf<InputFilter>(object :InputFilter{
+//            private val re="^(500|5[0-4][0-9]|550)(\\.\\d{0,2})?\$|" +"^(551)(\\.[0]{0,2})\$|"+
+//                    "^([1-4][0-9]{2}|[1-9][0-9]\\d|[2-9]{1})(\\.\\d{0,2})?\$"
+//            override fun filter(
+//                p0: CharSequence?,
+//                p1: Int,
+//                p2: Int,
+//                p3: Spanned?,
+//                p4: Int,
+//                p5: Int
+//            ): String? {
+//                val replacement=p0?.subSequence(p1,p2).toString()
+//                val newText=p3!!.subSequence(0,p4).toString()+
+//                        replacement+p3.subSequence(p5,p3.length).toString()
+//
+//                return if (newText.matches(re.toRegex())) null else ""
+//            }
+//
+//        })
 
         //身高
         var htfirstConvert = true
@@ -441,8 +512,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     )
                 }
             }
-
-
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
 
@@ -465,64 +534,71 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 }
                 var str = p0.toString()
                 if (str.contains("'")) {
-                    str = str.dropLast(1)
-                }
+                    if(str.last().toString()!="'"){
 
-                if (str.contains(".")) {
-                    Log.d(TAG, str)
-                    binding.htInputFtin1.setError("只能输入整数")
-                    binding.htInputFtin1.postDelayed({
-                        binding.htInputFtin1.error = null
-                    }, 3000)
-
-                    val intPart = str.substring(0, str.indexOf("."))
-
-                    if (intPart.isEmpty()) {
-                        ischanged = true
+                        str=str.substring(0,str.indexOf("'"))
+                        ischanged=true
                         binding.htInputFtin1.setText(
-                            ff.format(5) + "'"
+                            ff.format(str.toInt())+"'"
                         )
-                    } else {
-                        ischanged = true
-                        binding.htInputFtin1.setText(
-                            intPart + "'"
-                        )
+                    }else{
+                        str = str.dropLast(1)
                     }
                 }
 
-                if (!str.isEmpty() && !str.contains(".")) {
-                    if (str.length > 1) {
-                        binding.htInputFtin1.setText(
-                            str.substring(1)
-                        )
-                    }
-
-                    if (str.toInt() < 1) {
-                        ischanged = true
-                        binding.htInputFtin1.setText(
-                            ff.format(1) + "'"
-                        )
-                        binding.htInputFtin1.setError("最小值为1")
+                if (!str.isEmpty()){
+                    if (str.contains(".")){
+                        binding.htInputFtin1.setError("只能输入整数")
                         binding.htInputFtin1.postDelayed({
                             binding.htInputFtin1.error = null
                         }, 3000)
-                    } else if (str.toInt() > 8) {
-                        ischanged = true
-                        binding.htInputFtin1.setText(
-                            ff.format(8) + "'"
-                        )
-                        binding.htInputFtin1.setError("最大值为8")
-                        binding.htInputFtin1.postDelayed({
-                            binding.htInputFtin1.error = null
-                        }, 3000)
+
+                        val intPart = str.substring(0, str.indexOf("."))
+                        if (intPart.isEmpty()) {
+                            ischanged = true
+                            binding.htInputFtin1.setText(
+                                ff.format(5) + "'"
+                            )
+                        } else {
+                            ischanged = true
+                            binding.htInputFtin1.setText(
+                                intPart + "'"
+                            )
+                        }
+                    }else{
+                        if (str.length > 1) {
+                            binding.htInputFtin1.setText(
+                                str.substring(1)
+                            )
+                        }
+
+                        if (str.toInt() < 1) {
+                            ischanged = true
+                            binding.htInputFtin1.setText(
+                                ff.format(1) + "'"
+                            )
+                            binding.htInputFtin1.setError("最小值为1")
+                            binding.htInputFtin1.postDelayed({
+                                binding.htInputFtin1.error = null
+                            }, 3000)
+                        } else if (str.toInt() > 8) {
+                            ischanged = true
+                            binding.htInputFtin1.setText(
+                                ff.format(8) + "'"
+                            )
+                            binding.htInputFtin1.setError("最大值为8")
+                            binding.htInputFtin1.postDelayed({
+                                binding.htInputFtin1.error = null
+                            }, 3000)
+                        }
                     }
-                }
-                if (str.isEmpty()) {
+                }else{
                     ischanged = true
                     binding.htInputFtin1.setText(
                         ff.format(5) + "'"
                     )
                 }
+
                 ischanged = false
             }
         })
@@ -553,10 +629,46 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     return
                 }
                 var str = p0.toString()
-                if (str.contains("''")) {
-                    str = str.dropLast(2)
-                } else if (str.contains("'")) {
-                    str = str.dropLast(1)
+//                if (str.contains("''")) {
+//                    if (str.substring(str.length-2,str.length-1)!="''"){
+//                        str=str.substring(0,str.indexOf("''"))
+//                        isChanged=true
+//                        binding.htInputFtin2.setText(
+//                            ff.format(str.toInt())+"''"
+//                        )
+//                    }else{
+//                        str = str.dropLast(2)
+//                        if(str.contains("'")){
+//                            str=str.substring(0,str.indexOf("'"))
+//                            isChanged=true
+//                            binding.htInputFtin2.setText(
+//                                ff.format(str.toInt())+"''"
+//                            )
+//                        }
+//                        str=str.substring(0,str.indexOf("'"))
+//                    }
+//                    isChanged=true
+//                    binding.htInputFtin2.setText(
+//                        ff.format(str.toInt())+"''"
+//                    )
+//                } else if (str.contains("'")) {
+//                    if (str.last().toString()!="'"){
+//                        str=str.substring(0,str.indexOf("'"))
+//                        isChanged=true
+//                        binding.htInputFtin2.setText(
+//                            ff.format(str.toInt())+"''"
+//                        )
+//                    }else{
+//                        str = str.dropLast(1)
+//                    }
+//                }
+
+                if (str.contains("'")){
+                    str=str.substring(0,str.indexOf("'"))
+                    isChanged=true
+                    binding.htInputFtin2.setText(
+                        ff.format(str.toInt())+"''"
+                    )
                 }
 
                 if (str.contains(".")) {
@@ -642,48 +754,62 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 }
 
                 var str = binding.htInputCm.text.toString()
-                if (str.contains(".")) {
-                    val decimalCount = str.substring(str.indexOf("."))
-                    if (decimalCount.length > 1) {
-                        isChanged = true
-                        binding.htInputCm.setText(
-                            str.substring(0, str.indexOf(".") + 2)
-                        )
-                    }
-                    if (str.toDouble() > 250) {
-                        isChanged = true
-                        binding.htInputCm.setText(
-                            tf.format(250)
-                        )
-                    } else if (str.toDouble() < 1) {
-                        isChanged
-                        binding.htInputCm.setText(
-                            tf.format(1)
-                        )
-                    }
-                }
 
-                if (!str.contains(".")) {
-                    if (str.toDouble() > 250) {
-                        isChanged = true
-                        binding.htInputCm.setText(
-                            tf.format(250)
-                        )
-                    } else if (str.toDouble() < 1) {
-                        isChanged = true
-                        binding.htInputCm.setText(
-                            tf.format(1)
-                        )
-                    }
-                }
+                if (!str.isEmpty()){
+                    if (str.contains(".")){
+                        val decimalCount = str.substring(str.indexOf("."))
+                        if (decimalCount.length > 1) {
+                            isChanged = true
+                            binding.htInputCm.setText(
+                                str.substring(0, str.indexOf(".") + 2)
+                            )
+                        }
 
-                if (str.isEmpty()) {
+                        val intCount=str.substring(0,str.indexOf("."))
+                        if (intCount.length>3){
+                                isChanged=true
+                                binding.htInputCm.setText(
+                                    tf.format((
+                                            intCount.substring(intCount.length-4).toDouble()
+                                                    +decimalCount.toDouble()/10)
+                                ))
+                            }
+                        if (str.toDouble() > 250) {
+                            isChanged = true
+                            binding.htInputCm.setText(
+                                tf.format(250)
+                            )
+                        } else if (str.toDouble() < 1) {
+                            isChanged
+                            binding.htInputCm.setText(
+                                tf.format(1)
+                            )
+                        }
+                    }else{
+                        if (str.length>3){
+                            isChanged=true
+                            binding.htInputCm.setText(
+                                tf.format((str).toDouble())
+                            )
+                        }
+                        if (str.toDouble() > 250) {
+                            isChanged = true
+                            binding.htInputCm.setText(
+                                tf.format(250)
+                            )
+                        } else if (str.toDouble() < 1) {
+                            isChanged = true
+                            binding.htInputCm.setText(
+                                tf.format(1)
+                            )
+                        }
+                    }
+                }else{
                     isChanged = true
                     binding.htInputCm.setText(
                         tf.format(170)
                     )
                 }
-
 
                 isChanged = false
             }
@@ -702,89 +828,88 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             val dialog = DatePickerFragment()
             dialog.show(childFragmentManager, "DatePicker")
         }
-        viewModel.selectedDate.observe(requireActivity()){
-            binding.timeInputDate.text=viewModel.selectedDate.value.toString()
+        viewModel.selectedDate.observe(requireActivity()) {
+            binding.timeInputDate.text = viewModel.selectedDate.value.toString()
         }
 
-        val current=LocalDateTime.now()
+        val current = LocalDateTime.now()
 
-        Log.d(TAG,"current: ${current.hour}:${current.minute}:${current.second}")
-        val phase:String= if (current.hour>=23&&current.hour<8){
+        Log.d(TAG, "current: ${current.hour}:${current.minute}:${current.second}")
+        val phase: String = if (current.hour >= 23 && current.hour < 8) {
             "Night"
-        }else if (current.hour>=8&&current.hour<14){
+        } else if (current.hour >= 8 && current.hour < 14) {
             "Morning"
-        }else if (current.hour>=14&&current.hour<19){
+        } else if (current.hour >= 14 && current.hour < 19) {
             "Afternoon"
-        }else{
+        } else {
             "Evening"
         }
-        binding.timeInputPhase.text=phase
+        binding.timeInputPhase.text = phase
         viewModel.setPhase(binding.timeInputPhase.text.toString())
         //时间
         binding.timeInputPhase.setOnClickListener {
-            val dialog=TimePickerFragment()
-            dialog.show(childFragmentManager,"TimePicker")
+            val dialog = TimePickerFragment()
+            dialog.show(childFragmentManager, "TimePicker")
         }
-        viewModel.selectedPhase.observe(requireActivity()){
+        viewModel.selectedPhase.observe(requireActivity()) {
             binding.timeInputPhase.setText(viewModel.selectedPhase.value)
         }
         //年龄
         ageinit()
 
-        binding.genderSelectedMale.isSelected=false
-        binding.genderSelectedFemale.isSelected=false
+        binding.genderSelectedMale.isSelected = false
+        binding.genderSelectedFemale.isSelected = false
         //性别
         binding.genderSelectedMale.setOnClickListener {
-            if (!it.isSelected){
-                it.isSelected=true
+            if (!it.isSelected) {
+                it.isSelected = true
 
                 binding.genderSelectedFemale.also {
-                    it.isSelected=false
-                    it.alpha=0.5f
+                    it.isSelected = false
+                    it.alpha = 0.5f
                 }
-                binding.genderSelectedFemalePic.visibility=View.INVISIBLE
-                it.alpha=1f
-                binding.genderSelectedMalePic.visibility=View.VISIBLE
+                binding.genderSelectedFemalePic.visibility = View.INVISIBLE
+                it.alpha = 1f
+                binding.genderSelectedMalePic.visibility = View.VISIBLE
                 viewModel.setGender('0')
             }
         }
 
         binding.genderSelectedFemale.setOnClickListener {
-            if (!it.isSelected){
-                it.isSelected=true
+            if (!it.isSelected) {
+                it.isSelected = true
 
                 binding.genderSelectedMale.also {
-                    it.isSelected=false
-                    it.alpha=0.5f
+                    it.isSelected = false
+                    it.alpha = 0.5f
                 }
-                binding.genderSelectedMalePic.visibility=View.INVISIBLE
-                it.alpha=1f
-                binding.genderSelectedFemalePic.visibility=View.VISIBLE
+                binding.genderSelectedMalePic.visibility = View.INVISIBLE
+                it.alpha = 1f
+                binding.genderSelectedFemalePic.visibility = View.VISIBLE
                 viewModel.setGender('1')
             }
         }
 
         binding.btnCalculate.setOnClickListener {
 
-            Toast.makeText(requireContext(),"yo clic calca",Toast.LENGTH_SHORT).show()
-            if (viewModel.selectedGender.value!=null){
-                val bmiInfo=BmiInfo(viewModel.wt_lb.value!!.toDouble(),
+            Toast.makeText(requireContext(), "yo clic calca", Toast.LENGTH_SHORT).show()
+            if (viewModel.selectedGender.value != null) {
+                val bmiInfo = BmiInfo(
+                    viewModel.wt_lb.value!!.toDouble(),
                     viewModel.wt_kg.value!!.toDouble(),
-                    viewModel.ht_ft.value!!.toInt()
-                    ,viewModel.ht_in.value!!.toInt(),
+                    viewModel.ht_ft.value!!.toInt(), viewModel.ht_in.value!!.toInt(),
                     viewModel.ht_cm.value!!.toDouble(),
-                    viewModel.selectedDate.value
-                    ,viewModel.selectedPhase.value,
-                viewModel.selectedAge.value!!.toInt(),
-                    viewModel.selectedGender.value!!.toChar())
-                Log.d(TAG,bmiInfo.toString())
-                Log.d(TAG,viewModel.infoCount.toString())
-                Log.d(TAG,viewModel.allBmiInfos.toString())
+                    viewModel.selectedDate.value, viewModel.selectedPhase.value,
+                    viewModel.selectedAge.value!!.toInt(),
+                    viewModel.selectedGender.value!!.toChar()
+                )
+                Log.d(TAG, bmiInfo.toString())
+//                Log.d(TAG,viewModel.infoCount.toString())
+//                Log.d(TAG,viewModel.allBmiInfos.toString())
                 viewModel.insertInfo(bmiInfo)
             }
         }
     }
-
 
 
     fun ageinit() {
@@ -808,7 +933,8 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         })
         //滑动之后100ms后移动到中心位置
         binding.ageRecyclerView.postDelayed({
-            binding.ageRecyclerView.scrollToPosition(childViewHalfCount+25)
+            binding.ageRecyclerView.scrollToPosition(childViewHalfCount + 25)
+            //scrollToCenter(childViewHalfCount+25)
         }, 100L)
     }
 

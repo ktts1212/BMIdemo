@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.dao.BmiInfoDao
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 
-@Database(version = 1, entities = [BmiInfo::class])
+@Database(version = 1, entities = [BmiInfo::class], exportSchema = false)
 abstract class AppDataBase : RoomDatabase() {
 
     abstract fun bmiInfoDao(): BmiInfoDao

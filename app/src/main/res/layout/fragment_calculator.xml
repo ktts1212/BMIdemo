@@ -213,18 +213,21 @@
         app:tabIndicatorHeight="0dp"
         app:tabTextColor="@color/black">
 
+
         <com.google.android.material.tabs.TabItem
-            android:layout_width="90dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:background="@drawable/tab_selector"
             android:clickable="true"
             android:text="@string/ft_in" />
 
         <com.google.android.material.tabs.TabItem
-            android:layout_width="90dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:background="@drawable/tab_selector"
             android:text="@string/cm" />
+
+
 
     </com.google.android.material.tabs.TabLayout>
 
