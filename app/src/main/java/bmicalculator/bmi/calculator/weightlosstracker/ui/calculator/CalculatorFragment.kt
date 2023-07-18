@@ -5,38 +5,41 @@ import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
-import android.text.InputFilter
-import android.text.Spanned
 import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import bmicalculator.bmi.calculator.weightlosstracker.R
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.FragmentCalculatorBinding
 import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFactory
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.adapter.AgeSelectorAdapter
+import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.CalculatorResultFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.DatePickerFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.TimePickerFragment
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.CenterItemUtils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
-import flashlight.flashlightapp.ledlight.torch.uitl.Utils
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
 import java.text.DateFormatSymbols
 import java.text.DecimalFormat
 import java.time.LocalDateTime
@@ -76,13 +79,16 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         val factory = ViewModelFactory(repository)
         viewModel =
             ViewModelProvider(requireActivity(), factory).get(CalculatorViewModel::class.java)
+        setHasOptionsMenu(true)
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbarCal)
         return binding.root
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val dialog=CalculatorResultFragment()
+        dialog.show(childFragmentManager,"CalculatorResult")
         //当输入完后点击键盘的done
         binding.root.setOnTouchListener { view, motionEvent ->
             if (view is TextInputLayout && motionEvent.action == MotionEvent.ACTION_DOWN) {
@@ -892,8 +898,8 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
         binding.btnCalculate.setOnClickListener {
 
-            Toast.makeText(requireContext(), "yo clic calca", Toast.LENGTH_SHORT).show()
             if (viewModel.selectedGender.value != null) {
+
                 val bmiInfo = BmiInfo(
                     viewModel.wt_lb.value!!.toDouble(),
                     viewModel.wt_kg.value!!.toDouble(),
@@ -904,9 +910,12 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     viewModel.selectedGender.value!!.toChar()
                 )
                 Log.d(TAG, bmiInfo.toString())
-//                Log.d(TAG,viewModel.infoCount.toString())
-//                Log.d(TAG,viewModel.allBmiInfos.toString())
-                viewModel.insertInfo(bmiInfo)
+               // viewModel.insertInfo(bmiInfo)
+                val dialog=CalculatorResultFragment()
+                dialog.show(childFragmentManager,"CalculatorResult")
+
+            }else{
+                Toast.makeText(requireContext(), "please select your gender", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -1048,6 +1057,20 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         viewModel.setAge(pos.toInt())
         Log.d(TAG, "当前选中:${ageList.get(pos)}")
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.toolbar_cal,menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.user -> Toast.makeText(requireContext(), "you click me", Toast.LENGTH_SHORT).show()
+            else -> return false
+        }
+        return true
+    }
+
 
 }
 

@@ -1,14 +1,10 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.calculator
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
-import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.Event
 import kotlinx.coroutines.Dispatchers

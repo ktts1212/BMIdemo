@@ -7,6 +7,16 @@
     android:background="#F5F5F5"
     tools:context=".ui.calculator.CalculatorFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_cal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#F5F5F5"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/Theme.AppCompat.Light" />
+
     <TextView
         android:id="@+id/wt_display"
         android:layout_width="wrap_content"
@@ -16,8 +26,9 @@
         android:text="@string/weight"
         android:textColor="@color/black"
         android:textSize="17sp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_cal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/wt_card"
@@ -35,16 +46,17 @@
             android:id="@+id/wt_textField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:boxBackgroundMode="none"
             app:errorEnabled="true">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:imeOptions="actionDone"
+            <AutoCompleteTextView
                 android:id="@+id/wt_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:fontFamily="@font/montserrat_extrabold"
                 android:gravity="center"
+                android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
                 android:text="@string/Default_140_00"
                 android:textColor="@color/black"
@@ -97,7 +109,7 @@
         android:textColor="@color/black"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar_cal" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/ht_card_cm"
@@ -116,9 +128,10 @@
             android:id="@+id/ht_textField_cm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:boxBackgroundMode="none"
             app:errorEnabled="true">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
                 android:id="@+id/ht_input_cm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -148,9 +161,10 @@
             android:id="@+id/ht_textField_ftin1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:boxBackgroundMode="none"
             app:errorEnabled="true">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
                 android:id="@+id/ht_input_ftin1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -181,9 +195,10 @@
             android:id="@+id/ht_textField_ftin2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:boxBackgroundMode="none"
             app:errorEnabled="true">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
                 android:id="@+id/ht_input_ftin2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

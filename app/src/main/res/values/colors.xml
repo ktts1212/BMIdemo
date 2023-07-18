@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="dolorblue">#1E90FF</color>
     <color name="royblue">#4169E1</color>
+    <color name="grey_w">#F5F5F5</color>
 </resources>

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.BMICalculatorWeightLossTracker" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="Theme.BMICalculatorWeightLossTracker" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimaryDark">#F5F5F5</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
+
 
     <style name="Theme.BMICalculatorWeightLossTracker.Splash" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimaryDark">#ff0099cc</item>
@@ -11,5 +13,16 @@
     
     <style name="DatePickerStyle" parent="android:Theme.Material.Light.Dialog">
         <item name="android:textColorPrimary">@color/black</item>
+    </style>
+    
+    <style name="NoUnderlineEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:background">
+            @android:color/transparent
+        </item>
+    </style>
+
+    <style name="CalculatorResultFragment" parent="Theme.MaterialComponents.Dialog">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorPrimaryDark">@color/white</item>
     </style>
 </resources>

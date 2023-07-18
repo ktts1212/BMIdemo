@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.ActivitySplashBinding
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.interpolator.BezierInterpolator
-import flashlight.flashlightapp.ledlight.torch.uitl.Utils
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
 import java.util.Timer
 import kotlin.concurrent.schedule
 
@@ -38,8 +38,8 @@ class SplashActivity : AppCompatActivity(), Animator.AnimatorListener {
 
     fun initobjAnimator(){
         //前一秒指针转动
-        binding.logoArrow.pivotX=Utils.dip2px(this,10f).toFloat()
-        binding.logoArrow.pivotY=Utils.dip2px(this,10f).toFloat()
+        binding.logoArrow.pivotX= Utils.dip2px(this,10f).toFloat()
+        binding.logoArrow.pivotY= Utils.dip2px(this,10f).toFloat()
         Log.d("SplashAc",(binding.logoArrow.width.toFloat()).toString())
         anim1=ObjectAnimator.ofFloat(binding.logoArrow,"rotation",
         0f,230f)
