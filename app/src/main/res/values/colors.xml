@@ -10,4 +10,12 @@
     <color name="dolorblue">#1E90FF</color>
     <color name="royblue">#4169E1</color>
     <color name="grey_w">#F5F5F5</color>
+    <color name="vsuw">#4343B8</color>
+    <color name="suw">#1258E1</color>
+    <color name="uw">#0099F2</color>
+    <color name="normal">#54A529</color>
+    <color name="ow">#FECD2E</color>
+    <color name="oc1">#FFA100</color>
+    <color name="oc2">#FF7137</color>
+    <color name="oc3">#D3333B</color>
 </resources>

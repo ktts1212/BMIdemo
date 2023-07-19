@@ -13,13 +13,29 @@ import kotlinx.coroutines.withContext
 
 class CalculatorViewModel(private val repository: Repository) : ViewModel() {
 
-    //共享日期
-    var selectedDate = MutableLiveData<String>()
+
 
 
     private val statusMessage = MutableLiveData<Event<String>>()
     val message: LiveData<Event<String>>
         get() = statusMessage
+
+
+    //记录用户的cal选择
+    var wtval:Float= 0f
+    var wttype="error"
+    var htval:Float=0f
+    var httype="error"
+
+    //记录BMI
+    var bmival=MutableLiveData<Float>(0f)
+
+    fun setBmival(data:Float){
+        bmival.value=data
+    }
+
+    //共享日期
+    var selectedDate = MutableLiveData<String>()
 
     fun setDate(data: String) {
         selectedDate.value = data
@@ -33,7 +49,7 @@ class CalculatorViewModel(private val repository: Repository) : ViewModel() {
     }
 
     //性别
-    var selectedGender = MutableLiveData<Char>()
+    var selectedGender = MutableLiveData<Char>('0')
 
     fun setGender(data: Char) {
         selectedGender.value = data

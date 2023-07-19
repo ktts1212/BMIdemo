@@ -17,4 +17,22 @@
     <string name="phase">null</string>
     <string name="age">Age</string>
     <string name="calculate">Calculate</string>
+    <string name="vsuw">Very Severely Underweight</string>
+    <string name="suw">Severely Underweight</string>
+    <string name="uw">Underweight</string>
+    <string name="nm">Normal</string>
+    <string name="ow">Overweight</string>
+    <string name="oc1">Obese Class I</string>
+    <string name="oc2">Obese Class II</string>
+    <string name="oc3">Obese Class III</string>
+    <string name="adult_nm_enc">😎 Congratulations! You’re in a great place now. Keep up your healthy habits to maintain your healthy weight.</string>
+    <string name="adult_vsuw">🤕 We wish you to show some love to yourself! You need to add healthy calories, go nutrient dense and seek medical advice to gain weight.</string>
+    <string name="adult_suw">🥺 It’s time to take care of yourself and get rid of the risk of poor immune function and osteoporosis. Treat yourself to a balanced meal and a variety of nutrients.</string>
+    <string name="adult_uw">😳 It seems that your body needs more fuel. Unless you’re naturally very slim, you may need to consider ways of gaining weight as your weight may pose certain health risks.</string>
+    <string name="adult_ow">😠 Don’t wait any longer! It’s time to take action to reach your weight target. You are carrying excess fat and should balance your diet and physical activity to achieve a healthy weight.</string>
+    <string name="adult_ob1">😧 Uh-oh! You currently weigh more than is ideal and have an increased risk of developing various health problems. It’s time to embrace healthy eating and increase your activity level.</string>
+    <string name="adult_ob2">😣 Time to change! You are at high risk of obesity-related diseases. You should increase physical activity and reduce caloric intake slowly but surely. It is also vital to have health screening.</string>
+    <string name="adult_ob3">😫 We are worried about you! Your weight is a serious and imminent threat to your health. Go for health advice and a weight loss plan scientifically.</string>
+    <string name="suggestion">Normal Weight for your height</string>
+
 </resources>
