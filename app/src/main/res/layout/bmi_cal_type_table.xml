@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/bmi_cal_type"
+        android:layout_width="375dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        >
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bmi_verysevere"
+            android:layout_width="345dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="4dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="13.5dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:id="@+id/bmi_verysevere_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/bmi_verysevere_image"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/shape_bmi_dot"
+                    android:backgroundTint="#4343B8" />
+
+                <TextView
+                    android:id="@+id/bmi_verysevere_text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/bmi_verysevere_image"
+                    android:gravity="center_vertical"
+                    android:text="Very Severely Underweight"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/bmi_verysevere_text2"
+                    android:layout_width="70dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="270dp"
+                    android:layout_marginEnd="25dp"
+                    android:gravity="center"
+                    android:text="&lt; 16"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bmi_severe"
+            android:layout_width="345dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="4dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="13.5dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:id="@+id/bmi_severe_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/bmi_severe_image"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/shape_bmi_dot"
+                    android:backgroundTint="#1258E1" />
+
+                <TextView
+                    android:id="@+id/bmi_severe_text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/bmi_severe_image"
+                    android:gravity="center_vertical"
+                    android:text="Severely Underweight"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/bmi_severe_text2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="250dp"
+                    android:gravity="center"
+                    android:text="16.0 - 16.9"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bmi_uweight"
+            android:layout_width="345dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="4dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="13.5dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:id="@+id/bmi_uweight_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/bmi_uweight_image"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/shape_bmi_dot"
+                    android:backgroundTint="#0099F2" />
+
+                <TextView
+                    android:id="@+id/bmi_uweight_text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/bmi_uweight_image"
+                    android:gravity="center_vertical"
+                    android:text="Underweight"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/bmi_uweight_text2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="250dp"
+                    android:gravity="center"
+                    android:text="17.0 - 18.4"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bmi_normal"
+            android:layout_width="345dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="4dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="13.5dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:id="@+id/bmi_normal_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/bmi_normal_image"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/shape_bmi_dot"
+                    android:backgroundTint="#54A529" />
+
+                <TextView
+                    android:id="@+id/bmi_normal_text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/bmi_normal_image"
+                    android:gravity="center_vertical"
+                    android:text="Normal"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/bmi_normal_text2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="250dp"
+                    android:gravity="center"
+                    android:text="18.5 - 24.9"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bmi_overweight"
+            android:layout_width="345dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="4dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="13.5dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:id="@+id/bmi_overweight_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/bmi_overweight_image"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/shape_bmi_dot"
+                    android:backgroundTint="#FECD2E" />
+
+                <TextView
+                    android:id="@+id/bmi_overweight_text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_toEndOf="@id/bmi_overweight_image"
+                    android:gravity="center_vertical"
+                    android:text="Overweight"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/bmi_overweight_text2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="250dp"
+                    android:gravity="center"
+                    android:text="25.0 - 29.9"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bmi_ob1"
+            android:layout_width="345dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="4dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="13.5dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:id="@+id/bmi_ob1_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/bmi_ob1_image"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/shape_bmi_dot"
+                    android:backgroundTint="#FFA100" />
+
+                <TextView
+                    android:id="@+id/bmi_ob1_text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/bmi_ob1_image"
+                    android:gravity="center_vertical"
+                    android:text="Obese Class I"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/bmi_ob1_text2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="250dp"
+                    android:gravity="center"
+                    android:text="30.0 - 34.9"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bmi_ob2"
+            android:layout_width="345dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="4dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="13.5dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:id="@+id/bmi_ob2.layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/bmi_ob2_image"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/shape_bmi_dot"
+                    android:backgroundTint="#FF7137" />
+
+                <TextView
+                    android:id="@+id/bmi_ob2_text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/bmi_ob2_image"
+                    android:gravity="center_vertical"
+                    android:text="Obese Class II"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/bmi_ob2_text2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="250dp"
+                    android:gravity="center"
+                    android:text="35.0 - 39.9"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bmi_ob3"
+            android:layout_width="345dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="4dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="13.5dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:id="@+id/bmi_ob3_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/bmi_ob3_image"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/shape_bmi_dot"
+                    android:backgroundTint="#D3333B" />
+
+                <TextView
+                    android:id="@+id/bmi_ob3_text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/bmi_ob3_image"
+                    android:gravity="center_vertical"
+                    android:text="Obese Class II"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/bmi_ob3_text2"
+                    android:layout_width="70dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="270dp"
+                    android:layout_marginEnd="28dp"
+                    android:gravity="center"
+                    android:text=">= 40"
+                    android:textColor="@color/black"
+                    android:textFontWeight="400"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>

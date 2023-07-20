@@ -13,9 +13,6 @@ import kotlinx.coroutines.withContext
 
 class CalculatorViewModel(private val repository: Repository) : ViewModel() {
 
-
-
-
     private val statusMessage = MutableLiveData<Event<String>>()
     val message: LiveData<Event<String>>
         get() = statusMessage

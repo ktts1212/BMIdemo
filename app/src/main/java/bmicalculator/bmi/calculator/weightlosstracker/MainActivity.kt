@@ -20,6 +20,7 @@ import bmicalculator.bmi.calculator.weightlosstracker.ui.bmi.BmiFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
 import bmicalculator.bmi.calculator.weightlosstracker.ui.statistic.StatisticFragment
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.UserStatus
 
 private const val TAG = "MainActivity"
 
@@ -35,17 +36,6 @@ class MainActivity : AppCompatActivity() {
 //        )
 //    }
 
-//    private val calculatorFragment by lazy {
-//        CalculatorFragment()
-//    }
-//
-//    private val bmiFragment by lazy {
-//        BmiFragment()
-//    }
-//
-//    private val statisticFragment by lazy {
-//        StatisticFragment()
-//    }
 
     private lateinit var viewModel: CalculatorViewModel
 
@@ -87,8 +77,10 @@ class MainActivity : AppCompatActivity() {
                 //binding.fragmentContainer.visibility = View.VISIBLE
                 binding.bottomNavigationView.visibility = View.VISIBLE
                 Log.d(TAG, "执行到了这里>>>>")
+                UserStatus.ishasRecord=false
             } else {
                 binding.bottomNavigationView.visibility = View.GONE
+                UserStatus.ishasRecord=false
             }
         }
 
@@ -105,13 +97,6 @@ class MainActivity : AppCompatActivity() {
         val transcation=fragmentManager.beginTransaction()
         transcation.add(R.id.fragment_container,mCurrentFragment,"calculator")
         transcation.show(mCurrentFragment).commit()
-//        transaction.add(calculatorFragment,"Calculator")
-//        transaction.add(bmiFragment,"Bmi")
-//        transaction.add(statisticFragment,"Statistic")
-        //transaction.replace(R.id.fragment_container, calculatorFragment)
-//        transaction.show(calculatorFragment)
-//        transaction.commit()
-
 
         binding.bottomNavigationView.setOnItemSelectedListener {
 

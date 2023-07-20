@@ -34,5 +34,10 @@
     <string name="adult_ob2">😣 Time to change! You are at high risk of obesity-related diseases. You should increase physical activity and reduce caloric intake slowly but surely. It is also vital to have health screening.</string>
     <string name="adult_ob3">😫 We are worried about you! Your weight is a serious and imminent threat to your health. Go for health advice and a weight loss plan scientifically.</string>
     <string name="suggestion">Normal Weight for your height</string>
+    <string name="ad_home_workout">Home Workout - No Equipment</string>
+    <string name="child_uw">😉 Don’t be picky eating anymore, your body needs more energy to grow. Try to snack on healthy and high energy foods to put on weight.</string>
+    <string name="child_nm">👍 Thumbs Up! You’ve done a great job and now only need to keep your lifestyle healthy to stay in this range.</string>
+    <string name="child_ow">😤 Time to be get moving and say no to junk food! Your extra weight increases the chances of developing health problems. A small amount of weight loss can make a difference.</string>
+    <string name="child_ob1">🤒 Feeling hard to keep up with friends? It’s time to repair your body by staying active and eat healthily! Seek your parents‘ and a health professional’s advice to get support.</string>
 
 </resources>

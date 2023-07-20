@@ -223,34 +223,6 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
         binding.btnDone.setOnClickListener {
 
-//            if (year < binding.wheelPickerDateYearWheel.getCurrentItem<Int>()) {
-//                Toast.makeText(
-//                    requireContext(), "Please select a date that is earlier than today",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                binding.btnDone.setBackgroundColor(Color.parseColor("#F5F5F5"))
-//            }
-//
-//            if (year == binding.wheelPickerDateYearWheel.getCurrentItem<Int>() &&
-//                month < MonthtoNumber(binding.wheelPickerDateMonthWheel.getCurrentItem())
-//            ) {
-//                Toast.makeText(
-//                    requireContext(), "Please select a date that is earlier than today",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                binding.btnDone.setBackgroundColor(Color.parseColor("#F5F5F5"))
-//            }
-//
-//            if (year == binding.wheelPickerDateYearWheel.getCurrentItem<Int>() &&
-//                month == MonthtoNumber(binding.wheelPickerDateMonthWheel.getCurrentItem())
-//                && day < binding.wheelPickerDateDayWheel.getCurrentItem<Int>()
-//            ) {
-//                Toast.makeText(
-//                    requireContext(), "Please select a date that is earlier than today",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                binding.btnDone.setBackgroundColor(Color.parseColor("#F5F5F5"))
-//            }
 
             if (isValid) {
                 val dateselected = binding.wheelPickerDateMonthWheel.getCurrentItem<String>() +
@@ -281,16 +253,6 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
     }
 
-//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-//        val c=Calendar.getInstance()
-//        val year=c.get(Calendar.YEAR)
-//        val month=c.get(Calendar.MONTH)
-//        val day=c.get(Calendar.DAY_OF_MONTH)
-//        val datePickerDialog=DatePickerDialog(requireActivity(),this,year,month,day)
-//        datePickerDialog.datePicker.calendarViewShown=false
-//        datePickerDialog.datePicker.spinnersShown=true
-//        return datePickerDialog
-//    }
 
     fun MonthtoNumber(month: String): Int {
         val monthnum = when (month) {

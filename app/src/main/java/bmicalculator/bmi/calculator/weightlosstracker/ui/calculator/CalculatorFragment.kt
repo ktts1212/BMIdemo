@@ -1044,7 +1044,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         val smoothDistance = childViewLeft - viewCTop + childVhalf
         binding.ageRecyclerView.smoothScrollBy(smoothDistance, 0, decelerateInterpolator)
         adapter.setSelectPosition(pos)
-        viewModel.setAge(pos.toInt()-1)
+        viewModel.setAge(pos-1)
         Log.d(TAG, "当前选中:${ageList.get(pos)}")
     }
 

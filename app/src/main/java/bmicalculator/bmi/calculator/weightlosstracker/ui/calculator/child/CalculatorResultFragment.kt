@@ -8,11 +8,6 @@ import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -31,9 +26,11 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFactory
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.CustomTypefaceSpan
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.ChildBmiDialData
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.DcFormat
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.UserStatus
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import kotlin.math.max
 
 private const val TAG = "Calres"
 
@@ -110,9 +107,29 @@ class CalculatorResultFragment : DialogFragment() {
             }
         }
 
-        Log.d(TAG, Utils.px2dip(requireContext(), 40f).toString())
-        binding.bmiArrow.rotation = sweepAngle(viewModel.bmival.value!!.toFloat())
+        if (UserStatus.ishasRecord){
+            binding.bmiTypeTip.visibility=View.VISIBLE
+            binding.bmiCalType.visibility=View.GONE
+            binding.bmiAdLayout.visibility=View.VISIBLE
+
+        }else{
+            binding.bmiTypeTip.visibility=View.GONE
+            binding.bmiCalType.visibility=View.VISIBLE
+            binding.bmiAdLayout.visibility=View.GONE
+        }
+
+        binding.bmiCalTypeCard.setOnClickListener {
+            if (UserStatus.ishasRecord){
+                val dialog=BmiCalTypeTableFragment()
+                dialog.show(childFragmentManager,"TypeTable")
+            }
+        }
+
         binding.bmiArrow.alpha = 0.75f
+
+        //根据bmival判断
+        val bval = viewModel.bmival.value
+
 
         //设置textdisplay
         val sgender = if (viewModel.selectedGender.value!!.equals('0')) "Male"
@@ -152,379 +169,600 @@ class CalculatorResultFragment : DialogFragment() {
 
         var wtrange="${DcFormat.tf.format(minwt)} ${viewModel.wttype} - ${DcFormat.tf.format(maxwt)} ${viewModel.wttype}"
 
-//        val spannable=SpannableString(wtrange)
-//        spannable.apply {
-//            setSpan(CustomTypefaceSpan(ResourcesCompat.getFont(requireContext(),R.font.montserrat_extrabold)),0,wtrange.length,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-//        }
-        //根据bmival判断
-        val bval = viewModel.bmival.value
-        var wtchazhi=if (viewModel.wttype=="kg"){
-            if (bval!!<18.5){
-                minwt-viewModel.wt_kg.value!!
+        var wtchazhi=if (viewModel.selectedAge.value!!>20){
+            if (viewModel.wttype=="kg"){
+                if (bval!!<18.5){
+                    minwt-viewModel.wt_kg.value!!
+                }else{
+                    viewModel.wt_kg.value!!-maxwt
+                }
             }else{
-                viewModel.wt_kg.value!!-maxwt
-            }
-        }else{
-            if (bval!!<18.5){
-                minwt-viewModel.wt_lb.value!!
-            }else{
-                viewModel.wt_lb.value!!-maxwt
-            }
-        }
-        if (bval!! < 16) {
-            binding.bmiCalTypeDisplay.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.vsuw
-                )
-            )
-            binding.bmiCalTypeText.setText(R.string.vsuw)
-            binding.bmiVerysevereLayout.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.vsuw
-                )
-            )
-            ViewCompat.setBackgroundTintList(
-                binding.bmiVerysevereImage, ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.white
-                    )
-                )
-            )
-            binding.bmiVerysevereText1.apply {
-                setTextColor(Color.WHITE)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    typeface = Typeface.create(
-                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
-                        800,
-                        false
-                    )
+                if (bval!!<18.5){
+                    minwt-viewModel.wt_lb.value!!
+                }else{
+                    viewModel.wt_lb.value!!-maxwt
                 }
             }
-            binding.bmiVerysevereText2.apply {
-                setTextColor(Color.WHITE)
-                typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+        }else{
+
+            ChildBmiDialData.setData(viewModel.selectedAge.value!!,viewModel.selectedGender.value!!)
+
+            if (viewModel.wttype=="kg"){
+                if (bval!!<ChildBmiDialData.cScaleList[0].toFloat()){
+                    minwt-viewModel.wt_kg.value!!
+                }else{
+                    viewModel.wt_kg.value!!-maxwt
+                }
+            }else{
+                if (bval!!<ChildBmiDialData.cScaleList[0].toFloat()){
+                    minwt-viewModel.wt_lb.value!!
+                }else{
+                    viewModel.wt_lb.value!!-maxwt
+                }
             }
-            binding.bmiCalSuggest.setText(
-                getString(R.string.adult_vsuw) + "\n\n" +
-                        getString(R.string.suggestion) + "(${
+        }
+
+        if (viewModel.selectedAge.value!!>20){
+            binding.bmiChildDial.visibility=View.GONE
+            binding.bmiDial.visibility=View.VISIBLE
+            binding.bmiArrow.rotation = sweepAngle(viewModel.bmival.value!!.toFloat())
+
+            if (bval < 16) {
+                binding.bmiCalTypeDisplay.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.vsuw
+                    )
+                )
+                binding.bmiCalTypeText.setText(R.string.vsuw)
+                binding.newac.bmiVerysevereLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.vsuw
+                    )
+                )
+                ViewCompat.setBackgroundTintList(
+                    binding.newac.bmiVerysevereImage, ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
+                )
+                binding.newac.bmiVerysevereText1.apply {
+                    setTextColor(Color.WHITE)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        typeface = Typeface.create(
+                            ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                            800,
+                            false
+                        )
+                    }
+                }
+                binding.newac.bmiVerysevereText2.apply {
+                    setTextColor(Color.WHITE)
+                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                }
+                binding.bmiCalSuggest.setText(
+                    getString(R.string.adult_vsuw) + "\n\n" +
+                            getString(R.string.suggestion) + "(${
+                        if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
+                        else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
+                    }):"+"\n"
+                )
+                binding.wtRange.setText(wtrange)
+                binding.wtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
+            } else if (bval >= 16 && bval < 17) {
+                binding.bmiCalTypeDisplay.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.suw
+                    )
+                )
+                binding.bmiCalTypeText.setText(R.string.suw)
+                binding.newac.bmiSevereLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.suw
+                    )
+                )
+                ViewCompat.setBackgroundTintList(
+                    binding.newac.bmiSevereImage, ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
+                )
+                binding.newac.bmiSevereText1.apply {
+                    setTextColor(Color.WHITE)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        typeface = Typeface.create(
+                            ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                            800,
+                            false
+                        )
+                    }
+                }
+                binding.newac.bmiSevereText2.apply {
+                    setTextColor(Color.WHITE)
+                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                }
+                binding.bmiCalSuggest.setText(
+                    getString(R.string.adult_suw) + "\n\n" +
+                            getString(R.string.suggestion) + "(${
+                        if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
+                        else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
+                    }):"+"\n"
+                )
+                binding.wtRange.setText(wtrange)
+                binding.wtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
+            } else if (bval >= 17 && bval < 18.5) {
+                binding.bmiCalTypeDisplay.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.uw
+                    )
+                )
+                binding.bmiCalTypeText.setText(R.string.uw)
+                binding.newac.bmiUweightLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.uw
+                    )
+                )
+                ViewCompat.setBackgroundTintList(
+                    binding.newac.bmiUweightImage, ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
+                )
+                binding.newac.bmiUweightText1.apply {
+                    setTextColor(Color.WHITE)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        typeface = Typeface.create(
+                            ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                            800,
+                            false
+                        )
+                    }
+                }
+                binding.newac.bmiUweightText2.apply {
+                    setTextColor(Color.WHITE)
+                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                }
+                binding.bmiCalSuggest.setText(
+                    getString(R.string.adult_uw) + "\n\n" +
+                            getString(R.string.suggestion) + "(${
+                        if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
+                        else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
+                    }):"+"\n"
+                )
+                binding.wtRange.setText(wtrange)
+                binding.wtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
+            } else if (bval >= 18.5 && bval < 25) {
+                binding.bmiCalTypeDisplay.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.normal
+                    )
+                )
+                binding.bmiCalTypeText.setText(R.string.nm)
+                binding.newac.bmiNormalLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.normal
+                    )
+                )
+                ViewCompat.setBackgroundTintList(
+                    binding.newac.bmiNormalImage, ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
+                )
+                binding.newac.bmiNormalText1.apply {
+                    setTextColor(Color.WHITE)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        typeface = Typeface.create(
+                            ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                            800,
+                            false
+                        )
+                    }
+                }
+                binding.newac.bmiNormalText2.apply {
+                    setTextColor(Color.WHITE)
+                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                }
+                binding.bmiCalSuggest.setText(R.string.adult_nm_enc)
+            } else if (bval >= 25 && bval < 30) {
+                binding.bmiCalTypeDisplay.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.ow
+                    )
+                )
+                binding.bmiCalTypeText.setText(R.string.ow)
+                binding.newac.bmiOverweightLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.ow
+                    )
+                )
+                ViewCompat.setBackgroundTintList(
+                    binding.newac.bmiOverweightImage, ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
+                )
+                binding.newac.bmiOverweightText1.apply {
+                    setTextColor(Color.WHITE)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        typeface = Typeface.create(
+                            ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                            800,
+                            false
+                        )
+                    }
+                }
+                binding.newac.bmiOverweightText2.apply {
+                    setTextColor(Color.WHITE)
+                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                }
+                binding.bmiCalSuggest.setText(
+                    getString(R.string.adult_ow) + "\n\n" +
+                            getString(R.string.suggestion) + "(${
+                        if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
+                        else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
+                    }):"+"\n"
+                )
+                binding.wtRange.setText(wtrange)
+                binding.wtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
+            } else if (bval >= 30 && bval < 35) {
+                binding.bmiCalTypeDisplay.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.oc1
+                    )
+                )
+                binding.bmiCalTypeText.setText(R.string.oc1)
+                binding.newac.bmiOb1Layout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.oc1
+                    )
+                )
+                ViewCompat.setBackgroundTintList(
+                    binding.newac.bmiOb1Image, ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
+                )
+                binding.newac.bmiOb1Text1.apply {
+                    setTextColor(Color.WHITE)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        typeface = Typeface.create(
+                            ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                            800,
+                            false
+                        )
+                    }
+                }
+                binding.newac.bmiOb1Text2.apply {
+                    setTextColor(Color.WHITE)
+                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                }
+                binding.bmiCalSuggest.setText(
+                    getString(R.string.adult_ob1) + "\n\n" +
+                            getString(R.string.suggestion) + "(${
+                        if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
+                        else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
+                    }):"+"\n"
+                )
+                binding.wtRange.setText(wtrange)
+                binding.wtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
+            } else if (bval >= 35 && bval < 40) {
+                binding.bmiCalTypeDisplay.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.oc2
+                    )
+                )
+                binding.bmiCalTypeText.setText(R.string.oc2)
+                binding.newac.bmiOb2Layout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.oc2
+                    )
+                )
+                ViewCompat.setBackgroundTintList(
+                    binding.newac.bmiOb2Image, ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
+                )
+                binding.newac.bmiOb2Text1.apply {
+                    setTextColor(Color.WHITE)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        typeface = Typeface.create(
+                            ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                            800,
+                            false
+                        )
+                    }
+                }
+                binding.newac.bmiOb2Text2.apply {
+                    setTextColor(Color.WHITE)
+                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                }
+                binding.bmiCalSuggest.setText(
+                    getString(R.string.adult_ob2) + "\n\n" +
+                            getString(R.string.suggestion) + "(${
+                        if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
+                        else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
+                    }):"+"\n"
+                )
+                binding.wtRange.setText(wtrange)
+                binding.wtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
+            } else {
+                binding.bmiCalTypeDisplay.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.oc3
+                    )
+                )
+                binding.bmiCalTypeText.setText(R.string.oc3)
+                binding.newac.bmiOb3Layout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.oc3
+                    )
+                )
+                ViewCompat.setBackgroundTintList(
+                    binding.newac.bmiOb3Image, ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
+                )
+                binding.newac.bmiOb3Text1.apply {
+                    setTextColor(Color.WHITE)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        typeface = Typeface.create(
+                            ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                            800,
+                            false
+                        )
+                    }
+                }
+                binding.newac.bmiOb3Text2.apply {
+                    setTextColor(Color.WHITE)
+                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                }
+                binding.bmiCalSuggest.setText(
+                    getString(R.string.adult_ob3) + "\n\n" +
+                            getString(R.string.suggestion) + "(${
+                        if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
+                        else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
+                    }):"+"\n"
+                )
+                binding.wtRange.setText(wtrange)
+                binding.wtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
+            }
+        }else{
+            binding.bmiDial.visibility=View.GONE
+            binding.bmiChildDial.visibility=View.VISIBLE
+            binding.bmiChildDial.getData(ChildBmiDialData.cScaleList,ChildBmiDialData.scaleRange)
+            binding.bmiArrow.rotation=childSweepAngle(viewModel.bmival.value!!.toFloat())
+
+            binding.newac.bmiVerysevere.visibility=View.GONE
+            binding.newac.bmiSevere.visibility=View.GONE
+            binding.newac.bmiOb2.visibility=View.GONE
+            binding.newac.bmiOb3.visibility=View.GONE
+            val list=ChildBmiDialData.cScaleList
+            binding.newac.bmiUweightText2.setText("${list[0]} - ${list[1]}")
+            binding.newac.bmiNormalText2.setText("${list[1]} - ${list[2]}")
+            binding.newac.bmiOverweightText2.setText("${list[2]} - ${list[3]}")
+            binding.newac.bmiOb1Text2.setText("${list[3]} - ${list[4]}")
+
+            if (bval < ChildBmiDialData.cScaleList[1].toFloat()) {
+                binding.bmiCalTypeDisplay.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.uw
+                    )
+                )
+                binding.bmiCalTypeText.setText(R.string.uw)
+                binding.newac.bmiVerysevereLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.uw
+                    )
+                )
+                ViewCompat.setBackgroundTintList(
+                    binding.newac.bmiUweight, ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
+                )
+                binding.newac.bmiVerysevereText1.apply {
+                    setTextColor(Color.WHITE)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        typeface = Typeface.create(
+                            ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                            800,
+                            false
+                        )
+                    }
+                }
+                binding.newac.bmiVerysevereText2.apply {
+                    setTextColor(Color.WHITE)
+                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                }
+                binding.bmiCalSuggest.setText(
+                    getString(R.string.child_uw) + "\n\n" +
+                            getString(R.string.suggestion) + "(${
+                        if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
+                        else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
+                    }):"+"\n"
+                )
+                binding.wtRange.setText(wtrange)
+                binding.wtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
+            }else if (bval < ChildBmiDialData.cScaleList[2].toFloat()&&
+                bval>ChildBmiDialData.cScaleList[1].toFloat()) {
+                binding.bmiCalTypeDisplay.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.normal
+                    )
+                )
+                binding.bmiCalTypeText.setText(R.string.uw)
+                binding.newac.bmiNormalLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.normal
+                    )
+                )
+                ViewCompat.setBackgroundTintList(
+                    binding.newac.bmiNormalImage, ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
+                )
+                binding.newac.bmiNormalText1.apply {
+                    setTextColor(Color.WHITE)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        typeface = Typeface.create(
+                            ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                            800,
+                            false
+                        )
+                    }
+                }
+                binding.newac.bmiNormalText2.apply {
+                    setTextColor(Color.WHITE)
+                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                }
+                binding.bmiCalSuggest.setText(
+                    getString(R.string.child_nm) + "\n\n" +
+                            getString(R.string.suggestion) + "(${
+                        if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
+                        else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
+                    }):"+"\n"
+                )
+                binding.wtRange.setText(wtrange)
+                binding.wtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
+            }else if (bval < ChildBmiDialData.cScaleList[3].toFloat() &&
+                    bval>ChildBmiDialData.cScaleList[2].toFloat()) {
+                binding.bmiCalTypeDisplay.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.ow
+                    )
+                )
+                binding.bmiCalTypeText.setText(R.string.uw)
+                binding.newac.bmiVerysevereLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.ow
+                    )
+                )
+                ViewCompat.setBackgroundTintList(
+                    binding.newac.bmiVerysevereImage, ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
+                )
+                binding.newac.bmiVerysevereText1.apply {
+                    setTextColor(Color.WHITE)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        typeface = Typeface.create(
+                            ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                            800,
+                            false
+                        )
+                    }
+                }
+                binding.newac.bmiVerysevereText2.apply {
+                    setTextColor(Color.WHITE)
+                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                }
+                binding.bmiCalSuggest.setText(
+                    getString(R.string.child_ow) + "\n\n" +
+                            getString(R.string.suggestion) + "(${
+                        if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
+                        else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
+                    }):"+"\n"
+                )
+                binding.wtRange.setText(wtrange)
+                binding.wtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
+            }else {
+                    binding.bmiCalTypeDisplay.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.oc1
+                        )
+                    )
+                    binding.bmiCalTypeText.setText(R.string.uw)
+                    binding.newac.bmiVerysevereLayout.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.oc1
+                        )
+                    )
+                    ViewCompat.setBackgroundTintList(
+                        binding.newac.bmiVerysevereImage, ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.white
+                            )
+                        )
+                    )
+                    binding.newac.bmiVerysevereText1.apply {
+                        setTextColor(Color.WHITE)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            typeface = Typeface.create(
+                                ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                                800,
+                                false
+                            )
+                        }
+                    }
+                    binding.newac.bmiVerysevereText2.apply {
+                        setTextColor(Color.WHITE)
+                        typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                    }
+                    binding.bmiCalSuggest.setText(
+                        getString(R.string.child_ob1) + "\n\n" +
+                                getString(R.string.suggestion) + "(${
                             if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
                             else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
                         }):"+"\n"
-            )
-            binding.wtRange.setText(wtrange)
-            binding.wtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
-        } else if (bval >= 16 && bval < 17) {
-            binding.bmiCalTypeDisplay.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.suw
-                )
-            )
-            binding.bmiCalTypeText.setText(R.string.suw)
-            binding.bmiSevereLayout.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.suw
-                )
-            )
-            ViewCompat.setBackgroundTintList(
-                binding.bmiSevereImage, ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.white
                     )
-                )
-            )
-            binding.bmiSevereText1.apply {
-                setTextColor(Color.WHITE)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    typeface = Typeface.create(
-                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
-                        800,
-                        false
-                    )
-                }
+                    binding.wtRange.setText(wtrange)
+                    binding.wtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
             }
-            binding.bmiSevereText2.apply {
-                setTextColor(Color.WHITE)
-                typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
-            }
-            binding.bmiCalSuggest.setText(
-                getString(R.string.adult_suw) + "\n\n" +
-                        getString(R.string.suggestion) + "(${
-                    if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
-                    else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
-                }):"+"\n"
-            )
-            binding.wtRange.setText(wtrange)
-            binding.wtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
-        } else if (bval >= 17 && bval < 18.5) {
-            binding.bmiCalTypeDisplay.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.uw
-                )
-            )
-            binding.bmiCalTypeText.setText(R.string.uw)
-            binding.bmiUweightLayout.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.uw
-                )
-            )
-            ViewCompat.setBackgroundTintList(
-                binding.bmiUweightImage, ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.white
-                    )
-                )
-            )
-            binding.bmiUweightText1.apply {
-                setTextColor(Color.WHITE)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    typeface = Typeface.create(
-                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
-                        800,
-                        false
-                    )
-                }
-            }
-            binding.bmiUweightText2.apply {
-                setTextColor(Color.WHITE)
-                typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
-            }
-            binding.bmiCalSuggest.setText(
-                getString(R.string.adult_uw) + "\n\n" +
-                        getString(R.string.suggestion) + "(${
-                    if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
-                    else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
-                }):"+"\n"
-            )
-            binding.wtRange.setText(wtrange)
-            binding.wtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
-        } else if (bval >= 18.5 && bval < 25) {
-            binding.bmiCalTypeDisplay.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.normal
-                )
-            )
-            binding.bmiCalTypeText.setText(R.string.nm)
-            binding.bmiNormalLayout.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.normal
-                )
-            )
-            ViewCompat.setBackgroundTintList(
-                binding.bmiNormalImage, ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.white
-                    )
-                )
-            )
-            binding.bmiNormalText1.apply {
-                setTextColor(Color.WHITE)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    typeface = Typeface.create(
-                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
-                        800,
-                        false
-                    )
-                }
-            }
-            binding.bmiNormalText2.apply {
-                setTextColor(Color.WHITE)
-                typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
-            }
-            binding.bmiCalSuggest.setText(R.string.adult_nm_enc)
-        } else if (bval >= 25 && bval < 30) {
-            binding.bmiCalTypeDisplay.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.ow
-                )
-            )
-            binding.bmiCalTypeText.setText(R.string.ow)
-            binding.bmiOverweightLayout.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.ow
-                )
-            )
-            ViewCompat.setBackgroundTintList(
-                binding.bmiOverweightImage, ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.white
-                    )
-                )
-            )
-            binding.bmiOverweightText1.apply {
-                setTextColor(Color.WHITE)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    typeface = Typeface.create(
-                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
-                        800,
-                        false
-                    )
-                }
-            }
-            binding.bmiOverweightText2.apply {
-                setTextColor(Color.WHITE)
-                typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
-            }
-            binding.bmiCalSuggest.setText(
-                getString(R.string.adult_ow) + "\n\n" +
-                        getString(R.string.suggestion) + "(${
-                    if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
-                    else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
-                }):"+"\n"
-            )
-            binding.wtRange.setText(wtrange)
-            binding.wtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
-        } else if (bval >= 30 && bval < 35) {
-            binding.bmiCalTypeDisplay.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.oc1
-                )
-            )
-            binding.bmiCalTypeText.setText(R.string.oc1)
-            binding.bmiOb1Layout.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.oc1
-                )
-            )
-            ViewCompat.setBackgroundTintList(
-                binding.bmiOb1Image, ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.white
-                    )
-                )
-            )
-            binding.bmiOb1Text1.apply {
-                setTextColor(Color.WHITE)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    typeface = Typeface.create(
-                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
-                        800,
-                        false
-                    )
-                }
-            }
-            binding.bmiOb1Text2.apply {
-                setTextColor(Color.WHITE)
-                typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
-            }
-            binding.bmiCalSuggest.setText(
-                getString(R.string.adult_ob1) + "\n\n" +
-                        getString(R.string.suggestion) + "(${
-                    if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
-                    else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
-                }):"+"\n"
-            )
-            binding.wtRange.setText(wtrange)
-            binding.wtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
-        } else if (bval >= 35 && bval < 40) {
-            binding.bmiCalTypeDisplay.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.oc2
-                )
-            )
-            binding.bmiCalTypeText.setText(R.string.oc2)
-            binding.bmiOb2Layout.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.oc2
-                )
-            )
-            ViewCompat.setBackgroundTintList(
-                binding.bmiOb2Image, ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.white
-                    )
-                )
-            )
-            binding.bmiOb2Text1.apply {
-                setTextColor(Color.WHITE)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    typeface = Typeface.create(
-                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
-                        800,
-                        false
-                    )
-                }
-            }
-            binding.bmiOb2Text2.apply {
-                setTextColor(Color.WHITE)
-                typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
-            }
-            binding.bmiCalSuggest.setText(
-                getString(R.string.adult_ob2) + "\n\n" +
-                        getString(R.string.suggestion) + "(${
-                    if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
-                    else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
-                }):"+"\n"
-            )
-            binding.wtRange.setText(wtrange)
-            binding.wtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
-        } else {
-            binding.bmiCalTypeDisplay.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.oc3
-                )
-            )
-            binding.bmiCalTypeText.setText(R.string.oc3)
-            binding.bmiOb3Layout.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.oc3
-                )
-            )
-            ViewCompat.setBackgroundTintList(
-                binding.bmiOb3Image, ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.white
-                    )
-                )
-            )
-            binding.bmiOb3Text1.apply {
-                setTextColor(Color.WHITE)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    typeface = Typeface.create(
-                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
-                        800,
-                        false
-                    )
-                }
-            }
-            binding.bmiOb3Text2.apply {
-                setTextColor(Color.WHITE)
-                typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
-            }
-            binding.bmiCalSuggest.setText(
-                getString(R.string.adult_ob3) + "\n\n" +
-                        getString(R.string.suggestion) + "(${
-                    if (viewModel.httype=="cm") viewModel.ht_cm.value.toString()+"cm"
-                    else viewModel.ht_ft.value.toString()+"ft ${viewModel.ht_in.value}in"
-                }):"+"\n"
-            )
-            binding.wtRange.setText(wtrange)
-            binding.wtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
         }
     }
+
+
 
     override fun onResume() {
         super.onResume()
@@ -546,5 +784,12 @@ class CalculatorResultFragment : DialogFragment() {
     fun sweepAngle(num: Float): Float {
         val bmival = if (num > 40.3) 40.3f else if (num < 15.6) 15.6f else num
         return DcFormat.tf.format((bmival - 15.6) / 24.8 * 180 + 90).toFloat()
+    }
+
+    fun childSweepAngle(num:Float):Float {
+        val maxb=ChildBmiDialData.cScaleList[4].toFloat()
+        val minb=ChildBmiDialData.cScaleList[0].toFloat()
+        val bmival=if (num> maxb) maxb else if (num<minb) minb else num
+        return DcFormat.tf.format((bmival-minb)/(maxb-minb)*180+90).toFloat()
     }
 }
