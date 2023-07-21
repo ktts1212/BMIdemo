@@ -8,7 +8,7 @@
     tools:context=".ui.calculator.child.BmiCalTypeTableFragment">
 
     <TextView
-        android:id="@+id/type_table_tip"
+        android:id="@+id/type_table_tip_text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -21,11 +21,24 @@
         android:textFontWeight="800"
         android:text="BMI for adults"/>
 
+    <TextView
+        android:id="@+id/type_table_tip_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:alpha="0.6"
+        app:layout_constraintTop_toBottomOf="@id/type_table_tip_text1"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="20dp"
+        android:textFontWeight="400"
+        android:text="null"/>
     <View
         android:id="@+id/type_table_space"
         android:layout_width="match_parent"
-        android:layout_height="15dp"
-        app:layout_constraintTop_toBottomOf="@id/type_table_tip"
+        android:layout_height="5dp"
+        app:layout_constraintTop_toBottomOf="@id/type_table_tip_text2"
         app:layout_constraintStart_toStartOf="parent"/>
 
 

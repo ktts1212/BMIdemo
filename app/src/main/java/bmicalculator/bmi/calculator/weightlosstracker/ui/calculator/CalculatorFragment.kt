@@ -88,8 +88,8 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val dialog = CalculatorResultFragment()
-        dialog.show(childFragmentManager, "CalculatorResult")
+//        val dialog = CalculatorResultFragment()
+//        dialog.show(childFragmentManager, "CalculatorResult")
         //当输入完后点击键盘的done
         binding.root.setOnTouchListener { view, motionEvent ->
             if (view is TextInputLayout && motionEvent.action == MotionEvent.ACTION_DOWN) {
@@ -843,16 +843,16 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
             if (viewModel.selectedGender.value != null) {
 
-                val bmiInfo = BmiInfo(
-                    viewModel.wt_lb.value!!.toDouble(),
-                    viewModel.wt_kg.value!!.toDouble(),
-                    viewModel.ht_ft.value!!.toInt(), viewModel.ht_in.value!!.toInt(),
-                    viewModel.ht_cm.value!!.toDouble(),
-                    viewModel.selectedDate.value, viewModel.selectedPhase.value,
-                    viewModel.selectedAge.value!!.toInt(),
-                    viewModel.selectedGender.value!!.toChar()
-                )
-                Log.d("CCCCCC", bmiInfo.toString())
+//                val bmiInfo = BmiInfo(
+//                    viewModel.wt_lb.value!!.toDouble(),
+//                    viewModel.wt_kg.value!!.toDouble(),
+//                    viewModel.ht_ft.value!!.toInt(), viewModel.ht_in.value!!.toInt(),
+//                    viewModel.ht_cm.value!!.toDouble(),
+//                    viewModel.selectedDate.value, viewModel.selectedPhase.value,
+//                    viewModel.selectedAge.value!!.toInt(),
+//                    viewModel.selectedGender.value!!.toChar()
+//                )
+//                Log.d("CCCCCC", bmiInfo.toString())
                 // viewModel.insertInfo(bmiInfo)
                 if (binding.wtTab.getTabAt(0)!!.isSelected &&
                     binding.htTab.getTabAt(0)!!.isSelected

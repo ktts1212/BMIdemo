@@ -43,9 +43,9 @@
             <bmicalculator.bmi.calculator.weightlosstracker.uitl.views.ChildBmiDial
                 android:id="@+id/bmi_child_dial"
                 android:layout_width="360dp"
-                android:visibility="gone"
                 android:layout_height="360dp"
                 android:layout_marginTop="25dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -137,21 +137,21 @@
                         android:id="@+id/bmi_type_tip"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
-                        android:background="@drawable/shape_bmi_help"
-                        android:src="@drawable/bmi_type_help"
-                        android:backgroundTint="@color/normal"
-                        app:layout_constraintStart_toEndOf="@id/bmi_cal_type_text"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginStart="5dp"
+                        android:background="@drawable/shape_bmi_help"
+                        android:backgroundTint="@color/normal"
+                        android:src="@drawable/bmi_type_help"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/bmi_type_space"
+                        app:layout_constraintStart_toEndOf="@id/bmi_cal_type_text"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <View
                         android:id="@+id/bmi_type_space"
                         android:layout_width="15dp"
                         android:layout_height="match_parent"
-                        app:layout_constraintStart_toEndOf="@id/bmi_type_tip"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/bmi_type_tip" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -185,8 +185,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/bmi_cal_info">
 
-                <include layout="@layout/bmi_cal_type_table"
-                    android:id="@+id/newac"/>
+                <include
+                    android:id="@+id/newac"
+                    layout="@layout/bmi_cal_type_table" />
 
             </RelativeLayout>
 
@@ -196,16 +197,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 app:cardBackgroundColor="#F4F4F4"
+                app:layout_constraintBottom_toTopOf="@id/bmi_bottom_suggestion_space"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/bmi_bottom_suggestion_space"
                 app:layout_constraintTop_toBottomOf="@id/bmi_cal_type">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:gravity="center"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_height="match_parent">
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/bmi_cal_suggest"
@@ -238,8 +239,8 @@
                         android:layout_below="@id/bmi_cal_suggest"
                         android:layout_marginStart="4dp"
                         android:layout_marginTop="-20dp"
-                        android:layout_toEndOf="@id/wt_range"
                         android:layout_marginBottom="14dp"
+                        android:layout_toEndOf="@id/wt_range"
                         android:fontFamily="@font/montserrat_extrabold"
                         android:textColor="#FF0000"
                         android:textFontWeight="400"
@@ -252,12 +253,12 @@
                 android:id="@+id/bmi_bottom_suggestion_space"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_marginBottom="0dp"
                 android:background="@color/white"
                 android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/bmi_suggestion_card"
                 app:layout_constraintBottom_toTopOf="@id/bmi_ad_layout"
-                android:layout_marginBottom="0dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bmi_suggestion_card" />
 
             <RelativeLayout
                 android:id="@+id/bmi_ad_layout"
@@ -266,8 +267,8 @@
                 android:layout_marginTop="30dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/bmi_bottom_space"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/bmi_bottom_suggestion_space">
 
                 <View
@@ -278,109 +279,110 @@
                     android:background="@color/black" />
 
                 <TextView
+                    android:id="@+id/bmi_advertise_tip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/bmi_advertise_tip"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="24.5dp"
+                    android:fontFamily="@font/montserrat_extrabold"
                     android:text="Apps you might need"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/montserrat_extrabold"
                     android:textFontWeight="800"
-                    android:textSize="16sp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="24.5dp"/>
-                
+                    android:textSize="16sp" />
+
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
                     android:id="@+id/bmi_ad1"
+                    android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    app:cardElevation="0dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
                     android:layout_below="@id/bmi_advertise_tip"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="14.5dp"
+                    android:layout_marginEnd="20dp"
+                    android:backgroundTint="#F4F4F4"
                     app:cardCornerRadius="20dp"
-                    android:backgroundTint="#F4F4F4">
+                    app:cardElevation="0dp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/bmi_ad1_iv1"
-                        android:layout_width="49dp"
-                        android:layout_height="49dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginStart="16dp"
-                        android:src="@drawable/home_workout"/>
+
+                            <ImageView
+                                android:id="@+id/bmi_ad1_iv1"
+                                android:layout_width="49dp"
+                                android:layout_height="49dp"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginStart="16dp"
+                                android:src="@drawable/ad6" />
+
+
 
                         <TextView
                             android:id="@+id/bmi_ad1_tv1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:layout_toEndOf="@id/bmi_ad1_iv1"
                             android:layout_marginStart="16dp"
-                            android:textColor="@color/black"
-                            android:textSize="14sp"
+                            android:layout_marginTop="12dp"
+                            android:layout_toEndOf="@id/bmi_ad1_iv1"
                             android:text="@string/ad_home_workout"
-                            android:textFontWeight="400"/>
+                            android:textColor="@color/black"
+                            android:textFontWeight="400"
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/bmi_ad1_tv2"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
                             android:layout_below="@id/bmi_ad1_tv1"
-                            android:layout_toEndOf="@id/bmi_ad1_iv1"
                             android:layout_marginStart="16dp"
-                            android:textSize="12sp"
-                            android:textColor="@color/black"
+                            android:layout_toEndOf="@id/bmi_ad1_iv1"
                             android:alpha="0.6"
+                            android:text="Weight Loss,Lose Belly Fat"
+                            android:textColor="@color/black"
                             android:textFontWeight="400"
-                            android:text="Weight Loss,Lose Belly Fat"/>
-                        
+                            android:textSize="12sp" />
+
                         <ImageView
                             android:id="@+id/bmi_ad1_iv2"
                             android:layout_width="60dp"
                             android:layout_height="12dp"
-                            android:layout_below="@id/bmi_ad1_tv2"
-                            android:src="@drawable/app_score"
-                            android:layout_toEndOf="@id/bmi_ad1_iv1"
                             android:layout_marginStart="16dp"
-                            android:layout_marginTop="1dp"/>
+                            android:layout_marginTop="54dp"
+                            android:layout_toEndOf="@id/bmi_ad1_iv1"
+                            android:src="@drawable/app_score" />
 
                         <TextView
+                            android:id="@+id/bmi_ad1_tv3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/bmi_ad1_tv3"
-                            android:layout_toEndOf="@id/bmi_ad1_iv2"
-                            android:layout_below="@id/bmi_ad1_tv2"
                             android:layout_marginStart="5dp"
-                            android:layout_marginTop="-3dp"
-                            android:textColor="@color/black"
+                            android:layout_marginTop="51dp"
+                            android:layout_toEndOf="@id/bmi_ad1_iv2"
                             android:alpha="0.6"
-                            android:text="4.8"/>
+                            android:text="4.8"
+                            android:textColor="@color/black" />
 
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="15dp"
-                            android:layout_marginTop="59dp"
                             android:layout_marginStart="318dp"
-                            android:src="@drawable/ad_tag1"/>
+                            android:layout_marginTop="59dp"
+                            android:src="@drawable/ad_tag1" />
 
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
                     android:id="@+id/bmi_ad2"
+                    android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    app:cardElevation="0dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
                     android:layout_below="@id/bmi_advertise_tip"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="104.5dp"
+                    android:layout_marginEnd="20dp"
+                    android:backgroundTint="#F4F4F4"
                     app:cardCornerRadius="20dp"
-                    android:backgroundTint="#F4F4F4">
+                    app:cardElevation="0dp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -390,79 +392,79 @@
                             android:id="@+id/bmi_ad2_iv1"
                             android:layout_width="49dp"
                             android:layout_height="49dp"
-                            android:layout_marginTop="15dp"
                             android:layout_marginStart="16dp"
-                            android:src="@drawable/home_workout"/>
+                            android:layout_marginTop="15dp"
+                            android:src="@drawable/ad6" />
 
                         <TextView
                             android:id="@+id/bmi_ad2_tv1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:layout_toEndOf="@id/bmi_ad2_iv1"
                             android:layout_marginStart="16dp"
-                            android:textColor="@color/black"
-                            android:textSize="14sp"
+                            android:layout_marginTop="12dp"
+                            android:layout_toEndOf="@id/bmi_ad2_iv1"
                             android:text="@string/ad_home_workout"
-                            android:textFontWeight="400"/>
+                            android:textColor="@color/black"
+                            android:textFontWeight="400"
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/bmi_ad2_tv2"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
                             android:layout_below="@id/bmi_ad2_tv1"
-                            android:layout_toEndOf="@id/bmi_ad2_iv1"
                             android:layout_marginStart="16dp"
-                            android:textSize="12sp"
-                            android:textColor="@color/black"
+                            android:layout_toEndOf="@id/bmi_ad2_iv1"
                             android:alpha="0.6"
+                            android:text="Weight Loss,Lose Belly Fat"
+                            android:textColor="@color/black"
                             android:textFontWeight="400"
-                            android:text="Weight Loss,Lose Belly Fat"/>
+                            android:textSize="12sp" />
 
                         <ImageView
                             android:id="@+id/bmi_ad2_iv2"
                             android:layout_width="60dp"
                             android:layout_height="12dp"
-                            android:layout_below="@id/bmi_ad2_tv2"
-                            android:src="@drawable/app_score"
-                            android:layout_toEndOf="@id/bmi_ad2_iv1"
+
                             android:layout_marginStart="16dp"
-                            android:layout_marginTop="1dp"/>
+                            android:layout_marginTop="54dp"
+                            android:layout_toEndOf="@id/bmi_ad2_iv1"
+                            android:src="@drawable/app_score" />
 
                         <TextView
+                            android:id="@+id/bmi_ad2_tv3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/bmi_ad2_tv3"
-                            android:layout_toEndOf="@id/bmi_ad2_iv2"
-                            android:layout_below="@id/bmi_ad2_tv2"
                             android:layout_marginStart="5dp"
-                            android:layout_marginTop="-3dp"
-                            android:textColor="@color/black"
+
+                            android:layout_marginTop="51dp"
+                            android:layout_toEndOf="@id/bmi_ad2_iv2"
                             android:alpha="0.6"
-                            android:text="4.8"/>
+                            android:text="4.8"
+                            android:textColor="@color/black" />
 
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="15dp"
-                            android:layout_marginTop="59dp"
                             android:layout_marginStart="318dp"
-                            android:src="@drawable/ad_tag1"/>
+                            android:layout_marginTop="59dp"
+                            android:src="@drawable/ad_tag1" />
 
                     </RelativeLayout>
 
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
                     android:id="@+id/bmi_ad3"
+                    android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    app:cardElevation="0dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
                     android:layout_below="@id/bmi_advertise_tip"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="194.5dp"
+                    android:layout_marginEnd="20dp"
+                    android:backgroundTint="#F4F4F4"
                     app:cardCornerRadius="20dp"
-                    android:backgroundTint="#F4F4F4">
+                    app:cardElevation="0dp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -472,63 +474,62 @@
                             android:id="@+id/bmi_ad3_iv1"
                             android:layout_width="49dp"
                             android:layout_height="49dp"
-                            android:layout_marginTop="15dp"
                             android:layout_marginStart="16dp"
-                            android:src="@drawable/home_workout"/>
+                            android:layout_marginTop="15dp"
+                            android:src="@drawable/ad6" />
 
                         <TextView
                             android:id="@+id/bmi_ad3_tv1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:layout_toEndOf="@id/bmi_ad3_iv1"
                             android:layout_marginStart="16dp"
-                            android:textColor="@color/black"
-                            android:textSize="14sp"
+                            android:layout_marginTop="12dp"
+                            android:layout_toEndOf="@id/bmi_ad3_iv1"
                             android:text="@string/ad_home_workout"
-                            android:textFontWeight="400"/>
+                            android:textColor="@color/black"
+                            android:textFontWeight="400"
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/bmi_ad3_tv2"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
                             android:layout_below="@id/bmi_ad3_tv1"
-                            android:layout_toEndOf="@id/bmi_ad3_iv1"
                             android:layout_marginStart="16dp"
-                            android:textSize="12sp"
-                            android:textColor="@color/black"
+                            android:layout_toEndOf="@id/bmi_ad3_iv1"
                             android:alpha="0.6"
+                            android:text="Weight Loss,Lose Belly Fat"
+                            android:textColor="@color/black"
                             android:textFontWeight="400"
-                            android:text="Weight Loss,Lose Belly Fat"/>
+                            android:textSize="12sp" />
 
                         <ImageView
                             android:id="@+id/bmi_ad3_iv2"
                             android:layout_width="60dp"
                             android:layout_height="12dp"
-                            android:layout_below="@id/bmi_ad3_tv2"
-                            android:src="@drawable/app_score"
-                            android:layout_toEndOf="@id/bmi_ad3_iv1"
+
                             android:layout_marginStart="16dp"
-                            android:layout_marginTop="1dp"/>
+                            android:layout_marginTop="54dp"
+                            android:layout_toEndOf="@id/bmi_ad3_iv1"
+                            android:src="@drawable/app_score" />
 
                         <TextView
+                            android:id="@+id/bmi_ad3_tv3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/bmi_ad3_tv3"
-                            android:layout_toEndOf="@id/bmi_ad3_iv2"
-                            android:layout_below="@id/bmi_ad3_tv2"
                             android:layout_marginStart="5dp"
-                            android:layout_marginTop="-3dp"
-                            android:textColor="@color/black"
+                            android:layout_marginTop="51dp"
+                            android:layout_toEndOf="@id/bmi_ad3_iv2"
                             android:alpha="0.6"
-                            android:text="4.8"/>
+                            android:text="4.8"
+                            android:textColor="@color/black" />
 
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="15dp"
-                            android:layout_marginTop="59dp"
                             android:layout_marginStart="318dp"
-                            android:src="@drawable/ad_tag1"/>
+                            android:layout_marginTop="59dp"
+                            android:src="@drawable/ad_tag1" />
 
                     </RelativeLayout>
 
@@ -540,16 +541,17 @@
                 android:id="@+id/bmi_bottom_space"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_marginBottom="0dp"
                 android:background="@color/white"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="0dp"/>
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/save_btn"
         android:layout_width="315dp"
         android:layout_height="55dp"
         android:layout_alignParentStart="true"

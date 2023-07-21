@@ -19,16 +19,19 @@ class CalculatorViewModel(private val repository: Repository) : ViewModel() {
 
 
     //记录用户的cal选择
-    var wtval:Float= 0f
-    var wttype="error"
-    var htval:Float=0f
-    var httype="error"
+    var wtval: Float = 0f
+    var wttype = "error"
+    var htval: Float = 0f
+    var httype = "error"
+
+    //记录BMI类型
+    var bmitype = "null"
 
     //记录BMI
-    var bmival=MutableLiveData<Float>(0f)
+    var bmival = MutableLiveData<Float>(0f)
 
-    fun setBmival(data:Float){
-        bmival.value=data
+    fun setBmival(data: Float) {
+        bmival.value = data
     }
 
     //共享日期
@@ -46,7 +49,7 @@ class CalculatorViewModel(private val repository: Repository) : ViewModel() {
     }
 
     //性别
-    var selectedGender = MutableLiveData<Char>('0')
+    var selectedGender = MutableLiveData<Char>()
 
     fun setGender(data: Char) {
         selectedGender.value = data
@@ -110,20 +113,19 @@ class CalculatorViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    var infoCount=MutableLiveData<Int>(-1)
+    var infoCount = MutableLiveData<Int>(-1)
 
 
-
-    fun getAllInfo()=viewModelScope.launch {
-        var num:Int
-        withContext(Dispatchers.IO){
-            num=repository.getAllInfos().size
+    fun getAllInfo() = viewModelScope.launch {
+        var num: Int
+        withContext(Dispatchers.IO) {
+            num = repository.getAllInfos().size
         }
-        if (num==0){
+        if (num == 0) {
             //statusMessage.value=Event("数据为空或查询失败")
-        }else{
-            infoCount.value=num
-            statusMessage.value=Event("查询成功,数量为:${infoCount.value}")
+        } else {
+            infoCount.value = num
+            statusMessage.value = Event("查询成功,数量为:${infoCount.value}")
         }
     }
 

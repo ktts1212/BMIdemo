@@ -39,5 +39,36 @@
     <string name="child_nm">👍 Thumbs Up! You’ve done a great job and now only need to keep your lifestyle healthy to stay in this range.</string>
     <string name="child_ow">😤 Time to be get moving and say no to junk food! Your extra weight increases the chances of developing health problems. A small amount of weight loss can make a difference.</string>
     <string name="child_ob1">🤒 Feeling hard to keep up with friends? It’s time to repair your body by staying active and eat healthily! Seek your parents‘ and a health professional’s advice to get support.</string>
+    <string name="ad1">Lose Weight App for Women - Workout at Home</string>
+    <string name="ad2">Lose Weight App for Men - Weight Loss in 30 Days</string>
+    <string name="ad3">Lose Weight at Home - Home Workout in 30 Days</string>
+    <string name="ad4">Fasting App - Fasting Tracker &amp; Intermittent Fast</string>
+    <string name="ad5">Walking App - Walking for Weight Loss</string>
+    <string name="ad6">Home Workout - No Equipment</string>
+    <string name="ad7">30 Day Fitness Challenge - Workout at Home</string>
+    <string name="ad8">Six Pack in 30 Days - Abs Workout</string>
+    <string name="ad9">Step Tracker - Pedometer Free &amp; Calorie Tracker</string>
+    <string name="ad10">Blood Pressure Monitor - Blood Pressure App</string>
+    <string name="ad1_url">loseweightapp.loseweightappforwomen.womenworkoutathome</string>
+    <string name="ad2_url">menloseweight.loseweightappformen.weightlossformen</string>
+    <string name="ad3_url">loseweight.weightloss.workout.fitness</string>
+    <string name="ad4_url">bodyfast.zero.fastingtracker.weightloss</string>
+    <string name="ad5_url">walking.weightloss.walk.tracker</string>
+    <string name="ad6_url">homeworkout.homeworkouts.noequipment</string>
+    <string name="ad7_url">com.popularapp.thirtydayfitnesschallenge</string>
+    <string name="ad8_url">sixpack.sixpackabs.absworkout</string>
+    <string name="ad9_url">steptracker.healthandfitness.walkingtracker.pedometer</string>
+    <string name="ad10_url">bloodpressuremonitor.bloodpressureapp.bpmonitor</string>
+    <string name="ad1_score">4.7</string>
+    <string name="ad2_score">4.8</string>
+    <string name="ad3_score">4.9</string>
+    <string name="ad4_score">4.6</string>
+    <string name="ad5_score">4.9</string>
+    <string name="ad6_score">4.8</string>
+    <string name="ad7_score">5</string>
+    <string name="ad8_score">4.7</string>
+    <string name="ad9_score">5</string>
+    <string name="ad10_score">4.6</string>
+
 
 </resources>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/calculateFragment">
+
+    <!-- calculatorfragment -->
+    <fragment
+        android:id="@+id/calculateFragment"
+        android:name="bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorFragment"
+        android:label="calFragment"
+        tools:layout="@layout/fragment_calculator">
+
+<!--        <action-->
+<!--            android:id="@+id/cal_to_calres"-->
+<!--            app:destination="@id/calculateResultFragment"/>-->
+
+<!--        <action android:id="@+id/cal_to_sta"-->
+<!--            app:destination="@id/statisticFragment"/>-->
+
+    </fragment>
+
+<!--    <fragment-->
+<!--        android:id="@+id/calculateResultFragment"-->
+<!--        android:name="bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.CalculatorResultFragment"-->
+<!--        tools:layout="@layout/fragment_calculator_result"-->
+<!--        android:label="calResFragment">-->
+
+<!--        <action-->
+<!--            android:id="@+id/calres_to_sta"-->
+<!--            app:destination="@id/statisticFragment"/>-->
+
+<!--    </fragment>-->
+
+
+<!--    <fragment-->
+<!--        android:id="@+id/statisticFragment"-->
+<!--        android:name="bmicalculator.bmi.calculator.weightlosstracker.ui.statistic.StatisticFragment"-->
+<!--        android:label="staFragment"-->
+<!--        tools:layout="@layout/fragment_statistic">-->
+
+<!--    </fragment>-->
+
+</navigation>

@@ -1,5 +1,6 @@
 package bmicalculator.bmi.calculator.weightlosstracker
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.ActivityMainBinding
 import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
@@ -45,6 +49,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         //setSupportActionBar(binding.toolbar)
 
+        val prefs=getSharedPreferences("data", Context.MODE_PRIVATE)
+        val hasdata=prefs.getBoolean("hasdata",false)
+
         val dao = AppDataBase.getDatabase(application).bmiInfoDao()
         val factory = ViewModelFactory(Repository(dao))
 
@@ -64,26 +71,21 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "num:${viewModel.infoCount.value}")
         //判断底部导航栏是否显示
 
-        viewModel.infoCount.observe(this) {
-            Log.d(TAG, it.toString())
-            if (it != -1) {
-                binding.bottomNavigationView.post {
-                    val height = binding.bottomNavigationView.height
-                    val params =
-                        binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
-                    params.bottomMargin = height
-                    binding.fragmentContainer.layoutParams = params
-                }
-                //binding.fragmentContainer.visibility = View.VISIBLE
-                binding.bottomNavigationView.visibility = View.VISIBLE
-                Log.d(TAG, "执行到了这里>>>>")
-                UserStatus.ishasRecord=false
-            } else {
-                binding.bottomNavigationView.visibility = View.GONE
-                UserStatus.ishasRecord=false
+        if (hasdata){
+            binding.bottomNavigationView.post {
+                val height = binding.bottomNavigationView.height
+                val params =
+                    binding.navHostFragment.layoutParams as ViewGroup.MarginLayoutParams
+                params.bottomMargin = height
+                binding.navHostFragment.layoutParams = params
             }
+            //binding.fragmentContainer.visibility = View.VISIBLE
+            binding.bottomNavigationView.visibility = View.VISIBLE
+            UserStatus.ishasRecord=true
+        }else{
+            binding.bottomNavigationView.visibility = View.GONE
+            UserStatus.ishasRecord=false
         }
-
 
         //更改状态栏字体颜色
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -95,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         //val transaction = fragmentManager.beginTransaction()
         var mCurrentFragment:Fragment = CalculatorFragment()
         val transcation=fragmentManager.beginTransaction()
-        transcation.add(R.id.fragment_container,mCurrentFragment,"calculator")
+        transcation.add(R.id.nav_host_fragment,mCurrentFragment,"calculator")
         transcation.show(mCurrentFragment).commit()
 
         binding.bottomNavigationView.setOnItemSelectedListener {
@@ -108,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                     val calculatorFragment = fragmentManager.findFragmentByTag("calculator")
                     mCurrentFragment=if (calculatorFragment==null){
                         CalculatorFragment().also {
-                            transcation.add(R.id.fragment_container,it,"calculator")
+                            transcation.add(R.id.nav_host_fragment,it,"calculator")
                         }
                     }else{
                         calculatorFragment
@@ -120,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                     val bmiFragment = fragmentManager.findFragmentByTag("bmi")
                     mCurrentFragment=if (bmiFragment==null){
                         BmiFragment().also {
-                            transcation.add(R.id.fragment_container,it,"bmi")
+                            transcation.add(R.id.nav_host_fragment,it,"bmi")
                         }
                     }else{
                         bmiFragment
@@ -130,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                     val statisticFragment = fragmentManager.findFragmentByTag("statistic")
                     mCurrentFragment=if (statisticFragment==null){
                         StatisticFragment().also {
-                            transcation.add(R.id.fragment_container,it,"statistic")
+                            transcation.add(R.id.nav_host_fragment,it,"statistic")
                         }
                     }else{
                         statisticFragment
@@ -141,6 +143,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
+
 
 //    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 //        menuInflater.inflate(R.menu.toolbar, menu)

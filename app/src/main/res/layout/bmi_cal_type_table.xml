@@ -400,7 +400,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/bmi_ob3_image"
                     android:gravity="center_vertical"
-                    android:text="Obese Class II"
+                    android:text="Obese Class III"
                     android:textColor="@color/black"
                     android:textFontWeight="400"
                     android:textSize="14sp" />

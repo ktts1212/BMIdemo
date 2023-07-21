@@ -2,10 +2,28 @@ package bmicalculator.bmi.calculator.weightlosstracker.uitl
 
 import android.content.Context
 
-private const val Min=18.5
 
-private const val Max=24.9
+
 object Utils {
+
+
+    private var Min=18.5
+
+    private var Max=24.9
+
+    fun initData(age:Int){
+        if (age<=20){
+
+            Min=ChildBmiDialData.cScaleList[1].toDouble()
+
+            Max=ChildBmiDialData.cScaleList[2].toDouble()-0.1
+
+        }else{
+            Min=18.5
+
+            Max=24.9
+        }
+    }
 
     //根据手机分辨率从dp单位转换为px（像素）
     fun dip2px(context: Context,deValue:Float): Int {
