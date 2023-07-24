@@ -33,6 +33,7 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFacto
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.AdInfo
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
+import bmicalculator.bmi.calculator.weightlosstracker.ui.statistic.StatisticFragment
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.ChildBmiDialData
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.DcFormat
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.UserStatus
@@ -40,6 +41,7 @@ import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.Arrays
 import kotlin.math.max
 import kotlin.random.Random
@@ -861,6 +863,12 @@ class CalculatorResultFragment : DialogFragment() {
                 "data",Context.MODE_PRIVATE).edit()
             editor.putBoolean("hasdata",true)
             editor.apply()
+            val navView= (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+            navView.selectedItemId=R.id.menu_statistics
+            val fragmentManager=(activity as AppCompatActivity).supportFragmentManager
+            val transition=fragmentManager.beginTransaction()
+            transition.replace(R.id.fragment_container,StatisticFragment())
+            transition.commit()
         }
 
     }

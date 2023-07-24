@@ -75,9 +75,9 @@ class MainActivity : AppCompatActivity() {
             binding.bottomNavigationView.post {
                 val height = binding.bottomNavigationView.height
                 val params =
-                    binding.navHostFragment.layoutParams as ViewGroup.MarginLayoutParams
+                    binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
                 params.bottomMargin = height
-                binding.navHostFragment.layoutParams = params
+                binding.fragmentContainer.layoutParams = params
             }
             //binding.fragmentContainer.visibility = View.VISIBLE
             binding.bottomNavigationView.visibility = View.VISIBLE
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         //val transaction = fragmentManager.beginTransaction()
         var mCurrentFragment:Fragment = CalculatorFragment()
         val transcation=fragmentManager.beginTransaction()
-        transcation.add(R.id.nav_host_fragment,mCurrentFragment,"calculator")
+        transcation.add(R.id.fragment_container,mCurrentFragment,"calculator")
         transcation.show(mCurrentFragment).commit()
 
         binding.bottomNavigationView.setOnItemSelectedListener {
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                     val calculatorFragment = fragmentManager.findFragmentByTag("calculator")
                     mCurrentFragment=if (calculatorFragment==null){
                         CalculatorFragment().also {
-                            transcation.add(R.id.nav_host_fragment,it,"calculator")
+                            transcation.add(R.id.fragment_container,it,"calculator")
                         }
                     }else{
                         calculatorFragment
@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                     val bmiFragment = fragmentManager.findFragmentByTag("bmi")
                     mCurrentFragment=if (bmiFragment==null){
                         BmiFragment().also {
-                            transcation.add(R.id.nav_host_fragment,it,"bmi")
+                            transcation.add(R.id.fragment_container,it,"bmi")
                         }
                     }else{
                         bmiFragment
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                     val statisticFragment = fragmentManager.findFragmentByTag("statistic")
                     mCurrentFragment=if (statisticFragment==null){
                         StatisticFragment().also {
-                            transcation.add(R.id.nav_host_fragment,it,"statistic")
+                            transcation.add(R.id.fragment_container,it,"statistic")
                         }
                     }else{
                         statisticFragment
@@ -142,6 +142,7 @@ class MainActivity : AppCompatActivity() {
             transcation.show(mCurrentFragment).commit()
             true
         }
+
     }
 
 
