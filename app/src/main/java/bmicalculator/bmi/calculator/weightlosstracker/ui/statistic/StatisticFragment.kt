@@ -62,12 +62,13 @@ class StatisticFragment : Fragment() {
         })
 
         for (i in 1..12) {
-            bmiList.add(Entry(i.toFloat(), Random.nextInt(1,i+1) * 10f))
+            bmiList.add(Entry(i.toFloat()*2, Random.nextInt(1,i+1) * 10f))
         }
 
 
 
-        val lineDataSet = LineDataSet(bmiList, "")
+        val lineDataSet = LineDataSet(bmiList,null)
+        //填充x轴到曲线之间区域
         if (android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.JELLY_BEAN_MR2){
             val fillGradient=GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
@@ -76,11 +77,14 @@ class StatisticFragment : Fragment() {
             lineDataSet.fillDrawable=fillGradient
         }
 
+        //设置气泡
         val mv=CustomMarkerView(requireContext(),R.layout.mark_view_layout)
         binding.staLinechart1.marker=mv
 
+        //设置linedataset属性
         lineDataSet.apply {
             color=Color.WHITE
+            //曲线
             mode=LineDataSet.Mode.CUBIC_BEZIER
             setCircleColor(Color.WHITE)
             circleRadius=4f
@@ -96,13 +100,15 @@ class StatisticFragment : Fragment() {
 
                     Log.d(TAG,lastIndex.toString())
                     if (lastIndex==entry!!.x.toInt()){
-                        return entry!!.y.toString()
+                       return ""
+                       // return entry!!.y.toString()
                     }else{
                         return ""
                     }
                 }
             }
 
+            //数据值设置
             valueTextColor=Color.WHITE
             valueTextSize=14f
             valueTypeface=ResourcesCompat.getFont(requireContext(),R.font.montserrat_extrabold)
@@ -112,18 +118,26 @@ class StatisticFragment : Fragment() {
             fillAlpha=230
         }
 
+
+
+
+
         val lineData = LineData(lineDataSet)
         binding.staLinechart1.apply {
             setTouchEnabled(true)
             setDrawGridBackground(false)
+            legend.isEnabled=false
+            //自适应
             isAutoScaleMinMaxEnabled = true
+            //x轴可拖拽
             isDragXEnabled = true
             setDrawBorders(false)
             setScaleEnabled(false)
             data = lineData
             description.isEnabled = false
-
         }
+
+        //默认最后一个被选中
 
         val description = binding.staLinechart1.description
         description.apply {
@@ -150,16 +164,22 @@ class StatisticFragment : Fragment() {
             //setCenterAxisLabels(true)
             setDrawLimitLinesBehindData(false)
             position=XAxis.XAxisPosition.BOTTOM
+            //yOffset=20f
             valueFormatter=object:ValueFormatter(){
                 override fun getFormattedValue(value: Float): String {
+
+
                     return value.toInt().toString()
                 }
+
+
             }
             spaceMax=0.5f
         }
 
         binding.staLinechart1.axisRight.apply {
             isEnabled=false
+            setDrawGridLines(false)
         }
 
         binding.staLinechart1.axisLeft.apply {
@@ -176,6 +196,16 @@ class StatisticFragment : Fragment() {
             maxWidth=38f
         }
 
+        binding.staLinechart1.isHighlightPerTapEnabled=true
+        val set=binding.staLinechart1.data.getDataSetByIndex(0)
+        val lastEntryIndex=set.entryCount-1
+        val lastEntry=set.getEntryForIndex(lastEntryIndex)
+        binding.staLinechart1.highlightValue(lastEntry.x,0,true)
+        //使用markview显示
+        binding.staLinechart1.data.isHighlightEnabled=true
+        binding.staLinechart1.axisLeft.setDrawGridLines(false)
+        binding.staLinechart1.axisRight.setDrawGridLines(false)
+        //重绘刷新
         binding.staLinechart1.invalidate()
     }
 
