@@ -770,7 +770,12 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
-        val monthName = DateFormatSymbols(Locale.ENGLISH).shortMonths[month]
+        var monthName = DateFormatSymbols(Locale.ENGLISH).shortMonths[month]
+        monthName= when(monthName){
+            "Jul"->"July"
+            "Jun"->"June"
+            else->monthName
+        }
         binding.timeInputDate.setText("${monthName} ${day},${year}")
         viewModel.setDate(binding.timeInputDate.text.toString())
         binding.timeInputDate.setOnClickListener {

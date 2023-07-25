@@ -7,13 +7,14 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.database.initialize.
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.dao.BmiInfoDao
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 
 class Repository(private val bmiInfoDao: BmiInfoDao) {
 
 
-    suspend fun getAllInfos():List<BmiInfo>{
+    fun getAllInfos(): Flow<List<BmiInfo>> {
         return bmiInfoDao.queryAllInfo()
     }
 //    suspend fun queryAllInfo(): List<BmiInfo>? {

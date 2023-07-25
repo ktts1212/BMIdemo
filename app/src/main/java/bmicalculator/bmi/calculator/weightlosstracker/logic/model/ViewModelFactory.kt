@@ -11,6 +11,9 @@ class ViewModelFactory(private val repository:Repository):ViewModelProvider.Fact
         if (modelClass.isAssignableFrom(CalculatorViewModel::class.java)){
             return CalculatorViewModel(repository) as T
         }
+//        else if (modelClass.isAssignableFrom(StatisticViewModel::class.java)){
+//            return StatisticViewModel(repository) as T
+//        }
         throw IllegalArgumentException("Unknown View Model Class")
     }
 

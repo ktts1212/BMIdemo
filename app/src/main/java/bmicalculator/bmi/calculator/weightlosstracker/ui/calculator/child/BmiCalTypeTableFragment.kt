@@ -32,7 +32,7 @@ class BmiCalTypeTableFragment : DialogFragment() {
 
     private lateinit var viewModel: CalculatorViewModel
 
-    private var scsize: Double = 0.0
+    private var scSize: Double = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,7 +64,7 @@ class BmiCalTypeTableFragment : DialogFragment() {
             binding.typeTableChildDial.visibility = View.GONE
             binding.typeTableDial.visibility = View.VISIBLE
             binding.typeTableTipText2.visibility=View.INVISIBLE
-            scsize = 0.75
+            scSize = 0.75
         } else {
             val gender= if (viewModel.selectedGender.value!!.equals('0')) "Boy" else "Girl"
 
@@ -92,7 +92,7 @@ class BmiCalTypeTableFragment : DialogFragment() {
             binding.typeTable.bmiNormalText2.setText("${ls[1]} - ${ls[2]}")
             binding.typeTable.bmiOverweightText2.setText("${ls[2]} - ${ls[3]}")
             binding.typeTable.bmiOb1Text2.setText("${ls[3]} - ${ls[4]}")
-            scsize = 0.6
+            scSize = 0.6
         }
 
         binding.typeTableBtn.setOnClickListener {
@@ -100,12 +100,13 @@ class BmiCalTypeTableFragment : DialogFragment() {
         }
     }
 
+
     override fun onResume() {
         super.onResume()
         val params = dialog?.window?.attributes
         val displayMetrics = resources.displayMetrics
         params?.width = WindowManager.LayoutParams.MATCH_PARENT
-        params?.height = (displayMetrics.heightPixels * scsize).toInt()
+        params?.height = (displayMetrics.heightPixels * scSize).toInt()
         params?.gravity = Gravity.BOTTOM
         dialog?.window?.attributes = params as WindowManager.LayoutParams
     }

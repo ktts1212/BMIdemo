@@ -856,7 +856,8 @@ class CalculatorResultFragment : DialogFragment() {
                     viewModel.ht_cm.value!!.toDouble(),
                     viewModel.selectedDate.value, viewModel.selectedPhase.value,
                     viewModel.selectedAge.value!!.toInt(),
-                    viewModel.selectedGender.value!!.toChar()
+                    viewModel.selectedGender.value!!.toChar(),
+                    viewModel.bmival.value!!
                 )
              viewModel.insertInfo(bmiInfo)
             val editor=(activity as AppCompatActivity).getSharedPreferences(

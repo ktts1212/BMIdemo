@@ -15,7 +15,7 @@ interface BmiInfoDao {
     suspend fun insertBmiInfo(bmiInfo: BmiInfo): Long
 
     @Query("select * from BmiInfo")
-    suspend fun queryAllInfo(): List<BmiInfo>
+    fun queryAllInfo(): Flow<List<BmiInfo>>
 
     @Delete
     suspend fun deleteBmiInfo(bmiInfo: BmiInfo):Int

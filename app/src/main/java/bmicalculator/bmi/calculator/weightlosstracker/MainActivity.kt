@@ -66,7 +66,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.getAllInfo()
+        viewModel.allInfo.observe(this){info->
+            info?.let {
+                if (it.isEmpty()){
+                    Toast.makeText(this,"search error",Toast.LENGTH_SHORT).show()
+                }else{
+                    viewModel.infoCount.postValue(it.size)
+                    Toast.makeText(this,"search success",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }
 
         Log.d(TAG, "num:${viewModel.infoCount.value}")
         //判断底部导航栏是否显示

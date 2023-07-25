@@ -3,6 +3,7 @@ package bmicalculator.bmi.calculator.weightlosstracker.ui.calculator
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
@@ -115,19 +116,20 @@ class CalculatorViewModel(private val repository: Repository) : ViewModel() {
 
     var infoCount = MutableLiveData<Int>(-1)
 
+    var allInfo:MutableLiveData<List<BmiInfo>> = repository.getAllInfos().asLiveData() as MutableLiveData<List<BmiInfo>>
 
-    fun getAllInfo() = viewModelScope.launch {
-        var num: Int
-        withContext(Dispatchers.IO) {
-            num = repository.getAllInfos().size
-        }
-        if (num == 0) {
-            //statusMessage.value=Event("数据为空或查询失败")
-        } else {
-            infoCount.value = num
-            statusMessage.value = Event("查询成功,数量为:${infoCount.value}")
-        }
-    }
+//    fun getAllInfo() = viewModelScope.launch {
+//        var num: Int
+//        withContext(Dispatchers.IO) {
+//            num = repository.getAllInfos().asLiveData().value!!.size
+//        }
+//        if (num == 0) {
+//            //statusMessage.value=Event("数据为空或查询失败")
+//        } else {
+//            infoCount.postValue(num)
+//            statusMessage.value = Event("查询成功,数量为:${infoCount.value}")
+//        }
+//    }
 
 }
 
