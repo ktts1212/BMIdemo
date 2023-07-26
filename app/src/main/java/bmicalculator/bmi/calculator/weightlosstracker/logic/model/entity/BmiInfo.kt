@@ -15,7 +15,9 @@ data class BmiInfo(
     var phase: String? = null,
     var age: Int = 25,
     var gender: Char = '0',
-    var bmi:Float=0f
+    var bmi:Float=0f,
+    var save_time:Int=-1,
+    var year:Int=-1,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

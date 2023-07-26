@@ -1,18 +1,13 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.statistic
 
 import android.graphics.Color
-import android.graphics.LinearGradient
-import android.graphics.Paint
-import android.graphics.Shader
 import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.PaintDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import bmicalculator.bmi.calculator.weightlosstracker.R
@@ -21,9 +16,12 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFactory
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
+import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.DWeek
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.CustomMarkerView
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.DcFormat
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.LimitLine.LimitLabelPosition
@@ -33,7 +31,8 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.tabs.TabLayout
-import kotlin.random.Random
+import java.lang.Exception
+import java.time.LocalDate
 
 private const val TAG = "StatisticFragment"
 
@@ -66,38 +65,55 @@ class StatisticFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.staLinechart1.clear()
+        if (!bmiList.isEmpty()){
+            bmiList.clear()
+        }
 
-        viewModel.allInfo.observe(requireActivity()) { info ->
+        bmiList.add(Entry(1f,0f))
+
+        val currentDate=LocalDate.now()
+
+        Log.d(TAG,bmiList.toString())
+
+
+        viewModel.listByYear.observe(requireActivity()) { info ->
+
             info?.let {
-                if (it.isEmpty()) {
-
+                if (it.isNullOrEmpty()) {
+                    throw Exception("There is no data")
                 } else {
                     viewModel.infoCount.postValue(it.size)
-                    list = viewModel.allInfo.value
+
+                    Log.d(TAG,"viewModel.listByYear.value.size.toString()")
+
+                    //Log.d(TAG,"list:${viewModel.listByYear.value}")
+                    list=orderList(viewModel.listByYear.value!!)
+
+                    Log.d(TAG,"list:${list}")
+
+                    bmiList.clear()
+
+                    bmiList.add(Entry(1f,0f))
+
                     for (i in 0..list!!.size - 1) {
-                        val year = list!![i].date!!.substring(list!![i].date!!.length - 4)
-                        // val day=list[i].date!!.subSequence(list[i].date!!.length-7,)
-                        Log.d(TAG, year)
                         val l1 = list!![i].date!!.split(" ")
+                        //获取当前的月份和天数
                         val day = l1[1].split(",")[0]
                         val month = Utils.monthToNumber(l1[0])
-                        if (Utils.isInCurrentMonth(year.toInt(), month)) {
-                            var exists=false
 
-                            for (j in 0..bmiList.size-1){
-                                if (bmiList[j].x==day.toFloat()){
-                                    bmiList[j].y= list!![i].bmi
-                                    exists=true
-                                }
-                            }
+                        val dayOfYear=Utils.getDayOfYear(day.toInt(),month)
 
-                            if (exists==false){
-                                bmiList.add(Entry(day.toFloat(),list!![i].bmi))
-                            }
-                        }
+                        bmiList.add(Entry(dayOfYear.toFloat(),list!![i].bmi))
                     }
 
-                    Log.d(TAG,bmiList.toString())
+                    bmiList.sortBy { it.x }
+//                    binding.staLinechart1.notifyDataSetChanged()
+//                    binding.staLinechart1.invalidate()
+                    Log.d(TAG,"bmiList:${bmiList}")
+
+                    Log.d(TAG, bmiList.toString())
+
                     val lineDataSet = LineDataSet(bmiList, null)
                     //填充x轴到曲线之间区域
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -117,17 +133,11 @@ class StatisticFragment : Fragment() {
                         //setDrawValues(false)
                         valueFormatter = object : ValueFormatter() {
                             override fun getPointLabel(entry: Entry?): String {
-                                //每次获取某个x轴坐标点的对应的所有y轴值
-//                    val entries=binding.staLinechart1.data.getDataSetByIndex(0)
-//                        .getEntriesForXValue(entry!!.x)
-
                                 val lastIndex = binding.staLinechart1.data.getDataSetByIndex(0)
                                     .entryCount
 
-                                //Log.d(TAG, lastIndex.toString())
                                 if (lastIndex == entry!!.x.toInt()) {
                                     return ""
-                                    // return entry!!.y.toString()
                                 } else {
                                     return ""
                                 }
@@ -137,7 +147,15 @@ class StatisticFragment : Fragment() {
                         //数据值设置
                         valueTextColor = Color.WHITE
                         valueTextSize = 14f
-                        valueTypeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+
+                        //检查fragment是否关联到activity
+                        if (isAdded()) {
+                            valueTypeface = ResourcesCompat.getFont(
+                                requireContext(),
+                                R.font.montserrat_extrabold
+                            )
+                        }
+
                         //取消高亮点线绘制
                         //isHighlightEnabled = false
                         setDrawFilled(true)
@@ -161,7 +179,10 @@ class StatisticFragment : Fragment() {
                         setScaleEnabled(false)
                         data = lineData
                         description.isEnabled = false
+//                        binding.staLinechart1.rendererXAxis=MyLineChartXRender(binding.staLinechart1.viewPortHandler,
+//                            xAxis,binding.staLinechart1.getTransformer(YAxis.AxisDependency.LEFT))
                     }
+
 
                     val limitLine = LimitLine(5f, "Month")
                     limitLine.apply {
@@ -176,21 +197,36 @@ class StatisticFragment : Fragment() {
                         addLimitLine(limitLine)
                         isEnabled = true
                         gridColor = Color.parseColor("#EEEEEE")
-                        gridLineWidth = Utils.dip2px(requireContext(), 0.5f).toFloat()
+                        if (isAdded()) {
+                            gridLineWidth = Utils.dip2px(requireContext(), 0.5f).toFloat()
+                        }
                         //是否绘制x轴
                         setDrawAxisLine(false)
                         //设置内容显示个数
                         setLabelCount(7, false)
                         textColor = Color.WHITE
                         textSize = 12f
-                        typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                        if (isAdded()) {
+                            typeface = ResourcesCompat.getFont(
+                                requireContext(),
+                                R.font.montserrat_extrabold
+                            )
+                        }
+
                         //setCenterAxisLabels(true)
                         setDrawLimitLinesBehindData(false)
                         position = XAxis.XAxisPosition.BOTTOM
                         //yOffset=20f
                         valueFormatter = object : ValueFormatter() {
                             override fun getFormattedValue(value: Float): String {
-                                return value.toInt().toString()
+                                if (binding.staTabHeader.getTabAt(0)!!.isSelected){
+                                    val dMonth= Utils.getDayOfMonth(value.toInt())
+
+                                    return dMonth.day.toString()
+                                }else{
+                                    return value.toInt().toString()
+                                }
+
                             }
                         }
                         spaceMax = 0.5f
@@ -207,14 +243,27 @@ class StatisticFragment : Fragment() {
                         setDrawZeroLine(false)
                         textColor = Color.WHITE
                         textSize = 12f
-                        typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                        if (isAdded) {
+                            typeface = ResourcesCompat.getFont(
+                                requireContext(),
+                                R.font.montserrat_extrabold
+                            )
+
+                        }
                         setLabelCount(6, true)
                         xOffset = 15f
                         axisMinimum = 0f
-                        minWidth = 38f
-                        maxWidth = 38f
-//            axisMaximum=120f
-//            axisMinimum=0f
+                        minWidth = 45f
+                        maxWidth = 45f
+                        valueFormatter=object :ValueFormatter(){
+                            override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+                                if (value==0f){
+                                    return 0f.toString()
+                                }else{
+                                    return DcFormat.tf.format(value)
+                                }
+                            }
+                        }
                     }
 
                     binding.staLinechart1.isHighlightPerTapEnabled = true
@@ -226,6 +275,7 @@ class StatisticFragment : Fragment() {
                     binding.staLinechart1.data.isHighlightEnabled = true
 
                     //重绘刷新
+                    binding.staLinechart1.notifyDataSetChanged()
                     binding.staLinechart1.invalidate()
                 }
             }
@@ -235,7 +285,29 @@ class StatisticFragment : Fragment() {
 
         binding.staTabHeader.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-
+                if (tab!!.position==1){
+                    val list=weekOrderdList(viewModel.listByYear.value!!)
+                    bmiList.clear()
+                    for (i in 0 until list.size){
+                        bmiList.add(Entry(list[i].week.toFloat(),list[i].bmi))
+                    }
+                    bmiList.sortBy { it.x }
+                    Log.d(TAG,"weekList:${bmiList}")
+                    binding.staLinechart1.notifyDataSetChanged()
+                    binding.staLinechart1.invalidate()
+                }else if (
+                    tab!!.position==0
+                ){
+                    val ls=orderList(viewModel.listByYear.value!!)
+                    bmiList.clear()
+                    bmiList.add(Entry(1f,0f))
+                    for (i in 0 until ls.size){
+                        bmiList.add(Entry(getDayOfYearFromDate(list!![i]).toFloat(),list!![i].bmi))
+                    }
+                    bmiList.sortBy { it.x }
+                    binding.staLinechart1.notifyDataSetChanged()
+                    binding.staLinechart1.invalidate()
+                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -249,45 +321,54 @@ class StatisticFragment : Fragment() {
         })
 
 
-
         //设置气泡
         val mv = CustomMarkerView(requireContext(), R.layout.mark_view_layout)
         binding.staLinechart1.marker = mv
 
-        //设置linedataset属性
-
-
-
-
-
-        //默认最后一个被选中
-
-        val description = binding.staLinechart1.description
-        description.apply {
-            description.text = "this is a desp"
-            textSize = 20f
-            textColor = Color.WHITE
-            typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
-            textAlign = Paint.Align.RIGHT
-        }
-
-
-
-
-
         //重绘刷新
-        binding.staLinechart1.invalidate()
+        //binding.staLinechart1.invalidate()
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "ON start")
-        Log.d(TAG, list.toString())
+    fun orderList(list:List<BmiInfo>):List<BmiInfo>{
+        val ls= mutableListOf<BmiInfo>()
+        for (i in 0 until list.size){
+            if (ls.filter {
+                    it.date == list[i].date
+                }.isEmpty()){
+                ls.add(list[i])
+            }else{
+                val index= ls.indexOfFirst { it.date==list[i].date }
+                if (ls[index].save_time<list[i].save_time){
+                    ls[index]=list[i]
+                }
+            }
+        }
+        Log.d(TAG,"ls:${ls}")
+        return ls
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "ON Resume")
-        Log.d(TAG, list.toString())
+    fun weekOrderdList(list:List<BmiInfo>):List<DWeek>{
+        val ls= mutableListOf<DWeek>()
+        for (i in 0 until list.size){
+            if (ls.filter {
+                    it.week == Utils.dayToWeek(getDayOfYearFromDate(list[i]))
+                }.isEmpty()){
+                ls.add(DWeek(Utils.dayToWeek(getDayOfYearFromDate(list[i])),list[i].bmi))
+            }else{
+                val index=ls.indexOfFirst { it.week==Utils.dayToWeek(getDayOfYearFromDate(list[i])) }
+                ls[index].bmi=DcFormat.tf.format((ls[index].bmi+list[i].bmi)/2).toFloat()
+            }
+        }
+        return ls
+    }
+
+    fun getDayOfYearFromDate(bmiInfo: BmiInfo):Int{
+        val l1 = bmiInfo.date!!.split(" ")
+        //获取当前的月份和天数
+        val day = l1[1].split(",")[0]
+        val month = Utils.monthToNumber(l1[0])
+        Log.d(TAG,"day is :${Utils.getDayOfYear(day.toInt(),month)}")
+        return Utils.getDayOfYear(day.toInt(),month)
+
     }
 }

@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.RoundedCorner
@@ -42,6 +43,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.time.LocalDate
+import java.time.LocalTime
 import java.util.Arrays
 import kotlin.math.max
 import kotlin.random.Random
@@ -849,6 +852,8 @@ class CalculatorResultFragment : DialogFragment() {
         }
 
         binding.saveBtn.setOnClickListener {
+            val now= LocalTime.now()
+            val secondsPastMidnight=now.toSecondOfDay()
                 val bmiInfo = BmiInfo(
                     viewModel.wt_lb.value!!.toDouble(),
                     viewModel.wt_kg.value!!.toDouble(),
@@ -857,7 +862,10 @@ class CalculatorResultFragment : DialogFragment() {
                     viewModel.selectedDate.value, viewModel.selectedPhase.value,
                     viewModel.selectedAge.value!!.toInt(),
                     viewModel.selectedGender.value!!.toChar(),
-                    viewModel.bmival.value!!
+                    viewModel.bmival.value!!,
+                    secondsPastMidnight,
+                    viewModel.selectedDate.value!!.substring(
+                        viewModel.selectedDate.value!!.length-4).toInt()
                 )
              viewModel.insertInfo(bmiInfo)
             val editor=(activity as AppCompatActivity).getSharedPreferences(

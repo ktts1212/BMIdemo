@@ -11,6 +11,7 @@ import bmicalculator.bmi.calculator.weightlosstracker.uitl.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 
 class CalculatorViewModel(private val repository: Repository) : ViewModel() {
 
@@ -118,18 +119,9 @@ class CalculatorViewModel(private val repository: Repository) : ViewModel() {
 
     var allInfo:MutableLiveData<List<BmiInfo>> = repository.getAllInfos().asLiveData() as MutableLiveData<List<BmiInfo>>
 
-//    fun getAllInfo() = viewModelScope.launch {
-//        var num: Int
-//        withContext(Dispatchers.IO) {
-//            num = repository.getAllInfos().asLiveData().value!!.size
-//        }
-//        if (num == 0) {
-//            //statusMessage.value=Event("数据为空或查询失败")
-//        } else {
-//            infoCount.postValue(num)
-//            statusMessage.value = Event("查询成功,数量为:${infoCount.value}")
-//        }
-//    }
+
+
+    var listByYear : MutableLiveData<List<BmiInfo>> = repository.selectByYear(LocalDate.now().year).asLiveData() as MutableLiveData<List<BmiInfo>>
 
 }
 

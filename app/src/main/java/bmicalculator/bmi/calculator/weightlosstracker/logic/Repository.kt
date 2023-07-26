@@ -9,10 +9,15 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import java.time.Year
 
 
 class Repository(private val bmiInfoDao: BmiInfoDao) {
 
+
+    fun selectByYear(year: Int):Flow<List<BmiInfo>>{
+        return bmiInfoDao.queryByYear(year)
+    }
 
     fun getAllInfos(): Flow<List<BmiInfo>> {
         return bmiInfoDao.queryAllInfo()

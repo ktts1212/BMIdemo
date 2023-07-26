@@ -4,4 +4,6 @@ import java.text.DecimalFormat
 
 object DcFormat {
     val tf = DecimalFormat("#.0")
+
+    //val df=DecimalFormat("#.00")
 }

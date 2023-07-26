@@ -2,6 +2,8 @@ package bmicalculator.bmi.calculator.weightlosstracker.uitl
 
 import android.content.Context
 import android.util.Log
+import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.DMonth
+import java.time.LocalDate
 import java.util.Calendar
 import kotlin.math.pow
 
@@ -93,5 +95,29 @@ object Utils {
             else -> -1
         }
         return monthnum
+    }
+
+    fun getDayOfYear(dayOfMonth:Int,month:Int):Int{
+        val currentDate= LocalDate.now()
+        val calendar=Calendar.getInstance()
+        calendar.set(Calendar.YEAR,currentDate.year)
+        calendar.set(Calendar.MONTH,month-1)
+        calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth)
+        return calendar.get(Calendar.DAY_OF_YEAR)
+    }
+
+    fun getDayOfMonth(dayOFYear:Int):DMonth{
+        val calendar=Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_YEAR,dayOFYear)
+        val dayOfMonth=calendar.get(Calendar.DAY_OF_MONTH)
+        val month=calendar.get(Calendar.MONTH)+1
+        return DMonth(dayOfMonth,month)
+    }
+
+    fun dayToWeek(dayOfYear:Int):Int{
+        val calendar=Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_YEAR,dayOfYear)
+        Log.d("waaa","第${dayOfYear}天 is 第 ${calendar.get(Calendar.WEEK_OF_YEAR)}周")
+        return calendar.get(Calendar.WEEK_OF_YEAR)
     }
 }
