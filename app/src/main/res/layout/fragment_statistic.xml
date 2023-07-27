@@ -112,13 +112,61 @@
         <com.github.mikephil.charting.charts.LineChart
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/shape_chart_bg"
             android:id="@+id/sta_linechart1"/>
 
     </RelativeLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sta_wtdisp1"
+        android:text="Weight"
+        android:textColor="@color/black"
+        android:fontFamily="@font/montserrat_extrabold"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/sta_chart_view1"
+        android:layout_marginTop="20dp"
+        android:textFontWeight="800"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update"
+        android:id="@+id/sta_wtdisp2"
+        android:textSize="16sp"
+        android:fontFamily="@font/montserrat_regular"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="22dp"
+        app:layout_constraintTop_toBottomOf="@id/sta_chart_view1"
+        android:textColor="#3659CF"/>
+
+    <RelativeLayout
+        android:id="@+id/sta_chart_view2"
+        android:layout_width="match_parent"
+        android:layout_height="218dp"
+        app:layout_constraintTop_toBottomOf="@id/sta_wtdisp1"
+        android:layout_marginTop="10dp"
+
+        android:background="@drawable/shape_chart_bg2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp">
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/shape_chart_bg2"
+            android:id="@+id/sta_linechart2"/>
+
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

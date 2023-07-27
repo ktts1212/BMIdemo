@@ -120,4 +120,11 @@ object Utils {
         Log.d("waaa","第${dayOfYear}天 is 第 ${calendar.get(Calendar.WEEK_OF_YEAR)}周")
         return calendar.get(Calendar.WEEK_OF_YEAR)
     }
+
+    fun dayToMonth(dayOfYear: Int): Int {
+        val calendar=Calendar.getInstance()
+        calendar.set(Calendar.YEAR,LocalDate.now().year)
+        calendar.set(Calendar.DAY_OF_YEAR,dayOfYear)
+        return calendar.get(Calendar.MONTH)+1
+    }
 }
