@@ -1,13 +1,7 @@
 package bmicalculator.bmi.calculator.weightlosstracker.uitl
 
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Matrix
-import android.graphics.Paint
-import com.github.mikephil.charting.animation.ChartAnimator
-import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.renderer.LineChartRenderer
 import com.github.mikephil.charting.renderer.XAxisRenderer
 import com.github.mikephil.charting.utils.MPPointF
 import com.github.mikephil.charting.utils.Transformer

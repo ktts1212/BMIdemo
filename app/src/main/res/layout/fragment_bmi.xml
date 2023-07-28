@@ -1,33 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#F5F5F5"
+    android:background="@color/white"
     tools:context=".ui.bmi.BmiFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_bmi"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#F5F5F5"
+        android:background="@color/white"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/Theme.AppCompat.Light" >
+        app:popupTheme="@style/Theme.AppCompat.Light">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/menu_discard"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:fontFamily="sans-serif-medium"
-            android:text="Discard"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/menu_bmi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_extrabold"
+                android:text="BMI"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/menu_recent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="20dp"
+                android:text="Recent"
+                android:textColor="#3659CF"
+                android:textFontWeight="400"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/bmi_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="date display"
+        android:textColor="@color/black"
+        android:textFontWeight="400"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_bmi" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bmi_date">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:id="@+id/dial_space"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <bmicalculator.bmi.calculator.weightlosstracker.uitl.views.ChildBmiDial
+                android:id="@+id/type_table_child_dial"
+                android:layout_width="320dp"
+                android:layout_height="320dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dial_space" />
+
+
+            <bmicalculator.bmi.calculator.weightlosstracker.uitl.views.BmiDial
+                android:id="@+id/type_table_dial"
+                android:layout_width="320dp"
+                android:layout_height="320dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.494"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/type_table_child_dial" />
+
+            <bmicalculator.bmi.calculator.weightlosstracker.uitl.views.BmiArrow
+                android:id="@+id/bmi_arrow"
+                android:layout_width="36dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="142dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dial_space" />
+
+            <TextView
+                android:id="@+id/bmi_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-110dp"
+                android:fontFamily="@font/montserrat_extrabold"
+                android:text="Your BMI is..."
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textFontWeight="800"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bmi_arrow" />
+
+            <TextView
+                android:id="@+id/bmi_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_extrabold"
+                android:text="24.7"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textFontWeight="800"
+                android:textSize="64sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bmi_label" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/bmi_cal_type_card"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:backgroundTint="@color/grey_w"
+                android:padding="0dp"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bmi_value">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bmi_cal_type_display_new"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/black">
+
+                    <TextView
+                        android:id="@+id/bmi_cal_type_text_new"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:fontFamily="@font/montserrat_extrabold"
+                        android:text="Normal"
+                        android:textColor="@color/white"
+                        android:textFontWeight="800"
+                        android:textSize="19sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/bmi_type_tip_new"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/bmi_type_tip_new"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="5dp"
+                        android:background="@drawable/shape_bmi_help"
+                        android:backgroundTint="@color/normal"
+                        android:src="@drawable/bmi_type_help"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/bmi_type_space"
+                        app:layout_constraintStart_toEndOf="@id/bmi_cal_type_text_new"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/bmi_type_space"
+                        android:layout_width="15dp"
+                        android:layout_height="match_parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/bmi_type_tip_new" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/bmi_cal_info_new"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:layout_marginTop="10dp"
+                android:alpha="0.5"
+                android:fontFamily="sans-serif-medium"
+                android:text="null"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textFontWeight="400"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bmi_cal_type_card" />
+
+
+            <RelativeLayout
+                android:id="@+id/bmi_cal_type_new"
+                android:layout_width="375dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bmi_cal_info_new">
+
+                <include
+                    android:id="@+id/new_record"
+                    layout="@layout/bmi_cal_type_table" />
+
+            </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

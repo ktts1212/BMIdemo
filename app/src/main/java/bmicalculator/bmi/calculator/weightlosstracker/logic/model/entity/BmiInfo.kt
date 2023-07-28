@@ -18,6 +18,9 @@ data class BmiInfo(
     var bmi:Float=0f,
     var save_time:Int=-1,
     var year:Int=-1,
+    var bmiType:String?=null,
+    var wtHtType:String?=null,
+    var timestape:Long=0
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

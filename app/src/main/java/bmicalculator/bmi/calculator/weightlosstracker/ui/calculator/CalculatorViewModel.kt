@@ -29,6 +29,8 @@ class CalculatorViewModel(private val repository: Repository) : ViewModel() {
     //记录BMI类型
     var bmitype = "null"
 
+    //记录bmi所属类型
+
     //记录BMI
     var bmival = MutableLiveData<Float>(0f)
 
