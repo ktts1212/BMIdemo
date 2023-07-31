@@ -877,24 +877,7 @@ class CalculatorResultFragment : DialogFragment() {
             val prefs=(activity as AppCompatActivity).getSharedPreferences(
                 "data",Context.MODE_PRIVATE)
             val editor=prefs.edit()
-//            val rDate=prefs.getString("recordDate",null)
-//
-//            val oDate=viewModel.selectedDate.value
-//            val oYear=oDate!!.substring(oDate.length-4).toInt()
-//            val ls=oDate.split(" ")
-//            val oDay=ls[1].split(",")[0]
-//            val oMonth=Utils.monthToNumber(ls[0])
-
-//            if (rDate!=null){
-//                val year=rDate.substring(rDate.length-4).toInt()
-//                val l1=rDate.split(" ")
-//                val day=l1[1].split(",")[0]
-//                val month=Utils.monthToNumber(l1[0])
-//            }
-//            editor.putString("type",viewModel.wttype+viewModel.httype)
             editor.putBoolean("hasdata",true)
-//            editor.putString("recordDate",viewModel.selectedDate.value)
-//            editor.putInt("recordSeconds",secondsPastMidnight)
             editor.apply()
             val navView= (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
             navView.selectedItemId=R.id.menu_statistics

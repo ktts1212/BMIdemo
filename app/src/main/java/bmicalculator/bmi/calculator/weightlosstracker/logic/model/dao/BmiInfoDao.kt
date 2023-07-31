@@ -23,8 +23,4 @@ interface BmiInfoDao {
     @Delete
     suspend fun deleteBmiInfo(bmiInfo: BmiInfo):Int
 
-//    @Query("delete from BmiInfo")
-//    suspend fun deleteALlInfo():Int
-
-
 }

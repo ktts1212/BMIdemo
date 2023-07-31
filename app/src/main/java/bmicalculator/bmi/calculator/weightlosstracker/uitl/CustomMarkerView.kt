@@ -18,6 +18,6 @@ class CustomMarkerView(context: Context, layoutResource:Int):MarkerView(context,
     }
 
     override fun getOffset(): MPPointF {
-        return MPPointF((-width/2).toFloat(),-height.toFloat())
+        return MPPointF((-width/2).toFloat(),-height.toFloat()+10f)
     }
 }

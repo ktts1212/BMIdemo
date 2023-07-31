@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+   android:gravity="center_horizontal"
+    android:layout_marginTop="6dp"
+    android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/entry_card"
-        android:layout_width="41dp"
+        android:layout_width="42dp"
         android:layout_height="26dp"
         android:backgroundTint="#00000000"
         app:cardCornerRadius="5dp">
@@ -48,12 +50,33 @@
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
 
+
+    <ImageView
+        android:id="@+id/big_circle"
+        android:layout_centerInParent="true"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:backgroundTint="@color/white"
+        android:background="@drawable/shape_circle2"
+        android:layout_below="@id/view_space"/>
+
+    <ImageView
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_below="@id/view_space"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/shape_circle1"
+        android:backgroundTint="@color/purple_200" />
+
     <View
+        android:id="@+id/view_space"
         android:layout_width="41dp"
-        android:layout_height="10dp"
+        android:layout_height="5dp"
         android:layout_below="@id/entry_card"
         android:alpha="0"
         android:background="@color/white" />
+
 
 
 </RelativeLayout>

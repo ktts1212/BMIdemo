@@ -15,6 +15,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -26,6 +27,7 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFactory
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
+import bmicalculator.bmi.calculator.weightlosstracker.ui.bmi.child.RecordHistoryFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.ChildBmiDialData
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.SweepAngel
@@ -46,6 +48,7 @@ class BmiFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         binding = FragmentBmiBinding.inflate(layoutInflater, container, false)
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbarBmi)
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -63,13 +66,13 @@ class BmiFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.bmiArrow.alpha=0.75f
-        binding.bmiArrow.pivotX=Utils.dip2px(
-            requireContext(),18f
+        binding.bmiArrow.alpha = 0.75f
+        binding.bmiArrow.pivotX = Utils.dip2px(
+            requireContext(), 18f
         ).toFloat()
 
-        binding.bmiArrow.pivotY=Utils.dip2px(
-            requireContext(),18f
+        binding.bmiArrow.pivotY = Utils.dip2px(
+            requireContext(), 18f
         ).toFloat()
 
 
@@ -84,7 +87,7 @@ class BmiFragment : Fragment() {
             if (newRecord.age > 20) {
                 binding.typeTableChildDial.visibility = View.GONE
                 binding.typeTableDial.visibility = View.VISIBLE
-                binding.bmiArrow.rotation=SweepAngel.sweepAngle(newRecord.bmi)
+                binding.bmiArrow.rotation = SweepAngel.sweepAngle(newRecord.bmi)
                 binding.bmiDate.setText(newRecord.date)
                 binding.bmiValue.setText(newRecord.bmi.toString())
 
@@ -92,34 +95,40 @@ class BmiFragment : Fragment() {
                 getWtHtType(newRecord)
 
             } else {
-                binding.typeTableChildDial.visibility=View.VISIBLE
-                binding.typeTableDial.visibility=View.GONE
-                ChildBmiDialData.setData(newRecord.age,newRecord.gender)
+                binding.typeTableChildDial.visibility = View.VISIBLE
+                binding.typeTableDial.visibility = View.GONE
+                binding.bmiValue.setText(newRecord.bmi.toString())
+                ChildBmiDialData.setData(newRecord.age, newRecord.gender)
                 binding.typeTableChildDial.getData(
                     ChildBmiDialData.cScaleList,
-                    ChildBmiDialData.scaleRange)
-                binding.newRecord.bmiVerysevere.visibility=View.GONE
-                binding.newRecord.bmiSevere.visibility=View.GONE
-                binding.newRecord.bmiOb2.visibility=View.GONE
-                binding.newRecord.bmiOb3.visibility=View.GONE
-                val ls=ChildBmiDialData.cScaleList
+                    ChildBmiDialData.scaleRange
+                )
+                binding.newRecord.bmiVerysevere.visibility = View.GONE
+                binding.newRecord.bmiSevere.visibility = View.GONE
+                binding.newRecord.bmiOb2.visibility = View.GONE
+                binding.newRecord.bmiOb3.visibility = View.GONE
+                val ls = ChildBmiDialData.cScaleList
                 binding.newRecord.bmiUweightText2.setText("${ls[0]} - ${ls[1]}")
                 binding.newRecord.bmiNormalText2.setText("${ls[1]} - ${ls[2]}")
                 binding.newRecord.bmiOverweightText2.setText("${ls[2]} - ${ls[3]}")
                 binding.newRecord.bmiOb1Text2.setText("${ls[3]} - ${ls[4]}")
                 getBmiType(newRecord.bmiType.toString())
-                binding.bmiArrow.rotation=SweepAngel.childSweepAngle(newRecord.bmi)
+                binding.bmiArrow.rotation = SweepAngel.childSweepAngle(newRecord.bmi)
                 getWtHtType(newRecord)
             }
         }
 
-        binding.
+        binding.menuRecent.setOnClickListener {
+            val dialog = RecordHistoryFragment()
+            dialog.show(childFragmentManager, "RecordHistory")
+        }
+
     }
 
     fun getBmiType(bmiType: String) {
         when (bmiType) {
             "vsuw" -> {
-                if (isAdded){
+                if (isAdded) {
                     binding.bmiCalTypeTextNew.setText(getString(R.string.vsuw))
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
@@ -145,7 +154,10 @@ class BmiFragment : Fragment() {
                         setTextColor(Color.WHITE)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                             typeface = Typeface.create(
-                                ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                                ResourcesCompat.getFont(
+                                    requireContext(),
+                                    R.font.montserrat_extrabold
+                                ),
                                 800,
                                 false
                             )
@@ -160,7 +172,7 @@ class BmiFragment : Fragment() {
             }
 
             "suw" -> {
-                if (isAdded){
+                if (isAdded) {
                     binding.bmiCalTypeTextNew.setText(getString(R.string.suw))
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
@@ -186,7 +198,10 @@ class BmiFragment : Fragment() {
                         setTextColor(Color.WHITE)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                             typeface = Typeface.create(
-                                ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                                ResourcesCompat.getFont(
+                                    requireContext(),
+                                    R.font.montserrat_extrabold
+                                ),
                                 800,
                                 false
                             )
@@ -202,7 +217,7 @@ class BmiFragment : Fragment() {
             }
 
             "uw" -> {
-                if (isAdded){
+                if (isAdded) {
                     binding.bmiCalTypeTextNew.setText(getString(R.string.uw))
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
@@ -228,7 +243,10 @@ class BmiFragment : Fragment() {
                         setTextColor(Color.WHITE)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                             typeface = Typeface.create(
-                                ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                                ResourcesCompat.getFont(
+                                    requireContext(),
+                                    R.font.montserrat_extrabold
+                                ),
                                 800,
                                 false
                             )
@@ -290,7 +308,7 @@ class BmiFragment : Fragment() {
             }
 
             "ow" -> {
-                if (isAdded){
+                if (isAdded) {
                     binding.bmiCalTypeTextNew.setText(getString(R.string.ow))
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
@@ -316,7 +334,10 @@ class BmiFragment : Fragment() {
                         setTextColor(Color.WHITE)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                             typeface = Typeface.create(
-                                ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold),
+                                ResourcesCompat.getFont(
+                                    requireContext(),
+                                    R.font.montserrat_extrabold
+                                ),
                                 800,
                                 false
                             )
@@ -332,7 +353,7 @@ class BmiFragment : Fragment() {
             }
 
             "oc1" -> {
-                if (isAdded){
+                if (isAdded) {
                     binding.bmiCalTypeTextNew.setText(getString(R.string.oc1))
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(

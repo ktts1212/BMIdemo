@@ -19,7 +19,6 @@ class CalculatorViewModel(private val repository: Repository) : ViewModel() {
     val message: LiveData<Event<String>>
         get() = statusMessage
 
-
     //记录用户的cal选择
     var wtval: Float = 0f
     var wttype = "error"
@@ -124,6 +123,16 @@ class CalculatorViewModel(private val repository: Repository) : ViewModel() {
 
 
     var listByYear : MutableLiveData<List<BmiInfo>> = repository.selectByYear(LocalDate.now().year).asLiveData() as MutableLiveData<List<BmiInfo>>
+
+
+    fun deleteBmiInfo(bmiInfo: BmiInfo)=viewModelScope.launch {
+        val id=repository.deleteBmiInfo(bmiInfo)
+        if (id>0){
+            statusMessage.value=Event("Delete Successfully")
+        }else{
+            statusMessage.value=Event("Occur Error")
+        }
+    }
 
 }
 

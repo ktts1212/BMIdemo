@@ -1,6 +1,9 @@
 package bmicalculator.bmi.calculator.weightlosstracker.uitl
 
 import android.graphics.Canvas
+import android.graphics.Color
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.renderer.XAxisRenderer
 import com.github.mikephil.charting.utils.MPPointF
@@ -21,16 +24,17 @@ class MyLineChartXRender(
         anchor: MPPointF?,
         angleDegrees: Float
     ) {
-        val label=formatLabel(formattedLabel.toString())
-        super.drawLabel(c, formattedLabel, x, y, anchor, angleDegrees)
 
-    }
 
-    fun formatLabel(originalLabel:String):String{
-        if (originalLabel=="1"){
-            return "Jan"
+        if (formattedLabel=="1"){
+            val labelX=x
+            val labelY=y-600f
+            val textStyle=mAxisLabelPaint
+            textStyle.color=Color.WHITE
+            c!!.drawText("Jan",labelX,labelY,textStyle)
         }else{
-            return ""
+            super.drawLabel(c, formattedLabel, x, y, anchor, angleDegrees)
         }
     }
+
 }

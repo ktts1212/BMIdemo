@@ -22,25 +22,10 @@ class Repository(private val bmiInfoDao: BmiInfoDao) {
     fun getAllInfos(): Flow<List<BmiInfo>> {
         return bmiInfoDao.queryAllInfo()
     }
-//    suspend fun queryAllInfo(): List<BmiInfo>? {
-//        return withContext(Dispatchers.IO){
-//            bmiInfoDao?.queryAllInfo()
-//        }
-//    }
-
-//    suspend fun insertBmiInfo(bmiInfo: BmiInfo):Long{
-//        return withContext(Dispatchers.IO){
-//            bmiInfoDao?.insertBmiInfo(bmiInfo)!!
-//        }
-//    }
 
     suspend fun insertBmiInfo(bmiInfo: BmiInfo): Long {
         return bmiInfoDao.insertBmiInfo(bmiInfo)
     }
-
-//    suspend fun deleteAllInfos(): Int {
-//        return bmiInfoDao.deleteALlInfo()
-//    }
 
     suspend fun deleteBmiInfo(bmiInfo: BmiInfo): Int {
         return bmiInfoDao.deleteBmiInfo(bmiInfo)
