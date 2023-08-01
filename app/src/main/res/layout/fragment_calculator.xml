@@ -17,465 +17,480 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/Theme.AppCompat.Light" />
 
-    <TextView
-        android:id="@+id/wt_display"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="75dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/weight"
-        android:textColor="@color/black"
-        android:textSize="17sp"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_cal"
+        android:layout_marginTop="50dp"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/wt_card"
-        android:layout_width="170dp"
-        android:layout_height="70dp"
-        android:layout_below="@id/wt_display"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="12dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/wt_display">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/wt_textField"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxBackgroundMode="none"
-            app:errorEnabled="true">
-
-            <AutoCompleteTextView
-                android:id="@+id/wt_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:fontFamily="@font/montserrat_extrabold"
-                android:gravity="center"
-                android:imeOptions="actionDone"
-                android:inputType="numberDecimal"
-                android:text="@string/Default_140_00"
-                android:textColor="@color/black"
-                android:textSize="35sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/wt_tab"
-        android:layout_width="170dp"
-        android:layout_height="48dp"
-        android:layout_below="@id/wt_card"
-        android:layout_alignStart="@id/wt_card"
-        android:layout_alignEnd="@id/wt_card"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/shape_tablayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/wt_card"
-        app:tabBackground="@drawable/tab_selector"
-        app:tabIndicatorHeight="0dp"
-        app:tabTextColor="@color/black">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="90dp"
-            android:layout_height="48dp"
-            android:background="@drawable/tab_selector"
-            android:clickable="true"
-            android:text="@string/lb" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="90dp"
-            android:layout_height="48dp"
-            android:background="@drawable/tab_selector"
-            android:text="@string/kg" />
-
-    </com.google.android.material.tabs.TabLayout>
-
-    <TextView
-        android:id="@+id/ht_display"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="75dp"
-        android:layout_toEndOf="@id/wt_display"
-        android:text="@string/height"
-        android:textColor="@color/black"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_cal" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/ht_card_cm"
-        android:layout_width="170dp"
-        android:layout_height="70dp"
-        android:layout_below="@id/ht_display"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="18dp"
-        android:visibility="invisible"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ht_display">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ht_textField_cm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxBackgroundMode="none"
-            app:errorEnabled="true">
-
-            <AutoCompleteTextView
-                android:id="@+id/ht_input_cm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:fontFamily="@font/montserrat_extrabold"
-                android:inputType="numberDecimal"
-                android:text="@string/default_170_0"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="35sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/ht_card_ftin1"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="118dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ht_display">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ht_textField_ftin1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxBackgroundMode="none"
-            app:errorEnabled="true">
-
-            <AutoCompleteTextView
-                android:id="@+id/ht_input_ftin1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:fontFamily="@font/montserrat_extrabold"
-                android:inputType="numberDecimal"
-                android:text="@string/default_5"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="35sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/ht_card_ftin2"
-        android:layout_width="90dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="18dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ht_display">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ht_textField_ftin2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxBackgroundMode="none"
-            app:errorEnabled="true">
-
-            <AutoCompleteTextView
-                android:id="@+id/ht_input_ftin2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:fontFamily="@font/montserrat_extrabold"
-                android:inputType="numberDecimal"
-                android:text="@string/default_7"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="35sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/ht_tab"
-        android:layout_width="170dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="18dp"
-        android:background="@drawable/shape_tablayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ht_card_cm"
-        app:tabBackground="@drawable/tab_selector"
-        app:tabIndicatorHeight="0dp"
-        app:tabTextColor="@color/black">
-
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/tab_selector"
-            android:clickable="true"
-            android:text="@string/ft_in" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/tab_selector"
-            android:text="@string/cm" />
-
-
-
-    </com.google.android.material.tabs.TabLayout>
-
-    <TextView
-        android:id="@+id/time_display"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="@string/time"
-        android:textColor="@color/black"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/wt_tab" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/time_date"
-        android:layout_width="170dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="12dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/time_display">
-
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/time_input_date"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:fontFamily="@font/montserrat_extrabold"
-            android:gravity="center"
-            android:inputType="numberDecimal"
-            android:text="@string/date"
-            android:textColor="@color/black"
-            android:textSize="25sp" />
-
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/time_phase"
-        android:layout_width="170dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="18dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/time_display">
-
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/time_input_phase"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:fontFamily="@font/montserrat_extrabold"
-            android:gravity="center"
-            android:inputType="numberDecimal"
-            android:text="@string/phase"
-            android:textColor="@color/black"
-            android:textSize="28sp" />
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <TextView
-        android:id="@+id/age_display"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="@string/age"
-        android:textColor="@color/black"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/time_date" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/age_card"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="18dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/age_display">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/age_recycler_view"/>
-
-            <ImageView
-                android:layout_marginTop="60dp"
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:src="@drawable/age_arrow" />
-        </RelativeLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/gender_card_male"
-        android:layout_width="170dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="15dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/age_card">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0.5"
-            android:id="@+id/gender_selected_male"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="140dp"
-                android:layout_marginTop="10dp"
-                android:id="@+id/gender_selected_male_pic"
-                android:visibility="invisible"
-                android:src="@drawable/gender_selected"/>
-
-            <ImageView
-                android:layout_marginTop="5dp"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:id="@+id/gender_male_pic"
-                android:src="@drawable/gender_male"/>
+            android:layout_height="match_parent">
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/wt_display"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/gender_male_text"
-                android:layout_marginTop="5dp"
+                android:layout_marginStart="75dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/weight"
                 android:textColor="@color/black"
                 android:textSize="17sp"
-                android:gravity="center"
-                android:text="Male"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
 
-        </LinearLayout>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/wt_card"
+                android:layout_width="140dp"
+                android:layout_height="60dp"
+                android:layout_below="@id/wt_display"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="12dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/wt_display">
 
-    </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/wt_textField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundMode="none"
+                    app:errorEnabled="true">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/gender_card_female"
-        android:layout_width="170dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="18dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/age_card">
+                    <AutoCompleteTextView
+                        android:id="@+id/wt_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:fontFamily="@font/montserrat_extrabold"
+                        android:gravity="center"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberDecimal"
+                        android:text="@string/Default_140_00"
+                        android:textColor="@color/black"
+                        android:textSize="35sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0.5"
-            android:clickable="true"
-            android:id="@+id/gender_selected_female"
-            android:orientation="vertical">
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="140dp"
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/wt_tab"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/wt_card"
+                android:layout_alignStart="@id/wt_card"
+                android:layout_alignEnd="@id/wt_card"
+                android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
-                android:id="@+id/gender_selected_female_pic"
-                android:visibility="invisible"
-                android:src="@drawable/gender_selected"/>
+                android:background="@drawable/shape_tablayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/wt_card"
+                app:tabBackground="@drawable/tab_selector"
+                app:tabIndicatorHeight="0dp"
+                app:tabTextColor="@color/black">
 
-            <ImageView
-                android:layout_marginTop="5dp"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:id="@+id/gender_female_pic"
-                android:src="@drawable/gender_female"/>
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/tab_selector"
+                    android:clickable="true"
+                    android:text="@string/lb" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/tab_selector"
+                    android:text="@string/kg" />
+
+            </com.google.android.material.tabs.TabLayout>
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/ht_display"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/gender_female_text"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="75dp"
+                android:layout_toEndOf="@id/wt_display"
+                android:text="@string/height"
                 android:textColor="@color/black"
                 android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/ht_card_cm"
+                android:layout_width="170dp"
+                android:layout_height="70dp"
+                android:layout_below="@id/ht_display"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="18dp"
+                android:visibility="invisible"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ht_display">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ht_textField_cm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundMode="none"
+                    app:errorEnabled="true">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/ht_input_cm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:fontFamily="@font/montserrat_extrabold"
+                        android:inputType="numberDecimal"
+                        android:text="@string/default_170_0"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="35sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/ht_card_ftin1"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="118dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ht_display">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ht_textField_ftin1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundMode="none"
+                    app:errorEnabled="true">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/ht_input_ftin1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:fontFamily="@font/montserrat_extrabold"
+                        android:inputType="numberDecimal"
+                        android:text="@string/default_5"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="35sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/ht_card_ftin2"
+                android:layout_width="80dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="18dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ht_display">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ht_textField_ftin2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundMode="none"
+                    app:errorEnabled="true">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/ht_input_ftin2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:fontFamily="@font/montserrat_extrabold"
+                        android:inputType="numberDecimal"
+                        android:text="@string/default_7"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="35sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/ht_tab"
+                android:layout_width="170dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="18dp"
+                android:background="@drawable/shape_tablayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ht_card_cm"
+                app:tabBackground="@drawable/tab_selector"
+                app:tabIndicatorHeight="0dp"
+                app:tabTextColor="@color/black">
+
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/tab_selector"
+                    android:clickable="true"
+                    android:text="@string/ft_in" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/tab_selector"
+                    android:text="@string/cm" />
+
+
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <TextView
+                android:id="@+id/time_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/time"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/wt_tab" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/time_date"
+                android:layout_width="170dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="12dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/time_display">
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/time_input_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:fontFamily="@font/montserrat_extrabold"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:text="@string/date"
+                    android:textColor="@color/black"
+                    android:textSize="25sp" />
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/time_phase"
+                android:layout_width="170dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="18dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/time_display">
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/time_input_phase"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:fontFamily="@font/montserrat_extrabold"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:text="@string/phase"
+                    android:textColor="@color/black"
+                    android:textSize="28sp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/age_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/age"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/time_date" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/age_card"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="18dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/age_display">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/age_recycler_view"/>
+
+                    <ImageView
+                        android:layout_marginTop="60dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:src="@drawable/age_arrow" />
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/gender_card_male"
+                android:layout_width="170dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="15dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/age_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.5"
+                    android:id="@+id/gender_selected_male"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="140dp"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/gender_selected_male_pic"
+                        android:visibility="invisible"
+                        android:src="@drawable/gender_selected"/>
+
+                    <ImageView
+                        android:layout_marginTop="5dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:id="@+id/gender_male_pic"
+                        android:src="@drawable/gender_male"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/gender_male_text"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="17sp"
+                        android:gravity="center"
+                        android:text="Male"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/gender_card_female"
+                android:layout_width="170dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="18dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/age_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.5"
+                    android:clickable="true"
+                    android:id="@+id/gender_selected_female"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="140dp"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/gender_selected_female_pic"
+                        android:visibility="invisible"
+                        android:src="@drawable/gender_selected"/>
+
+                    <ImageView
+                        android:layout_marginTop="5dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:id="@+id/gender_female_pic"
+                        android:src="@drawable/gender_female"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/gender_female_text"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="17sp"
+                        android:gravity="center"
+                        android:text="Female"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/btn_calculate"
+                style="@style/ThemeOverlay.Material3.Button"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="15dp"
                 android:gravity="center"
-                android:text="Female"/>
+                android:layout_marginEnd="18dp"
+                android:background="@drawable/btn_selector"
+                android:fontFamily="@font/montserrat_extrabold"
+                android:text="@string/calculate"
+                android:textColor="@color/white"
+                android:textSize="35sp"
+                app:backgroundTint="#ff0099cc"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:letterSpacing="-0.05"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@id/gender_card_male" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.google.android.material.card.MaterialCardView>
-
-    <TextView
-        android:id="@+id/btn_calculate"
-        style="@style/ThemeOverlay.Material3.Button"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="15dp"
-        android:gravity="center"
-        android:layout_marginEnd="18dp"
-        android:background="@drawable/btn_selector"
-        android:fontFamily="@font/montserrat_extrabold"
-        android:text="@string/calculate"
-        android:textColor="@color/white"
-        android:textSize="35sp"
-        app:backgroundTint="#ff0099cc"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:letterSpacing="-0.05"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/gender_card_male" />
-
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

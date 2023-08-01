@@ -848,17 +848,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
             if (viewModel.selectedGender.value != null) {
 
-//                val bmiInfo = BmiInfo(
-//                    viewModel.wt_lb.value!!.toDouble(),
-//                    viewModel.wt_kg.value!!.toDouble(),
-//                    viewModel.ht_ft.value!!.toInt(), viewModel.ht_in.value!!.toInt(),
-//                    viewModel.ht_cm.value!!.toDouble(),
-//                    viewModel.selectedDate.value, viewModel.selectedPhase.value,
-//                    viewModel.selectedAge.value!!.toInt(),
-//                    viewModel.selectedGender.value!!.toChar()
-//                )
-//                Log.d("CCCCCC", bmiInfo.toString())
-                // viewModel.insertInfo(bmiInfo)
                 if (binding.wtTab.getTabAt(0)!!.isSelected &&
                     binding.htTab.getTabAt(0)!!.isSelected
                 ) {
@@ -938,8 +927,9 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         //滑动之后100ms后移动到中心位置
         binding.ageRecyclerView.postDelayed({
             binding.ageRecyclerView.scrollToPosition(childViewHalfCount + 25)
-            //scrollToCenter(childViewHalfCount+25)
+            scrollToCenter(28)
         }, 100L)
+
     }
 
     fun initData() {
