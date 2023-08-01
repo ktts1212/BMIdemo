@@ -51,11 +51,11 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         binding.wheelPickerDateYearWheel.setRange(2000, 2035, 1)
         binding.wheelPickerDateMonthWheel.setData(months)
         binding.wheelPickerDateYearWheel.typeface =
-            ResourcesCompat.getFont(requireContext(),R.font.montserrat_extrabold)
+            ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
         binding.wheelPickerDateMonthWheel.typeface =
-            ResourcesCompat.getFont(requireContext(),R.font.montserrat_extrabold)
+            ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
         binding.wheelPickerDateDayWheel.typeface =
-            ResourcesCompat.getFont(requireContext(),R.font.montserrat_extrabold)
+            ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
         val currentDate = LocalDate.now()
         val day = currentDate.dayOfMonth
         val year = currentDate.year

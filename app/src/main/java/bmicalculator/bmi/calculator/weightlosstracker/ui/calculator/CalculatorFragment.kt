@@ -36,6 +36,7 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.adapter.AgeSelectorAdapter
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.CalculatorResultFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.DatePickerFragment
+import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.SettingFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.TimePickerFragment
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.CenterItemUtils
 import com.google.android.material.tabs.TabLayout
@@ -376,14 +377,18 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     }
                 }
 
-                if (binding.wtTab.getTabAt(0)!!.isSelected){
-                    viewModel.setwtlb(df.format(
-                        binding.wtInput.text.toString().toDouble()
-                    ).toDouble())
-                }else{
-                    viewModel.setwtkg(df.format(
-                        binding.wtInput.text.toString().toDouble()
-                    ).toDouble())
+                if (binding.wtTab.getTabAt(0)!!.isSelected) {
+                    viewModel.setwtlb(
+                        df.format(
+                            binding.wtInput.text.toString().toDouble()
+                        ).toDouble()
+                    )
+                } else {
+                    viewModel.setwtkg(
+                        df.format(
+                            binding.wtInput.text.toString().toDouble()
+                        ).toDouble()
+                    )
                 }
 
                 isChanged = false
@@ -553,11 +558,11 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 }
 
 
-                if (binding.htInputFtin1.text.toString().contains("'")){
+                if (binding.htInputFtin1.text.toString().contains("'")) {
                     viewModel.sethtft(
                         binding.htInputFtin1.text.toString().dropLast(1).toInt()
                     )
-                }else{
+                } else {
                     viewModel.sethtft(
                         binding.htInputFtin1.text.toString().toInt()
                     )
@@ -574,7 +579,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         binding.htInputFtin1.text.toString() + "'"
                     )
                 }
-            }else{
+            } else {
                 binding.htInputFtin1.setText(binding.htInputFtin1.text.toString().dropLast(1))
             }
         }
@@ -604,8 +609,8 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 //                    )
 //                }
 
-                if (str.contains("''")){
-                    str=str.dropLast(2)
+                if (str.contains("''")) {
+                    str = str.dropLast(2)
                 }
 
                 if (str.contains(".")) {
@@ -656,11 +661,11 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     )
                 }
 
-                if (binding.htInputFtin2.text.toString().contains("''")){
+                if (binding.htInputFtin2.text.toString().contains("''")) {
                     viewModel.sethtin(
                         binding.htInputFtin2.text.toString().dropLast(2).toInt()
                     )
-                }else{
+                } else {
                     viewModel.sethtin(
                         binding.htInputFtin2.text.toString().toInt()
                     )
@@ -672,12 +677,12 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
         binding.htInputFtin2.setOnFocusChangeListener { view, hasFocus ->
             if (!hasFocus) {
-                if (!binding.htInputFtin2.text.toString().contains("''")){
+                if (!binding.htInputFtin2.text.toString().contains("''")) {
                     binding.htInputFtin2.setText(
                         binding.htInputFtin2.text.toString() + "''"
                     )
                 }
-            }else{
+            } else {
                 binding.htInputFtin2.setText(
                     binding.htInputFtin2.text.toString().dropLast(2)
                 )
@@ -771,10 +776,10 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
         var monthName = DateFormatSymbols(Locale.ENGLISH).shortMonths[month]
-        monthName= when(monthName){
-            "Jul"->"July"
-            "Jun"->"June"
-            else->monthName
+        monthName = when (monthName) {
+            "Jul" -> "July"
+            "Jun" -> "June"
+            else -> monthName
         }
         binding.timeInputDate.setText("${monthName} ${day},${year}")
         viewModel.setDate(binding.timeInputDate.text.toString())
@@ -856,8 +861,8 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                                 viewModel.ht_in.value!!)).toDouble(), 2.0
                     ) * 703
                     viewModel.setBmival(tf.format(bmival.toFloat()).toFloat())
-                    viewModel.wttype= "lb"
-                    viewModel.httype="ftin"
+                    viewModel.wttype = "lb"
+                    viewModel.httype = "ftin"
                 }
 
                 if (binding.wtTab.getTabAt(0)!!.isSelected &&
@@ -868,19 +873,19 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         2.0
                     )
                     viewModel.setBmival(tf.format(bmival.toFloat()).toFloat())
-                    viewModel.wttype= "lb"
-                    viewModel.httype="cm"
+                    viewModel.wttype = "lb"
+                    viewModel.httype = "cm"
                 }
 
                 if (binding.wtTab.getTabAt(1)!!.isSelected &&
                     binding.htTab.getTabAt(0)!!.isSelected
                 ) {
                     val bmival = viewModel.wt_kg.value!! / Math.pow(
-                       viewModel.ht_ft.value!! * 0.3048 + viewModel.ht_in.value!! * 0.0254, 2.0
+                        viewModel.ht_ft.value!! * 0.3048 + viewModel.ht_in.value!! * 0.0254, 2.0
                     )
                     viewModel.setBmival(tf.format(bmival.toFloat()).toFloat())
-                    viewModel.wttype= "kg"
-                    viewModel.httype="ftin"
+                    viewModel.wttype = "kg"
+                    viewModel.httype = "ftin"
                 }
 
                 if (binding.wtTab.getTabAt(1)!!.isSelected &&
@@ -890,8 +895,8 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         viewModel.ht_cm.value!! * 0.01, 2.0
                     )
                     viewModel.setBmival(tf.format(bmival.toFloat()).toFloat())
-                    viewModel.wttype= "kg"
-                    viewModel.httype="cm"
+                    viewModel.wttype = "kg"
+                    viewModel.httype = "cm"
                 }
 
                 val dialog = CalculatorResultFragment()
@@ -915,19 +920,23 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 //rv中心到两边的距离
                 centerToLiftDistance = binding.ageRecyclerView.width / 2
 
-                val childViewHeight = Utils.dip2px(requireContext(), CHILDVIEWSIZE.toFloat())
-                //获取中心元素到两侧的元素个数
-                Log.d(TAG, "rvWidth:${binding.ageRecyclerView.width}")
-                childViewHalfCount = (binding.ageRecyclerView.width / childViewHeight) / 2 + 1
-                Log.d(TAG, "$childViewHeight + $childViewHalfCount ")
-                initData()
-                findView()
+                if (isAdded) {
+                    val childViewHeight = Utils.dip2px(requireContext(), CHILDVIEWSIZE.toFloat())
+                    //获取中心元素到两侧的元素个数
+                    Log.d(TAG, "rvWidth:${binding.ageRecyclerView.width}")
+                    childViewHalfCount = (binding.ageRecyclerView.width / childViewHeight) / 2 + 1
+                    Log.d(TAG, "$childViewHeight + $childViewHalfCount ")
+                    initData()
+                    findView()
+                }
+
+
             }
         })
         //滑动之后100ms后移动到中心位置
         binding.ageRecyclerView.postDelayed({
             binding.ageRecyclerView.scrollToPosition(childViewHalfCount + 25)
-            scrollToCenter(28)
+            //scrollToCenter(28)
         }, 100L)
 
     }
@@ -1015,7 +1024,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
     fun scrollToCenter(position: Int) {
         //var pos = if (position < childViewHalfCount) childViewHalfCount else position
 
-        Log.d(TAG, "itemCOunt :${adapter.itemCount}")
+        //  Log.d(TAG, "itemCOunt :${adapter.itemCount}")
 //        var pos = if (position < adapter.itemCount - childViewHalfCount - 1) position
 //        else adapter.itemCount - childViewHalfCount - 1
 
@@ -1039,7 +1048,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         val smoothDistance = childViewLeft - viewCTop + childVhalf
         binding.ageRecyclerView.smoothScrollBy(smoothDistance, 0, decelerateInterpolator)
         adapter.setSelectPosition(pos)
-        viewModel.setAge(pos-1)
+        viewModel.setAge(pos - 1)
         Log.d(TAG, "当前选中:${ageList.get(pos)}")
     }
 
@@ -1050,12 +1059,14 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.user -> Toast.makeText(requireContext(), "you click me", Toast.LENGTH_SHORT).show()
+            R.id.user -> {
+                val dialog=SettingFragment()
+                dialog.show(childFragmentManager,"SettingFragment")
+            }
             else -> return false
         }
         return true
     }
-
 
 }
 

@@ -33,7 +33,7 @@ class TimePickerFragment : DialogFragment() {
 //
 //    private var toastCount=0
 
-    private lateinit var mode:CalculatorViewModel
+    private lateinit var mode: CalculatorViewModel
 
     @SuppressLint("WrongConstant")
     override fun onCreateView(
@@ -47,7 +47,7 @@ class TimePickerFragment : DialogFragment() {
         binding.wheelPickerTimePhase.setDefaultValue(hourtophase(current))
         binding.wheelPickerTimePhase.typeface =
             ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
-        mode=ViewModelProvider(requireActivity()).get(CalculatorViewModel::class.java)
+        mode = ViewModelProvider(requireActivity()).get(CalculatorViewModel::class.java)
         return binding.root
     }
 
@@ -61,12 +61,12 @@ class TimePickerFragment : DialogFragment() {
             )
         }
 
-        binding.wheelPickerTimePhase.setOnWheelChangedListener(object :OnWheelChangedListener{
+        binding.wheelPickerTimePhase.setOnWheelChangedListener(object : OnWheelChangedListener {
             override fun onWheelScrolled(view: WheelView?, offset: Int) {
             }
 
             override fun onWheelSelected(view: WheelView?, position: Int) {
- //               val current=LocalDateTime.now()
+                //               val current=LocalDateTime.now()
 //                if (phases.indexOf(view?.getCurrentItem())>phases.indexOf(hourtophase(current))){
 //                    binding.btnDonePhase.setBackgroundResource(R.drawable.shape_btn_done_invalid)
 //                    binding.btnDonePhase.setTextColor(Color.parseColor("#000000"))
@@ -116,7 +116,7 @@ class TimePickerFragment : DialogFragment() {
         dialog?.window?.attributes = params as WindowManager.LayoutParams
     }
 
-    fun hourtophase(current:LocalDateTime): String {
+    fun hourtophase(current: LocalDateTime): String {
 
         val phase: String = if (current.hour >= 23 && current.hour < 8) {
             "Night"

@@ -1,5 +1,6 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.bmi.child
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import bmicalculator.bmi.calculator.weightlosstracker.R
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.FragmentRecordHistoryBinding
 import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
@@ -21,8 +23,10 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFacto
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.History
 import bmicalculator.bmi.calculator.weightlosstracker.ui.adapter.RecordAdapter
+import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlin.Exception
 
 private const val TAG = "RecordHistory"
@@ -72,13 +76,36 @@ class RecordHistoryFragment : DialogFragment() {
 
         viewModel.allInfo.observe(requireActivity()) {
             val list = viewModel.allInfo.value
+            if (it == null || it.size == 0) {
+
+                if (isAdded) {
+                    val editor = (activity as AppCompatActivity).getSharedPreferences(
+                        "data", Context.MODE_PRIVATE
+                    ).edit()
+                    editor.putBoolean("hasdata", false)
+                    editor.apply()
+
+                    val navView =
+                        (activity as AppCompatActivity).findViewById<BottomNavigationView>(
+                            R.id.bottom_navigation_view
+                        )
+                    navView.selectedItemId = R.id.menu_calculator
+                    val fragmentManager = (activity as AppCompatActivity).supportFragmentManager
+                    val transition = fragmentManager.beginTransaction()
+                    transition.replace(R.id.fragment_container, CalculatorFragment())
+                    transition.commit()
+                    viewModel.UserStatus.value = false
+                }
+
+
+            }
             bmiInfoList = orderList(list!!) as ArrayList<BmiInfo>
 
             if (isAdded) {
                 val layoutManager = LinearLayoutManager(requireContext())
                 layoutManager.orientation = LinearLayoutManager.VERTICAL
                 binding.recordRecyclerview.layoutManager = layoutManager
-                val adapter = RecordAdapter(requireContext(), bmiInfoList,childFragmentManager)
+                val adapter = RecordAdapter(requireContext(), bmiInfoList, childFragmentManager)
                 binding.recordRecyclerview.adapter = adapter
             }
 
@@ -120,7 +147,7 @@ class RecordHistoryFragment : DialogFragment() {
         while (y < ls.size) {
             l.clear()
             var xadd = false
-            while (ls[x].datetimestamp == ls[y].datetimestamp) {
+            while ((y < ls.size) && (ls[x].datetimestamp == ls[y].datetimestamp)) {
                 if (xadd == false) {
                     l.add(ls[x])
                     xadd = true

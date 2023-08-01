@@ -49,8 +49,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         //setSupportActionBar(binding.toolbar)
 
-        val prefs=getSharedPreferences("data", Context.MODE_PRIVATE)
-        val hasdata=prefs.getBoolean("hasdata",false)
+        val prefs = getSharedPreferences("data", Context.MODE_PRIVATE)
+        val hasdata = prefs.getBoolean("hasdata", false)
 
         val dao = AppDataBase.getDatabase(application).bmiInfoDao()
         val factory = ViewModelFactory(Repository(dao))
@@ -66,36 +66,86 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        viewModel.allInfo.observe(this){info->
-//            info?.let {
-//                if (it.isEmpty()){
-//                    Toast.makeText(this,"search error",Toast.LENGTH_SHORT).show()
-//                }else{
-//                    viewModel.infoCount.postValue(it.size)
-//                    Toast.makeText(this,"search success",Toast.LENGTH_SHORT).show()
+//        viewModel.UserStatus.observe(this) {
+//            if (it) {
+//                binding.bottomNavigationView.post {
+//                    val height = binding.bottomNavigationView.height
+//                    val params =
+//                        binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
+//                    params.bottomMargin = height
+//                    binding.fragmentContainer.layoutParams = params
 //                }
+//                //binding.fragmentContainer.visibility = View.VISIBLE
+//                binding.bottomNavigationView.visibility = View.VISIBLE
+//                UserStatus.ishasRecord = true
+//            } else {
+//                binding.bottomNavigationView.visibility = View.GONE
+//                val params =
+//                    binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
+//                params.bottomMargin = 0
+//                binding.fragmentContainer.layoutParams = params
+//                UserStatus.ishasRecord = false
 //            }
-//
 //        }
+
+        viewModel.allInfo.observe(this) {
+            if (!it.isNullOrEmpty()) {
+                binding.bottomNavigationView.post {
+                    val height = binding.bottomNavigationView.height
+                    val params =
+                        binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
+                    params.bottomMargin = height
+                    binding.fragmentContainer.layoutParams = params
+                }
+                //binding.fragmentContainer.visibility = View.VISIBLE
+                binding.bottomNavigationView.visibility = View.VISIBLE
+                UserStatus.ishasRecord = true
+            } else {
+                binding.bottomNavigationView.visibility = View.GONE
+                val params =
+                    binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
+                params.bottomMargin = 0
+                binding.fragmentContainer.layoutParams = params
+                UserStatus.ishasRecord = false
+            }
+        }
 
         Log.d(TAG, "num:${viewModel.infoCount.value}")
         //判断底部导航栏是否显示
 
-        if (hasdata){
-            binding.bottomNavigationView.post {
-                val height = binding.bottomNavigationView.height
-                val params =
-                    binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
-                params.bottomMargin = height
-                binding.fragmentContainer.layoutParams = params
-            }
-            //binding.fragmentContainer.visibility = View.VISIBLE
-            binding.bottomNavigationView.visibility = View.VISIBLE
-            UserStatus.ishasRecord=true
-        }else{
-            binding.bottomNavigationView.visibility = View.GONE
-            UserStatus.ishasRecord=false
-        }
+//        viewModel.allInfo.observe(this){
+//            if (it.size>0||it!=null){
+//                binding.bottomNavigationView.post {
+//                    val height = binding.bottomNavigationView.height
+//                    val params =
+//                        binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
+//                    params.bottomMargin = height
+//                    binding.fragmentContainer.layoutParams = params
+//                }
+//                //binding.fragmentContainer.visibility = View.VISIBLE
+//                binding.bottomNavigationView.visibility = View.VISIBLE
+//                UserStatus.ishasRecord=true
+//            }else{
+//                binding.bottomNavigationView.visibility = View.GONE
+//                UserStatus.ishasRecord=false
+//            }
+//        }
+
+//        if (hasdata){
+//            binding.bottomNavigationView.post {
+//                val height = binding.bottomNavigationView.height
+//                val params =
+//                    binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
+//                params.bottomMargin = height
+//                binding.fragmentContainer.layoutParams = params
+//            }
+//            //binding.fragmentContainer.visibility = View.VISIBLE
+//            binding.bottomNavigationView.visibility = View.VISIBLE
+//            UserStatus.ishasRecord=true
+//        }else{
+//            binding.bottomNavigationView.visibility = View.GONE
+//            UserStatus.ishasRecord=false
+//        }
 
         //更改状态栏字体颜色
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -105,9 +155,9 @@ class MainActivity : AppCompatActivity() {
         //fragment切换
         val fragmentManager = supportFragmentManager
         //val transaction = fragmentManager.beginTransaction()
-        var mCurrentFragment:Fragment = CalculatorFragment()
-        val transcation=fragmentManager.beginTransaction()
-        transcation.add(R.id.fragment_container,mCurrentFragment,"calculator")
+        var mCurrentFragment: Fragment = CalculatorFragment()
+        val transcation = fragmentManager.beginTransaction()
+        transcation.add(R.id.fragment_container, mCurrentFragment, "calculator")
         transcation.show(mCurrentFragment).commit()
 
         binding.bottomNavigationView.setOnItemSelectedListener {
@@ -116,13 +166,13 @@ class MainActivity : AppCompatActivity() {
             transcation.hide(mCurrentFragment)
 
             when (it.itemId) {
-                R.id.menu_calculator ->{
+                R.id.menu_calculator -> {
                     val calculatorFragment = fragmentManager.findFragmentByTag("calculator")
-                    mCurrentFragment=if (calculatorFragment==null){
+                    mCurrentFragment = if (calculatorFragment == null) {
                         CalculatorFragment().also {
-                            transcation.add(R.id.fragment_container,it,"calculator")
+                            transcation.add(R.id.fragment_container, it, "calculator")
                         }
-                    }else{
+                    } else {
                         calculatorFragment
                     }
                 }
@@ -130,21 +180,22 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.menu_bmi -> {
                     val bmiFragment = fragmentManager.findFragmentByTag("bmi")
-                    mCurrentFragment=if (bmiFragment==null){
+                    mCurrentFragment = if (bmiFragment == null) {
                         BmiFragment().also {
-                            transcation.add(R.id.fragment_container,it,"bmi")
+                            transcation.add(R.id.fragment_container, it, "bmi")
                         }
-                    }else{
+                    } else {
                         bmiFragment
                     }
                 }
-                R.id.menu_statistics->{
+
+                R.id.menu_statistics -> {
                     val statisticFragment = fragmentManager.findFragmentByTag("statistic")
-                    mCurrentFragment=if (statisticFragment==null){
+                    mCurrentFragment = if (statisticFragment == null) {
                         StatisticFragment().also {
-                            transcation.add(R.id.fragment_container,it,"statistic")
+                            transcation.add(R.id.fragment_container, it, "statistic")
                         }
-                    }else{
+                    } else {
                         statisticFragment
                     }
                 }

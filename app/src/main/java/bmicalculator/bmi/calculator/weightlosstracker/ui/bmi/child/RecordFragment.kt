@@ -34,16 +34,16 @@ class RecordFragment : DialogFragment() {
 
     private lateinit var binding: FragmentRecordBinding
 
-    private lateinit var currentBmiInfo:BmiInfo
+    private lateinit var currentBmiInfo: BmiInfo
 
     private lateinit var viewModel: CalculatorViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU){
-            currentBmiInfo= arguments?.getParcelable("cBI",BmiInfo::class.java)!!
-        }else{
-            currentBmiInfo= arguments?.getParcelable<BmiInfo>("cBI")!!
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            currentBmiInfo = arguments?.getParcelable("cBI", BmiInfo::class.java)!!
+        } else {
+            currentBmiInfo = arguments?.getParcelable<BmiInfo>("cBI")!!
         }
 
 
@@ -96,22 +96,22 @@ class RecordFragment : DialogFragment() {
             requireContext(), 18f
         ).toFloat()
 
-        if (currentBmiInfo.age>20){
-            binding.rcChildDial.visibility=View.GONE
-            binding.rcDial.visibility=View.VISIBLE
-            binding.rcArrow.rotation= SweepAngel.sweepAngle(currentBmiInfo.bmi)
+        if (currentBmiInfo.age > 20) {
+            binding.rcChildDial.visibility = View.GONE
+            binding.rcDial.visibility = View.VISIBLE
+            binding.rcArrow.rotation = SweepAngel.sweepAngle(currentBmiInfo.bmi)
             binding.rcNum.setText(currentBmiInfo.bmi.toString())
-            getBmiType(currentBmiInfo.bmiType!!,currentBmiInfo)
+            getBmiType(currentBmiInfo.bmiType!!, currentBmiInfo)
             getWtHtType(currentBmiInfo)
 
-        }else{
-            binding.rcChildDial.visibility=View.VISIBLE
-            binding.rcDial.visibility=View.GONE
-            ChildBmiDialData.setData(currentBmiInfo.age,currentBmiInfo.gender)
-            binding.rcChildDial.getData(ChildBmiDialData.cScaleList,ChildBmiDialData.scaleRange)
-            binding.rcArrow.rotation= SweepAngel.childSweepAngle(currentBmiInfo.bmi)
+        } else {
+            binding.rcChildDial.visibility = View.VISIBLE
+            binding.rcDial.visibility = View.GONE
+            ChildBmiDialData.setData(currentBmiInfo.age, currentBmiInfo.gender)
+            binding.rcChildDial.getData(ChildBmiDialData.cScaleList, ChildBmiDialData.scaleRange)
+            binding.rcArrow.rotation = SweepAngel.childSweepAngle(currentBmiInfo.bmi)
             binding.rcNum.setText(currentBmiInfo.bmi.toString())
-            getBmiType(currentBmiInfo.bmiType!!,currentBmiInfo)
+            getBmiType(currentBmiInfo.bmiType!!, currentBmiInfo)
             getWtHtType(currentBmiInfo)
 
         }
@@ -149,9 +149,9 @@ class RecordFragment : DialogFragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    fun getBmiType(bmiType:String, bmiInfo: BmiInfo){
+    fun getBmiType(bmiType: String, bmiInfo: BmiInfo) {
 
-        val sgender = if (bmiInfo.gender=='0') "Male"
+        val sgender = if (bmiInfo.gender == '0') "Male"
         else "Female"
         var minwt: Double = 0.0
         var maxwt: Double = 0.0
@@ -180,8 +180,8 @@ class RecordFragment : DialogFragment() {
         }
 
         binding.rcCalInfo.setText(bmicalinfo)
-        val wtType=bmiInfo.wtHtType!!.substring(0,2)
-        val htType=bmiInfo.wtHtType!!.substring(2)
+        val wtType = bmiInfo.wtHtType!!.substring(0, 2)
+        val htType = bmiInfo.wtHtType!!.substring(2)
 
         //Log.d("cccc",wtType)
         var wtrange =
@@ -222,16 +222,16 @@ class RecordFragment : DialogFragment() {
             "vsuw" -> {
                 binding.rcCalTypeText.setText(getString(R.string.vsuw))
                 binding.rcCalTypeDisplay.setBackgroundColor(
-                    ContextCompat.getColor(requireContext(),R.color.vsuw)
+                    ContextCompat.getColor(requireContext(), R.color.vsuw)
                 )
                 ViewCompat.setBackgroundTintList(
                     binding.rcTypeTip, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            requireContext(),R.color.vsuw
+                            requireContext(), R.color.vsuw
                         )
                     )
                 )
-                if (bmiInfo.age>20){
+                if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(
                         getString(R.string.adult_vsuw) + "\n\n" +
                                 getString(R.string.suggestion) + "(${
@@ -249,16 +249,16 @@ class RecordFragment : DialogFragment() {
             "suw" -> {
                 binding.rcCalTypeText.setText(getString(R.string.suw))
                 binding.rcCalTypeDisplay.setBackgroundColor(
-                    ContextCompat.getColor(requireContext(),R.color.suw)
+                    ContextCompat.getColor(requireContext(), R.color.suw)
                 )
                 ViewCompat.setBackgroundTintList(
                     binding.rcTypeTip, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            requireContext(),R.color.suw
+                            requireContext(), R.color.suw
                         )
                     )
                 )
-                if (bmiInfo.age>20){
+                if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(
                         getString(R.string.adult_suw) + "\n\n" +
                                 getString(R.string.suggestion) + "(${
@@ -273,16 +273,16 @@ class RecordFragment : DialogFragment() {
             "uw" -> {
                 binding.rcCalTypeText.setText(getString(R.string.uw))
                 binding.rcCalTypeDisplay.setBackgroundColor(
-                    ContextCompat.getColor(requireContext(),R.color.uw)
+                    ContextCompat.getColor(requireContext(), R.color.uw)
                 )
                 ViewCompat.setBackgroundTintList(
                     binding.rcTypeTip, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            requireContext(),R.color.uw
+                            requireContext(), R.color.uw
                         )
                     )
                 )
-                if (bmiInfo.age>20){
+                if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(
                         getString(R.string.adult_uw) + "\n\n" +
                                 getString(R.string.suggestion) + "(${
@@ -290,7 +290,7 @@ class RecordFragment : DialogFragment() {
                             else bmiInfo.ht_ft.toString() + "ft ${bmiInfo.ht_in}in"
                         }):" + "\n"
                     )
-                }else{
+                } else {
                     binding.rcCalSuggest.setText(
                         getString(R.string.child_uw) + "\n\n" +
                                 getString(R.string.suggestion) + "(${
@@ -305,18 +305,18 @@ class RecordFragment : DialogFragment() {
             "nm" -> {
                 binding.rcCalTypeText.setText(getString(R.string.nm))
                 binding.rcCalTypeDisplay.setBackgroundColor(
-                    ContextCompat.getColor(requireContext(),R.color.normal)
+                    ContextCompat.getColor(requireContext(), R.color.normal)
                 )
                 ViewCompat.setBackgroundTintList(
                     binding.rcTypeTip, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            requireContext(),R.color.normal
+                            requireContext(), R.color.normal
                         )
                     )
                 )
-                if (bmiInfo.age>20){
+                if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(getString(R.string.adult_nm_enc))
-                }else{
+                } else {
                     binding.rcCalSuggest.setText(getString(R.string.child_nm))
                 }
             }
@@ -324,16 +324,16 @@ class RecordFragment : DialogFragment() {
             "ow" -> {
                 binding.rcCalTypeText.setText(getString(R.string.ow))
                 binding.rcCalTypeDisplay.setBackgroundColor(
-                    ContextCompat.getColor(requireContext(),R.color.ow)
+                    ContextCompat.getColor(requireContext(), R.color.ow)
                 )
                 ViewCompat.setBackgroundTintList(
                     binding.rcTypeTip, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            requireContext(),R.color.ow
+                            requireContext(), R.color.ow
                         )
                     )
                 )
-                if (bmiInfo.age>20){
+                if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(
                         getString(R.string.adult_ow) + "\n\n" +
                                 getString(R.string.suggestion) + "(${
@@ -341,7 +341,7 @@ class RecordFragment : DialogFragment() {
                             else bmiInfo.ht_ft.toString() + "ft ${bmiInfo.ht_in}in"
                         }):" + "\n"
                     )
-                }else{
+                } else {
                     binding.rcCalSuggest.setText(
                         getString(R.string.child_ow) + "\n\n" +
                                 getString(R.string.suggestion) + "(${
@@ -356,16 +356,16 @@ class RecordFragment : DialogFragment() {
             "oc1" -> {
                 binding.rcCalTypeText.setText(getString(R.string.oc1))
                 binding.rcCalTypeDisplay.setBackgroundColor(
-                    ContextCompat.getColor(requireContext(),R.color.oc1)
+                    ContextCompat.getColor(requireContext(), R.color.oc1)
                 )
                 ViewCompat.setBackgroundTintList(
                     binding.rcTypeTip, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            requireContext(),R.color.oc1
+                            requireContext(), R.color.oc1
                         )
                     )
                 )
-                if (bmiInfo.age>20){
+                if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(
                         getString(R.string.adult_ob1) + "\n\n" +
                                 getString(R.string.suggestion) + "(${
@@ -373,7 +373,7 @@ class RecordFragment : DialogFragment() {
                             else bmiInfo.ht_ft.toString() + "ft ${bmiInfo.ht_in}in"
                         }):" + "\n"
                     )
-                }else{
+                } else {
                     binding.rcCalSuggest.setText(
                         getString(R.string.child_ob1) + "\n\n" +
                                 getString(R.string.suggestion) + "(${
@@ -388,16 +388,16 @@ class RecordFragment : DialogFragment() {
             "oc2" -> {
                 binding.rcCalTypeText.setText(getString(R.string.oc2))
                 binding.rcCalTypeDisplay.setBackgroundColor(
-                    ContextCompat.getColor(requireContext(),R.color.oc2)
+                    ContextCompat.getColor(requireContext(), R.color.oc2)
                 )
                 ViewCompat.setBackgroundTintList(
                     binding.rcTypeTip, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            requireContext(),R.color.oc2
+                            requireContext(), R.color.oc2
                         )
                     )
                 )
-                if (bmiInfo.age>20){
+                if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(
                         getString(R.string.adult_ob2) + "\n\n" +
                                 getString(R.string.suggestion) + "(${
@@ -412,16 +412,16 @@ class RecordFragment : DialogFragment() {
             "oc3" -> {
                 binding.rcCalTypeText.setText(getString(R.string.oc3))
                 binding.rcCalTypeDisplay.setBackgroundColor(
-                    ContextCompat.getColor(requireContext(),R.color.oc3)
+                    ContextCompat.getColor(requireContext(), R.color.oc3)
                 )
                 ViewCompat.setBackgroundTintList(
                     binding.rcTypeTip, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            requireContext(),R.color.oc3
+                            requireContext(), R.color.oc3
                         )
                     )
                 )
-                if (bmiInfo.age>20){
+                if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(
                         getString(R.string.adult_ob3) + "\n\n" +
                                 getString(R.string.suggestion) + "(${

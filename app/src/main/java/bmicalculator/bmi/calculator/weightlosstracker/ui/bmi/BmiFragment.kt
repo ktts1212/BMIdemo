@@ -98,6 +98,7 @@ class BmiFragment : Fragment() {
                 binding.typeTableChildDial.visibility = View.VISIBLE
                 binding.typeTableDial.visibility = View.GONE
                 binding.bmiValue.setText(newRecord.bmi.toString())
+                binding.bmiDate.setText(newRecord.date)
                 ChildBmiDialData.setData(newRecord.age, newRecord.gender)
                 binding.typeTableChildDial.getData(
                     ChildBmiDialData.cScaleList,

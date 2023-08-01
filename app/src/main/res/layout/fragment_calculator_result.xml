@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
     android:theme="@style/CalculatorResultFragment"
     tools:context=".ui.calculator.child.CalculatorResultFragment">
 
@@ -42,8 +43,8 @@
 
             <bmicalculator.bmi.calculator.weightlosstracker.uitl.views.ChildBmiDial
                 android:id="@+id/bmi_child_dial"
-                android:layout_width="360dp"
-                android:layout_height="360dp"
+                android:layout_width="320dp"
+                android:layout_height="320dp"
                 android:layout_marginTop="25dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -52,10 +53,9 @@
 
             <bmicalculator.bmi.calculator.weightlosstracker.uitl.views.BmiDial
                 android:id="@+id/bmi_dial"
-                android:layout_width="360dp"
-                android:layout_height="360dp"
+                android:layout_width="320dp"
+                android:layout_height="320dp"
                 android:layout_marginTop="25dp"
-
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/bmi_child_dial" />
@@ -64,7 +64,7 @@
                 android:id="@+id/bmi_arrow"
                 android:layout_width="36dp"
                 android:layout_height="150dp"
-                android:layout_marginTop="-198.5dp"
+                android:layout_marginTop="-178.5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/bmi_dial" />
@@ -133,7 +133,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-
                         android:id="@+id/bmi_type_tip"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
@@ -554,12 +553,11 @@
         android:id="@+id/save_btn"
         android:layout_width="315dp"
         android:layout_height="55dp"
-        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="42.5dp"
         android:layout_marginBottom="15dp"
         android:backgroundTint="#3659CF"
         android:fontFamily="@font/montserrat_extrabold"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="SAVE"
         android:textColor="@color/white"

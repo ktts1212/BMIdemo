@@ -5,10 +5,10 @@ import androidx.lifecycle.ViewModelProvider
 import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
 
-class ViewModelFactory(private val repository:Repository):ViewModelProvider.Factory {
+class ViewModelFactory(private val repository: Repository) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(CalculatorViewModel::class.java)){
+        if (modelClass.isAssignableFrom(CalculatorViewModel::class.java)) {
             return CalculatorViewModel(repository) as T
         }
 //        else if (modelClass.isAssignableFrom(StatisticViewModel::class.java)){

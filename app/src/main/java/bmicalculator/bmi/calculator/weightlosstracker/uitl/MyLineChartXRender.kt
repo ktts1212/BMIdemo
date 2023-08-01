@@ -26,7 +26,7 @@ class MyLineChartXRender(
     ) {
 
 
-        if (formattedLabel=="1"){
+        if (formattedLabel=="31"){
             val labelX=x
             val labelY=y-600f
             val textStyle=mAxisLabelPaint

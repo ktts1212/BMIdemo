@@ -811,80 +811,89 @@ class CalculatorResultFragment : DialogFragment() {
 
         binding.bmiAd1.setOnClickListener {
             try {
-                val playStoreUri= Uri.parse(
-                    "market://details?id=${binding.bmiAd1Tv2.text}")
-                val intent=Intent(Intent.ACTION_VIEW,playStoreUri)
+                val playStoreUri = Uri.parse(
+                    "market://details?id=${binding.bmiAd1Tv2.text}"
+                )
+                val intent = Intent(Intent.ACTION_VIEW, playStoreUri)
                 startActivity(intent)
-            }catch ( e:Exception){
-                val playStoreWebUri=Uri.parse(
-                    "https://play.google.com/store/apps/details?id=${binding.bmiAd1Tv2.text}")
-                val intent=Intent(Intent.ACTION_VIEW,playStoreWebUri)
+            } catch (e: Exception) {
+                val playStoreWebUri = Uri.parse(
+                    "https://play.google.com/store/apps/details?id=${binding.bmiAd1Tv2.text}"
+                )
+                val intent = Intent(Intent.ACTION_VIEW, playStoreWebUri)
                 startActivity(intent)
             }
         }
 
         binding.bmiAd2.setOnClickListener {
             try {
-                val playStoreUri= Uri.parse(
-                    "market://details?id=${binding.bmiAd2Tv2.text}")
-                val intent=Intent(Intent.ACTION_VIEW,playStoreUri)
+                val playStoreUri = Uri.parse(
+                    "market://details?id=${binding.bmiAd2Tv2.text}"
+                )
+                val intent = Intent(Intent.ACTION_VIEW, playStoreUri)
                 startActivity(intent)
-            }catch ( e:Exception){
-                val playStoreWebUri=Uri.parse(
-                    "https://play.google.com/store/apps/details?id=${binding.bmiAd2Tv2.text}")
-                val intent=Intent(Intent.ACTION_VIEW,playStoreWebUri)
+            } catch (e: Exception) {
+                val playStoreWebUri = Uri.parse(
+                    "https://play.google.com/store/apps/details?id=${binding.bmiAd2Tv2.text}"
+                )
+                val intent = Intent(Intent.ACTION_VIEW, playStoreWebUri)
                 startActivity(intent)
             }
         }
 
         binding.bmiAd3.setOnClickListener {
             try {
-                val playStoreUri= Uri.parse(
-                    "market://details?id=${binding.bmiAd3Tv2.text}")
-                val intent=Intent(Intent.ACTION_VIEW,playStoreUri)
+                val playStoreUri = Uri.parse(
+                    "market://details?id=${binding.bmiAd3Tv2.text}"
+                )
+                val intent = Intent(Intent.ACTION_VIEW, playStoreUri)
                 startActivity(intent)
-            }catch ( e:Exception){
-                val playStoreWebUri=Uri.parse(
-                    "https://play.google.com/store/apps/details?id=${binding.bmiAd3Tv2.text}")
-                val intent=Intent(Intent.ACTION_VIEW,playStoreWebUri)
+            } catch (e: Exception) {
+                val playStoreWebUri = Uri.parse(
+                    "https://play.google.com/store/apps/details?id=${binding.bmiAd3Tv2.text}"
+                )
+                val intent = Intent(Intent.ACTION_VIEW, playStoreWebUri)
                 startActivity(intent)
             }
         }
 
         binding.saveBtn.setOnClickListener {
-            val now= LocalTime.now()
-            val secondsPastMidnight=now.toSecondOfDay()
-                val bmiInfo = BmiInfo(
-                    viewModel.wt_lb.value!!.toDouble(),
-                    viewModel.wt_kg.value!!.toDouble(),
-                    viewModel.ht_ft.value!!.toInt(), viewModel.ht_in.value!!.toInt(),
-                    viewModel.ht_cm.value!!.toDouble(),
-                    viewModel.selectedDate.value, viewModel.selectedPhase.value,
-                    viewModel.selectedAge.value!!.toInt(),
-                    viewModel.selectedGender.value!!.toChar(),
-                    viewModel.bmival.value!!,
-                    secondsPastMidnight,
-                    viewModel.selectedDate.value!!.substring(
-                        viewModel.selectedDate.value!!.length-4).toInt(),
-                    viewModel.bmitype,
-                    viewModel.wttype+viewModel.httype,
-                    System.currentTimeMillis()
-                )
-             viewModel.insertInfo(bmiInfo)
+            val now = LocalTime.now()
+            val secondsPastMidnight = now.toSecondOfDay()
+            val bmiInfo = BmiInfo(
+                viewModel.wt_lb.value!!.toDouble(),
+                viewModel.wt_kg.value!!.toDouble(),
+                viewModel.ht_ft.value!!.toInt(), viewModel.ht_in.value!!.toInt(),
+                viewModel.ht_cm.value!!.toDouble(),
+                viewModel.selectedDate.value, viewModel.selectedPhase.value,
+                viewModel.selectedAge.value!!.toInt(),
+                viewModel.selectedGender.value!!.toChar(),
+                viewModel.bmival.value!!,
+                secondsPastMidnight,
+                viewModel.selectedDate.value!!.substring(
+                    viewModel.selectedDate.value!!.length - 4
+                ).toInt(),
+                viewModel.bmitype,
+                viewModel.wttype + viewModel.httype,
+                System.currentTimeMillis()
+            )
+            viewModel.insertInfo(bmiInfo)
 
 
-
-            val prefs=(activity as AppCompatActivity).getSharedPreferences(
-                "data",Context.MODE_PRIVATE)
-            val editor=prefs.edit()
-            editor.putBoolean("hasdata",true)
+            val prefs = (activity as AppCompatActivity).getSharedPreferences(
+                "data", Context.MODE_PRIVATE
+            )
+            val editor = prefs.edit()
+            editor.putBoolean("hasdata", true)
             editor.apply()
-            val navView= (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
-            navView.selectedItemId=R.id.menu_statistics
-            val fragmentManager=(activity as AppCompatActivity).supportFragmentManager
-            val transition=fragmentManager.beginTransaction()
-            transition.replace(R.id.fragment_container,StatisticFragment())
+            val navView =
+                (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+            navView.selectedItemId = R.id.menu_statistics
+            val fragmentManager = (activity as AppCompatActivity).supportFragmentManager
+            val transition = fragmentManager.beginTransaction()
+            transition.replace(R.id.fragment_container, StatisticFragment())
             transition.commit()
+            viewModel.UserStatus.value = true
         }
 
     }
@@ -921,13 +930,14 @@ class CalculatorResultFragment : DialogFragment() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     fun adshow(bmival: Float) {
-        if ((viewModel.selectedAge.value!! > 20 && bmival < 18.5)||
-            (viewModel.selectedAge.value!! <= 20 && bmival < ChildBmiDialData.cScaleList[1].toDouble()) ) {
+        if ((viewModel.selectedAge.value!! > 20 && bmival < 18.5) ||
+            (viewModel.selectedAge.value!! <= 20 && bmival < ChildBmiDialData.cScaleList[1].toDouble())
+        ) {
 //            binding.bmiAd1Tv2.visibility = View.GONE
 //            binding.bmiAd2Tv2.visibility = View.GONE
 //            binding.bmiAd3Tv2.visibility = View.GONE
             val num1 = Random.nextInt(6, 9)
-            var adInfo=choosead(num1)
+            var adInfo = choosead(num1)
 
             Glide.with(this)
                 .load(adInfo.image)
@@ -937,11 +947,11 @@ class CalculatorResultFragment : DialogFragment() {
             binding.bmiAd1Tv1.setText(getString(adInfo.appName))
             binding.bmiAd1Tv3.setText(getString(adInfo.appScore))
 
-            var num2:Int
-            do{
-                num2= Random.nextInt(6,9)
-            }while (num2==num1)
-            adInfo=choosead(num2)
+            var num2: Int
+            do {
+                num2 = Random.nextInt(6, 9)
+            } while (num2 == num1)
+            adInfo = choosead(num2)
             Glide.with(this)
                 .load(adInfo.image)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(15)))
@@ -950,10 +960,10 @@ class CalculatorResultFragment : DialogFragment() {
             binding.bmiAd2Tv3.setText(getString(adInfo.appScore))
             binding.bmiAd2Tv2.setText(getString(adInfo.applink))
 
-            val numList= listOf(5,9,10)
-            val randomIndex= Random.nextInt(numList.size)
-            val num3=numList[randomIndex]
-            adInfo=choosead(num3)
+            val numList = listOf(5, 9, 10)
+            val randomIndex = Random.nextInt(numList.size)
+            val num3 = numList[randomIndex]
+            adInfo = choosead(num3)
             Glide.with(this)
                 .load(adInfo.image)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(15)))
@@ -961,18 +971,18 @@ class CalculatorResultFragment : DialogFragment() {
             binding.bmiAd3Tv1.setText(getString(adInfo.appName))
             binding.bmiAd3Tv3.setText(getString(adInfo.appScore))
             binding.bmiAd3Tv2.setText(getString(adInfo.applink))
-        }else{
+        } else {
 //            binding.bmiAd1Tv2.visibility = View.VISIBLE
 //            binding.bmiAd2Tv2.visibility = View.VISIBLE
 //            binding.bmiAd3Tv2.visibility = View.VISIBLE
 //            binding.bmiAd1Tv2.visibility = View.GONE
 //            binding.bmiAd2Tv2.visibility = View.GONE
 //            binding.bmiAd3Tv2.visibility = View.GONE
-            val nums=if (viewModel.selectedGender.value!!.equals('0'))
-                mutableListOf(2,3,6,7,8) else mutableListOf(1,3,6,7,8)
-            var randomIndex= Random.nextInt(nums.size)
-            val num1=nums[randomIndex]
-            var adInfo=choosead(num1)
+            val nums = if (viewModel.selectedGender.value!!.equals('0'))
+                mutableListOf(2, 3, 6, 7, 8) else mutableListOf(1, 3, 6, 7, 8)
+            var randomIndex = Random.nextInt(nums.size)
+            val num1 = nums[randomIndex]
+            var adInfo = choosead(num1)
 
             Glide.with(this)
                 .load(adInfo.image)
@@ -984,9 +994,9 @@ class CalculatorResultFragment : DialogFragment() {
             binding.bmiAd1Tv3.setText(getString(adInfo.appScore))
             nums.removeAt(randomIndex)
 
-            randomIndex=Random.nextInt(nums.size)
-            val num2=nums[randomIndex]
-            adInfo=choosead(num2)
+            randomIndex = Random.nextInt(nums.size)
+            val num2 = nums[randomIndex]
+            adInfo = choosead(num2)
             Glide.with(this)
                 .load(adInfo.image)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(15)))
@@ -996,10 +1006,10 @@ class CalculatorResultFragment : DialogFragment() {
             binding.bmiAd2Tv3.setText(getString(adInfo.appScore))
 
             nums.clear()
-            nums.addAll(Arrays.asList(4,5,9,10))
-            randomIndex=Random.nextInt(nums.size)
-            val num3=nums[randomIndex]
-            adInfo=choosead(num3)
+            nums.addAll(Arrays.asList(4, 5, 9, 10))
+            randomIndex = Random.nextInt(nums.size)
+            val num3 = nums[randomIndex]
+            adInfo = choosead(num3)
             Glide.with(this)
                 .load(adInfo.image)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(15)))
@@ -1013,43 +1023,103 @@ class CalculatorResultFragment : DialogFragment() {
     fun choosead(num: Int): AdInfo {
         when (num) {
             1 -> {
-                return AdInfo(R.drawable.ad1, R.string.ad1, "", R.string.ad1_url,R.string.ad1_score)
+                return AdInfo(
+                    R.drawable.ad1,
+                    R.string.ad1,
+                    "",
+                    R.string.ad1_url,
+                    R.string.ad1_score
+                )
             }
 
             2 -> {
-                return AdInfo(R.drawable.ad2, R.string.ad2, "", R.string.ad2_url ,R.string.ad2_score)
+                return AdInfo(
+                    R.drawable.ad2,
+                    R.string.ad2,
+                    "",
+                    R.string.ad2_url,
+                    R.string.ad2_score
+                )
             }
 
             3 -> {
-                return AdInfo(R.drawable.ad3, R.string.ad3, "", R.string.ad3_url, R.string.ad3_score)
+                return AdInfo(
+                    R.drawable.ad3,
+                    R.string.ad3,
+                    "",
+                    R.string.ad3_url,
+                    R.string.ad3_score
+                )
             }
 
             4 -> {
-                return AdInfo(R.drawable.ad4, R.string.ad4, "", R.string.ad4_url, R.string.ad4_score)
+                return AdInfo(
+                    R.drawable.ad4,
+                    R.string.ad4,
+                    "",
+                    R.string.ad4_url,
+                    R.string.ad4_score
+                )
             }
 
             5 -> {
-                return AdInfo(R.drawable.ad5, R.string.ad5, "", R.string.ad5_url, R.string.ad5_score)
+                return AdInfo(
+                    R.drawable.ad5,
+                    R.string.ad5,
+                    "",
+                    R.string.ad5_url,
+                    R.string.ad5_score
+                )
             }
 
             6 -> {
-                return AdInfo(R.drawable.ad6, R.string.ad6, "", R.string.ad6_url, R.string.ad6_score)
+                return AdInfo(
+                    R.drawable.ad6,
+                    R.string.ad6,
+                    "",
+                    R.string.ad6_url,
+                    R.string.ad6_score
+                )
             }
 
             7 -> {
-                return AdInfo(R.drawable.ad7, R.string.ad7, "", R.string.ad7_url, R.string.ad7_score)
+                return AdInfo(
+                    R.drawable.ad7,
+                    R.string.ad7,
+                    "",
+                    R.string.ad7_url,
+                    R.string.ad7_score
+                )
             }
 
             8 -> {
-                return AdInfo(R.drawable.ad8, R.string.ad8, "", R.string.ad8_url, R.string.ad8_score)
+                return AdInfo(
+                    R.drawable.ad8,
+                    R.string.ad8,
+                    "",
+                    R.string.ad8_url,
+                    R.string.ad8_score
+                )
             }
 
             9 -> {
-                return AdInfo(R.drawable.ad9, R.string.ad9, "", R.string.ad9_url, R.string.ad9_score)
+                return AdInfo(
+                    R.drawable.ad9,
+                    R.string.ad9,
+                    "",
+                    R.string.ad9_url,
+                    R.string.ad9_score
+                )
             }
 
             else -> {
-                return AdInfo(R.drawable.ad10, R.string.ad10, "", R.string.ad10_url, R.string.ad10_score)
+                return AdInfo(
+                    R.drawable.ad10,
+                    R.string.ad10,
+                    "",
+                    R.string.ad10_url,
+                    R.string.ad10_score
+                )
             }
         }
     }

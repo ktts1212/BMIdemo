@@ -19,30 +19,23 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFacto
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.DWeek
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.DYear
-import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.DayData
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.WtWeek
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.WtYear
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.CustomMarkerView
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.DcFormat
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.MyLineChartXRender
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
 import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.github.mikephil.charting.renderer.DataRenderer
 import com.google.android.material.tabs.TabLayout
-import java.lang.Exception
 import java.time.LocalDateTime
 
 private const val TAG = "StatisticFragment"
@@ -54,15 +47,14 @@ class StatisticFragment : Fragment() {
     private val bmiList = ArrayList<Entry>()
 
     private val kgList = ArrayList<Entry>()
-    private val lbList = ArrayList<Entry>()
 
-    private lateinit var ld: Legend
+    private val lbList = ArrayList<Entry>()
 
     private lateinit var viewModel: CalculatorViewModel
 
     private var list: List<BmiInfo>? = null
 
-    private var dayList=ArrayList<Entry>()
+    private var dayList = ArrayList<Entry>()
 
     private var maxY = 0f
 
@@ -89,46 +81,45 @@ class StatisticFragment : Fragment() {
             viewModel.wttype = "kg"
         }
 
-        if (!bmiList.isEmpty()) {
-            bmiList.clear()
-        }
-
-        Log.d(TAG, bmiList.toString())
-
-
         viewModel.listByYear.observe(requireActivity()) { info ->
 
             info?.let {
                 if (it.isNullOrEmpty()) {
-                    throw Exception("There is no data")
+                    //throw Exception("There is no data")
                 } else {
+
+                    //设置dayBMI
                     viewModel.infoCount.postValue(it.size)
-
                     list = orderList(viewModel.listByYear.value!!)
-
-                    Log.d(TAG, "list:${list}")
-
                     bmiList.clear()
-                    kgList.clear()
-                    lbList.clear()
+                    val currentTime = LocalDateTime.now()
 
-                    val currentTime=LocalDateTime.now()
-                    var index=0
 
-                    for (i in 1..currentTime.dayOfYear){
-                        dayList.add(Entry(i.toFloat(),Float.NaN))
+                    if (dayList.isEmpty()) {
+                        dayList.add(Entry(0f, Float.NaN))
+                    }
+                    for (i in 1..currentTime.dayOfYear) {
+                        dayList.add(Entry(i.toFloat(), Float.NaN))
                     }
 
-                    for (i in 0 until list!!.size){
+                    for (i in 0 until list!!.size) {
                         val l1 = list!![i].date!!.split(" ")
                         //获取当前的月份和天数
                         val day = l1[1].split(",")[0]
                         val month = Utils.monthToNumber(l1[0])
                         val dayOfYear = Utils.getDayOfYear(day.toInt(), month)
-                        dayList[dayOfYear].y=list!![i].bmi
+                        dayList[dayOfYear].y = list!![i].bmi
                     }
 
-                    Log.d(TAG,"dayList:${dayList}")
+                    Log.d(TAG, "dayList:${dayList}")
+
+
+                    kgList.clear()
+                    lbList.clear()
+
+
+
+
 
                     for (i in 0..list!!.size - 1) {
                         val l1 = list!![i].date!!.split(" ")
@@ -148,10 +139,10 @@ class StatisticFragment : Fragment() {
                         bmiList.add(0, Entry(1f, 0f))
                     }
 
-                    val currentDate=LocalDateTime.now()
-                    while (bmiList[bmiList.size-1].x<currentDate.dayOfYear){
-                        val day=bmiList[bmiList.size-1].x+1
-                        bmiList.add(Entry(day,0f))
+                    val currentDate = LocalDateTime.now()
+                    while (bmiList[bmiList.size - 1].x < currentDate.dayOfYear) {
+                        val day = bmiList[bmiList.size - 1].x + 1
+                        bmiList.add(Entry(day, 0f))
 
                     }
                     chartStyle(dayList)
@@ -235,9 +226,9 @@ class StatisticFragment : Fragment() {
                     }
 
                     val xAxis = binding.staLinechart1.xAxis
-                    val render=MyLineChartXRender(binding.staLinechart1.viewPortHandler,
-                    binding.staLinechart1.xAxis,binding.staLinechart1.getTransformer(YAxis.AxisDependency.LEFT))
-                    binding.staLinechart1.setXAxisRenderer(render)
+//                    val render=MyLineChartXRender(binding.staLinechart1.viewPortHandler,
+//                    binding.staLinechart1.xAxis,binding.staLinechart1.getTransformer(YAxis.AxisDependency.LEFT))
+//                    binding.staLinechart1.setXAxisRenderer(render)
 
                     xAxis.apply {
                         isEnabled = true
@@ -266,13 +257,7 @@ class StatisticFragment : Fragment() {
                             override fun getFormattedValue(value: Float): String {
                                 if (binding.staTabHeader.getTabAt(0)!!.isSelected) {
                                     val dMonth = Utils.getDayOfMonth(value.toInt())
-                                    //测试代码
-                                    if (dMonth.day==29){
-                                        return ""
-                                    }else{
-                                        return dMonth.day.toString()
-                                    }
-
+                                    return dMonth.day.toString()
                                 } else {
                                     return value.toInt().toString()
                                 }
@@ -363,10 +348,10 @@ class StatisticFragment : Fragment() {
                             }
 
                             override fun getFormattedValue(value: Float): String {
-                                Log.d(TAG,"value:${value}")
-                                if (value==0f){
+                                Log.d(TAG, "value:${value}")
+                                if (value == 0f) {
                                     return ""
-                                }else{
+                                } else {
                                     return value.toString()
                                 }
                             }

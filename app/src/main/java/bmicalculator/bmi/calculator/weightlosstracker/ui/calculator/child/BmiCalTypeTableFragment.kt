@@ -63,10 +63,10 @@ class BmiCalTypeTableFragment : DialogFragment() {
         if (viewModel.selectedAge.value!! > 20) {
             binding.typeTableChildDial.visibility = View.GONE
             binding.typeTableDial.visibility = View.VISIBLE
-            binding.typeTableTipText2.visibility=View.INVISIBLE
+            binding.typeTableTipText2.visibility = View.INVISIBLE
             scSize = 0.75
         } else {
-            val gender= if (viewModel.selectedGender.value!!.equals('0')) "Boy" else "Girl"
+            val gender = if (viewModel.selectedGender.value!!.equals('0')) "Boy" else "Girl"
 
             binding.typeTableTipText1.setText("BMI for teenagers")
             binding.typeTableTipText2.setText(
@@ -87,7 +87,7 @@ class BmiCalTypeTableFragment : DialogFragment() {
             binding.typeTable.bmiOb2.visibility = View.GONE
             binding.typeTable.bmiOb3.visibility = View.GONE
 
-            val ls=ChildBmiDialData.cScaleList
+            val ls = ChildBmiDialData.cScaleList
             binding.typeTable.bmiUweightText2.setText("${ls[0]} - ${ls[1]}")
             binding.typeTable.bmiNormalText2.setText("${ls[1]} - ${ls[2]}")
             binding.typeTable.bmiOverweightText2.setText("${ls[2]} - ${ls[3]}")
@@ -111,9 +111,9 @@ class BmiCalTypeTableFragment : DialogFragment() {
         dialog?.window?.attributes = params as WindowManager.LayoutParams
     }
 
-    fun getBmiType(bmitype:String){
-        when(bmitype){
-            "vsuw"->{
+    fun getBmiType(bmitype: String) {
+        when (bmitype) {
+            "vsuw" -> {
                 binding.typeTable.bmiVerysevereLayout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -140,10 +140,12 @@ class BmiCalTypeTableFragment : DialogFragment() {
                 }
                 binding.typeTable.bmiVerysevereText2.apply {
                     setTextColor(Color.WHITE)
-                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                    typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
             }
-            "suw"->{
+
+            "suw" -> {
                 binding.typeTable.bmiSevereLayout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -170,10 +172,12 @@ class BmiCalTypeTableFragment : DialogFragment() {
                 }
                 binding.typeTable.bmiSevereText2.apply {
                     setTextColor(Color.WHITE)
-                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                    typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
             }
-            "uw"->{
+
+            "uw" -> {
                 binding.typeTable.bmiUweightLayout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -200,10 +204,12 @@ class BmiCalTypeTableFragment : DialogFragment() {
                 }
                 binding.typeTable.bmiUweightText2.apply {
                     setTextColor(Color.WHITE)
-                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                    typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
             }
-            "nm"->{
+
+            "nm" -> {
                 binding.typeTable.bmiNormalLayout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -230,10 +236,12 @@ class BmiCalTypeTableFragment : DialogFragment() {
                 }
                 binding.typeTable.bmiNormalText2.apply {
                     setTextColor(Color.WHITE)
-                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                    typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
             }
-            "ow"->{
+
+            "ow" -> {
                 binding.typeTable.bmiOverweightLayout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -260,10 +268,12 @@ class BmiCalTypeTableFragment : DialogFragment() {
                 }
                 binding.typeTable.bmiOverweightText2.apply {
                     setTextColor(Color.WHITE)
-                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                    typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
             }
-            "oc1"->{
+
+            "oc1" -> {
                 binding.typeTable.bmiOb1Layout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -290,10 +300,12 @@ class BmiCalTypeTableFragment : DialogFragment() {
                 }
                 binding.typeTable.bmiOb1Text2.apply {
                     setTextColor(Color.WHITE)
-                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                    typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
             }
-            "oc2"->{
+
+            "oc2" -> {
                 binding.typeTable.bmiOb2Layout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -320,10 +332,12 @@ class BmiCalTypeTableFragment : DialogFragment() {
                 }
                 binding.typeTable.bmiOb2Text2.apply {
                     setTextColor(Color.WHITE)
-                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                    typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
             }
-            "oc3"->{
+
+            "oc3" -> {
                 binding.typeTable.bmiOb3Layout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -350,7 +364,8 @@ class BmiCalTypeTableFragment : DialogFragment() {
                 }
                 binding.typeTable.bmiOb3Text2.apply {
                     setTextColor(Color.WHITE)
-                    typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
+                    typeface =
+                        ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
             }
         }

@@ -19,8 +19,10 @@ import bmicalculator.bmi.calculator.weightlosstracker.R
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.bmi.child.RecordFragment
 
-class RecordAdapter(private val context: Context,val bmiInfoList:ArrayList<BmiInfo>,
-private val childFragmentManager: FragmentManager):RecyclerView.Adapter<RecordAdapter.ViewHolder>() {
+class RecordAdapter(
+    private val context: Context, val bmiInfoList: ArrayList<BmiInfo>,
+    private val childFragmentManager: FragmentManager
+) : RecyclerView.Adapter<RecordAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val recordBmi: TextView = view.findViewById(R.id.record_bmi)
@@ -35,12 +37,12 @@ private val childFragmentManager: FragmentManager):RecyclerView.Adapter<RecordAd
             .inflate(R.layout.item_record, parent, false)
         val viewHolder = ViewHolder(view)
         viewHolder.itemView.setOnClickListener {
-            val dialog=RecordFragment()
-            val bundle=Bundle()
-            val position=viewHolder.bindingAdapterPosition
-            bundle.putParcelable("cBI",bmiInfoList[position])
-            dialog.arguments=bundle
-            dialog.show(childFragmentManager,"record")
+            val dialog = RecordFragment()
+            val bundle = Bundle()
+            val position = viewHolder.bindingAdapterPosition
+            bundle.putParcelable("cBI", bmiInfoList[position])
+            dialog.arguments = bundle
+            dialog.show(childFragmentManager, "record")
         }
         return viewHolder
     }
@@ -53,16 +55,16 @@ private val childFragmentManager: FragmentManager):RecyclerView.Adapter<RecordAd
         holder.recordBmi.setText(bmiInfoList[position].bmi.toString())
         holder.recordDate.setText(bmiInfoList[position].date)
         holder.recordPhase.setText(bmiInfoList[position].phase)
-        holder.recordType.setText(getBmiType(context, bmiInfoList[position].bmiType!!,holder))
+        holder.recordType.setText(getBmiType(context, bmiInfoList[position].bmiType!!, holder))
     }
 
-    fun getBmiType(context: Context, bmiType: String,holder:ViewHolder): String {
+    fun getBmiType(context: Context, bmiType: String, holder: ViewHolder): String {
         when (bmiType) {
             "vsuw" -> {
                 ViewCompat.setBackgroundTintList(
                     holder.recordDot, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            context,R.color.vsuw
+                            context, R.color.vsuw
                         )
                     )
                 )
@@ -73,29 +75,29 @@ private val childFragmentManager: FragmentManager):RecyclerView.Adapter<RecordAd
                 ViewCompat.setBackgroundTintList(
                     holder.recordDot, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            context,R.color.suw
+                            context, R.color.suw
                         )
                     )
                 )
-                return  context.getString(R.string.suw)
+                return context.getString(R.string.suw)
             }
 
             "uw" -> {
                 ViewCompat.setBackgroundTintList(
                     holder.recordDot, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            context,R.color.uw
+                            context, R.color.uw
                         )
                     )
                 )
-                return  context.getString(R.string.uw)
+                return context.getString(R.string.uw)
             }
 
             "nm" -> {
                 ViewCompat.setBackgroundTintList(
                     holder.recordDot, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            context,R.color.normal
+                            context, R.color.normal
                         )
                     )
                 )
@@ -106,47 +108,47 @@ private val childFragmentManager: FragmentManager):RecyclerView.Adapter<RecordAd
                 ViewCompat.setBackgroundTintList(
                     holder.recordDot, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            context,R.color.ow
+                            context, R.color.ow
                         )
                     )
                 )
-                return  context.getString(R.string.ow)
+                return context.getString(R.string.ow)
             }
 
             "oc1" -> {
                 ViewCompat.setBackgroundTintList(
                     holder.recordDot, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            context,R.color.oc1
+                            context, R.color.oc1
                         )
                     )
                 )
-                return  context.getString(R.string.oc1)
+                return context.getString(R.string.oc1)
             }
 
             "oc2" -> {
                 ViewCompat.setBackgroundTintList(
                     holder.recordDot, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            context,R.color.oc2
+                            context, R.color.oc2
                         )
                     )
                 )
-                return  context.getString(R.string.oc2)
+                return context.getString(R.string.oc2)
             }
 
             "oc3" -> {
                 ViewCompat.setBackgroundTintList(
                     holder.recordDot, ColorStateList.valueOf(
                         ContextCompat.getColor(
-                            context,R.color.oc3
+                            context, R.color.oc3
                         )
                     )
                 )
-                return  context.getString(R.string.oc3)
+                return context.getString(R.string.oc3)
             }
 
-            else ->{
+            else -> {
                 return "error"
             }
         }
