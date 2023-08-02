@@ -15,16 +15,48 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/Theme.AppCompat.Light" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:popupTheme="@style/Theme.AppCompat.Light">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:textAlignment="viewStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/montserrat_extrabold"
+                android:text="@string/calculator"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/cal_user"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="17dp"
+                android:src="@drawable/user"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_cal"
         android:layout_marginTop="50dp"
         android:background="#F5F5F5"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/toolbar_cal">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -39,9 +71,8 @@
                 android:text="@string/weight"
                 android:textColor="@color/black"
                 android:textSize="17sp"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/wt_card"
@@ -101,13 +132,13 @@
                     android:layout_height="48dp"
                     android:background="@drawable/tab_selector"
                     android:clickable="true"
-                    android:text="@string/lb" />
+                    android:text="@string/unit_lb" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="90dp"
                     android:layout_height="48dp"
                     android:background="@drawable/tab_selector"
-                    android:text="@string/kg" />
+                    android:text="@string/unit_kg" />
 
             </com.google.android.material.tabs.TabLayout>
 
@@ -247,14 +278,13 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/tab_selector"
                     android:clickable="true"
-                    android:text="@string/ft_in" />
+                    android:text="@string/unit_ft_in" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/tab_selector"
-                    android:text="@string/cm" />
-
+                    android:text="@string/unit_cm" />
 
 
             </com.google.android.material.tabs.TabLayout>
@@ -264,7 +294,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="@string/time"
+                android:text="@string/log_weight_time"
                 android:textColor="@color/black"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -355,14 +385,14 @@
                     android:gravity="center">
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/age_recycler_view"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/age_recycler_view"/>
+                        android:layout_height="match_parent" />
 
                     <ImageView
-                        android:layout_marginTop="60dp"
                         android:layout_width="match_parent"
                         android:layout_height="10dp"
+                        android:layout_marginTop="60dp"
                         android:src="@drawable/age_arrow" />
                 </RelativeLayout>
 
@@ -380,38 +410,38 @@
                 app:layout_constraintTop_toBottomOf="@id/age_card">
 
                 <LinearLayout
+                    android:id="@+id/gender_selected_male"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:alpha="0.5"
-                    android:id="@+id/gender_selected_male"
                     android:orientation="vertical">
 
                     <ImageView
+                        android:id="@+id/gender_selected_male_pic"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginStart="140dp"
                         android:layout_marginTop="10dp"
-                        android:id="@+id/gender_selected_male_pic"
-                        android:visibility="invisible"
-                        android:src="@drawable/gender_selected"/>
+                        android:src="@drawable/gender_selected"
+                        android:visibility="invisible" />
 
                     <ImageView
-                        android:layout_marginTop="5dp"
+                        android:id="@+id/gender_male_pic"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
-                        android:id="@+id/gender_male_pic"
-                        android:src="@drawable/gender_male"/>
+                        android:layout_marginTop="5dp"
+                        android:src="@drawable/gender_male" />
 
                     <TextView
+                        android:id="@+id/gender_male_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/gender_male_text"
                         android:layout_marginTop="5dp"
-                        android:textColor="@color/black"
-                        android:textSize="17sp"
                         android:gravity="center"
-                        android:text="Male"/>
+                        android:text="@string/male"
+                        android:textColor="@color/black"
+                        android:textSize="17sp" />
 
                 </LinearLayout>
 
@@ -429,39 +459,39 @@
                 app:layout_constraintTop_toBottomOf="@id/age_card">
 
                 <LinearLayout
+                    android:id="@+id/gender_selected_female"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:alpha="0.5"
                     android:clickable="true"
-                    android:id="@+id/gender_selected_female"
                     android:orientation="vertical">
 
                     <ImageView
+                        android:id="@+id/gender_selected_female_pic"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginStart="140dp"
                         android:layout_marginTop="10dp"
-                        android:id="@+id/gender_selected_female_pic"
-                        android:visibility="invisible"
-                        android:src="@drawable/gender_selected"/>
+                        android:src="@drawable/gender_selected"
+                        android:visibility="invisible" />
 
                     <ImageView
-                        android:layout_marginTop="5dp"
+                        android:id="@+id/gender_female_pic"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
-                        android:id="@+id/gender_female_pic"
-                        android:src="@drawable/gender_female"/>
+                        android:layout_marginTop="5dp"
+                        android:src="@drawable/gender_female" />
 
                     <TextView
+                        android:id="@+id/gender_female_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/gender_female_text"
                         android:layout_marginTop="5dp"
-                        android:textColor="@color/black"
-                        android:textSize="17sp"
                         android:gravity="center"
-                        android:text="Female"/>
+                        android:text="@string/female"
+                        android:textColor="@color/black"
+                        android:textSize="17sp" />
 
                 </LinearLayout>
 
@@ -474,19 +504,19 @@
                 android:layout_height="70dp"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="15dp"
-                android:gravity="center"
                 android:layout_marginEnd="18dp"
                 android:background="@drawable/btn_selector"
                 android:fontFamily="@font/montserrat_extrabold"
+                android:gravity="center"
+                android:letterSpacing="-0.05"
                 android:text="@string/calculate"
                 android:textColor="@color/white"
                 android:textSize="35sp"
-                app:backgroundTint="#ff0099cc"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:letterSpacing="-0.05"
                 android:visibility="visible"
+                app:backgroundTint="#ff0099cc"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/gender_card_male" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,7 +14,7 @@ data class BmiInfo(
     var ht_in: Int = 7,
     var ht_cm: Double = 170.0,
     var date: String? = null,
-    var phase: String? = null,
+    var phase: Int = 0,
     var age: Int = 25,
     var gender: Char = '0',
     var bmi:Float=0f,

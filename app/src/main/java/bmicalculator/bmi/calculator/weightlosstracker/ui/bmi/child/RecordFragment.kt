@@ -30,6 +30,7 @@ import bmicalculator.bmi.calculator.weightlosstracker.uitl.DcFormat
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.SweepAngel
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
 
+private const val TAG="RecordFragment"
 class RecordFragment : DialogFragment() {
 
     private lateinit var binding: FragmentRecordBinding
@@ -87,6 +88,8 @@ class RecordFragment : DialogFragment() {
             onDestroyView()
         }
 
+        binding.rcTip.setText(String.format(getString(R.string.bmi_tip_description),"..."))
+
         binding.rcArrow.alpha = 0.75f
         binding.rcArrow.pivotX = Utils.dip2px(
             requireContext(), 18f
@@ -101,8 +104,8 @@ class RecordFragment : DialogFragment() {
             binding.rcDial.visibility = View.VISIBLE
             binding.rcArrow.rotation = SweepAngel.sweepAngle(currentBmiInfo.bmi)
             binding.rcNum.setText(currentBmiInfo.bmi.toString())
-            getBmiType(currentBmiInfo.bmiType!!, currentBmiInfo)
-            getWtHtType(currentBmiInfo)
+            getBmiType(currentBmiInfo)
+            //getWtHtType(currentBmiInfo)
 
         } else {
             binding.rcChildDial.visibility = View.VISIBLE
@@ -111,8 +114,8 @@ class RecordFragment : DialogFragment() {
             binding.rcChildDial.getData(ChildBmiDialData.cScaleList, ChildBmiDialData.scaleRange)
             binding.rcArrow.rotation = SweepAngel.childSweepAngle(currentBmiInfo.bmi)
             binding.rcNum.setText(currentBmiInfo.bmi.toString())
-            getBmiType(currentBmiInfo.bmiType!!, currentBmiInfo)
-            getWtHtType(currentBmiInfo)
+            getBmiType(currentBmiInfo)
+            //getWtHtType(currentBmiInfo)
 
         }
         binding.recordTime.setText("${currentBmiInfo.date} ${currentBmiInfo.phase}")
@@ -120,15 +123,15 @@ class RecordFragment : DialogFragment() {
 
         binding.recordDel.setOnClickListener {
             AlertDialog.Builder(requireContext()).apply {
-                setTitle("Delete confirm")
-                setMessage("Are you sure you want to delete this record?")
+                setTitle(getString(R.string.tiktok_delete_confirm))
+                setMessage(getString(R.string.delete_history_record_content))
                 setCancelable(false)
-                setPositiveButton("Delete") { dialog, which ->
+                setPositiveButton(getString(R.string.delete)) { dialog, which ->
                     viewModel.deleteBmiInfo(currentBmiInfo)
                     onDestroyView()
                 }
 
-                setNegativeButton("Cancel") { dialog, which ->
+                setNegativeButton(getString(R.string.cancel)) { dialog, which ->
 
                 }
                 show()
@@ -149,41 +152,46 @@ class RecordFragment : DialogFragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    fun getBmiType(bmiType: String, bmiInfo: BmiInfo) {
+    fun getBmiType( bmiInfo: BmiInfo) {
 
-        val sgender = if (bmiInfo.gender == '0') "Male"
-        else "Female"
+        val sgender = if (bmiInfo.gender == '0') getString(R.string.male)
+        else getString(R.string.female)
+
         var minwt: Double = 0.0
         var maxwt: Double = 0.0
-        val bmicalinfo = if (bmiInfo.wtHtType == "lbftin") {
+        val bmiCalInfo = if (bmiInfo.wtHtType == "lbftin") {
             minwt = Utils.minWtftintolb(bmiInfo.ht_ft, bmiInfo.ht_in)
             maxwt = Utils.maxWtftintolb(bmiInfo.ht_ft, bmiInfo.ht_in)
-            "${bmiInfo.wt_lb} lb | ${bmiInfo.ht_ft} ft ${bmiInfo.ht_in} " +
-                    "in | ${sgender} | ${bmiInfo.age} years old"
+            String.format(getString(R.string.bmi_input_data),"${bmiInfo.wt_lb} lb",
+                "${bmiInfo.ht_ft} ft ${bmiInfo.ht_in} in",sgender,"${bmiInfo.age}"
+                )
         } else if (bmiInfo.wtHtType == "lbcm") {
             minwt = Utils.minCmtolb(bmiInfo.ht_cm)
             maxwt = Utils.maxCmtolb(bmiInfo.ht_cm)
-            "${bmiInfo.wt_lb} lb | ${bmiInfo.ht_cm} cm | ${sgender} | ${
-                bmiInfo.age
-            } years old"
+
+            String.format(getString(R.string.bmi_input_data),"${bmiInfo.wt_lb} lb",
+                "${bmiInfo.ht_cm} cm",sgender,"${bmiInfo.age}"
+            )
         } else if (bmiInfo.wtHtType == "kgftin") {
             minwt = Utils.minWtftintokg(bmiInfo.ht_ft, bmiInfo.ht_in)
             maxwt = Utils.maxWtftintokg(bmiInfo.ht_ft, bmiInfo.ht_in)
-            "${bmiInfo.wt_kg} kg | ${bmiInfo.ht_ft} ft ${bmiInfo.ht_in} " +
-                    "in | ${sgender} | ${bmiInfo.age} years old"
+
+            String.format(getString(R.string.bmi_input_data),"${bmiInfo.wt_kg} kg",
+                "${bmiInfo.ht_ft} ft ${bmiInfo.ht_in} in",sgender,"${bmiInfo.age}"
+            )
         } else {
             minwt = Utils.minCmtokg(bmiInfo.ht_cm)
             maxwt = Utils.maxCmtokg(bmiInfo.ht_cm)
-            "${bmiInfo.wt_kg} kg | ${bmiInfo.ht_cm} cm | ${sgender} | ${
-                bmiInfo.age
-            } years old"
+            String.format(getString(R.string.bmi_input_data),"${bmiInfo.wt_kg} kg",
+                "${bmiInfo.ht_cm} cm",sgender,"${bmiInfo.age}"
+            )
         }
 
-        binding.rcCalInfo.setText(bmicalinfo)
+        binding.rcCalInfo.setText(bmiCalInfo)
+
         val wtType = bmiInfo.wtHtType!!.substring(0, 2)
         val htType = bmiInfo.wtHtType!!.substring(2)
 
-        //Log.d("cccc",wtType)
         var wtrange =
             "${DcFormat.tf.format(minwt)} ${wtType} - ${DcFormat.tf.format(maxwt)} ${wtType}"
 
@@ -218,9 +226,9 @@ class RecordFragment : DialogFragment() {
             }
         }
 
-        when (bmiType) {
+        when (bmiInfo.bmiType) {
             "vsuw" -> {
-                binding.rcCalTypeText.setText(getString(R.string.vsuw))
+                binding.rcCalTypeText.setText(getString(R.string.bmi_very_severely_underweight))
                 binding.rcCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(requireContext(), R.color.vsuw)
                 )
@@ -233,21 +241,23 @@ class RecordFragment : DialogFragment() {
                 )
                 if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(
-                        getString(R.string.adult_vsuw) + "\n\n" +
-                                getString(R.string.suggestion) + "(${
-                            if (htType == "cm") bmiInfo.ht_cm.toString() + "cm"
-                            else bmiInfo.ht_ft.toString() + "ft ${bmiInfo.ht_in}in"
-                        }):" + "\n"
+                        getString(R.string.bmi_range_very_severely_underweight_description) + "\n\n" +
+                                String.format(
+                                    getString(R.string.bmi_result_suggest_start),
+                                    if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
+                                    else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
+                                )
                     )
                     binding.rcWtRange.setText(
                         wtrange
                     )
+                    binding.rcWtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${wtType})")
                 }
 
             }
 
             "suw" -> {
-                binding.rcCalTypeText.setText(getString(R.string.suw))
+                binding.rcCalTypeText.setText(getString(R.string.bmi_severely_underweight))
                 binding.rcCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(requireContext(), R.color.suw)
                 )
@@ -260,18 +270,20 @@ class RecordFragment : DialogFragment() {
                 )
                 if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(
-                        getString(R.string.adult_suw) + "\n\n" +
-                                getString(R.string.suggestion) + "(${
-                            if (htType == "cm") bmiInfo.ht_cm.toString() + "cm"
-                            else bmiInfo.ht_ft.toString() + "ft ${bmiInfo.ht_in}in"
-                        }):" + "\n"
+                        getString(R.string.bmi_range_severely_underweight_description) + "\n\n" +
+                                String.format(
+                                    getString(R.string.bmi_result_suggest_start),
+                                    if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
+                                    else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
+                                )
                     )
                     binding.rcWtRange.setText(wtrange)
+                    binding.rcWtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${wtType})")
                 }
             }
 
             "uw" -> {
-                binding.rcCalTypeText.setText(getString(R.string.uw))
+                binding.rcCalTypeText.setText(getString(R.string.bmi_underweight))
                 binding.rcCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(requireContext(), R.color.uw)
                 )
@@ -284,26 +296,29 @@ class RecordFragment : DialogFragment() {
                 )
                 if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(
-                        getString(R.string.adult_uw) + "\n\n" +
-                                getString(R.string.suggestion) + "(${
-                            if (htType == "cm") bmiInfo.ht_cm.toString() + "cm"
-                            else bmiInfo.ht_ft.toString() + "ft ${bmiInfo.ht_in}in"
-                        }):" + "\n"
+                        getString(R.string.bmi_range_underweight_adult_description) + "\n\n" +
+                                String.format(
+                                    getString(R.string.bmi_result_suggest_start),
+                                    if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
+                                    else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
+                                )
                     )
                 } else {
                     binding.rcCalSuggest.setText(
-                        getString(R.string.child_uw) + "\n\n" +
-                                getString(R.string.suggestion) + "(${
-                            if (htType == "cm") bmiInfo.ht_cm.toString() + "cm"
-                            else bmiInfo.ht_ft.toString() + "ft ${bmiInfo.ht_in}in"
-                        }):" + "\n"
+                        getString(R.string.bmi_range_underweight_child_description) + "\n\n" +
+                                String.format(
+                                    getString(R.string.bmi_result_suggest_start),
+                                    if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
+                                    else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
+                                )
                     )
                 }
                 binding.rcWtRange.setText(wtrange)
+                binding.rcWtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${wtType})")
             }
 
             "nm" -> {
-                binding.rcCalTypeText.setText(getString(R.string.nm))
+                binding.rcCalTypeText.setText(getString(R.string.normal_leg))
                 binding.rcCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(requireContext(), R.color.normal)
                 )
@@ -315,14 +330,14 @@ class RecordFragment : DialogFragment() {
                     )
                 )
                 if (bmiInfo.age > 20) {
-                    binding.rcCalSuggest.setText(getString(R.string.adult_nm_enc))
+                    binding.rcCalSuggest.setText(getString(R.string.bmi_range_normal_adult_description))
                 } else {
-                    binding.rcCalSuggest.setText(getString(R.string.child_nm))
+                    binding.rcCalSuggest.setText(getString(R.string.bmi_range_normal_child_description))
                 }
             }
 
             "ow" -> {
-                binding.rcCalTypeText.setText(getString(R.string.ow))
+                binding.rcCalTypeText.setText(getString(R.string.bmi_overweight))
                 binding.rcCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(requireContext(), R.color.ow)
                 )
@@ -335,26 +350,29 @@ class RecordFragment : DialogFragment() {
                 )
                 if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(
-                        getString(R.string.adult_ow) + "\n\n" +
-                                getString(R.string.suggestion) + "(${
-                            if (htType == "cm") bmiInfo.ht_cm.toString() + "cm"
-                            else bmiInfo.ht_ft.toString() + "ft ${bmiInfo.ht_in}in"
-                        }):" + "\n"
+                        getString(R.string.bmi_range_overweight_adult_description) + "\n\n" +
+                                String.format(
+                                    getString(R.string.bmi_result_suggest_start),
+                                    if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
+                                    else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
+                                )
                     )
                 } else {
                     binding.rcCalSuggest.setText(
-                        getString(R.string.child_ow) + "\n\n" +
-                                getString(R.string.suggestion) + "(${
-                            if (htType == "cm") bmiInfo.ht_cm.toString() + "cm"
-                            else bmiInfo.ht_ft.toString() + "ft ${bmiInfo.ht_in}in"
-                        }):" + "\n"
+                        getString(R.string.bmi_range_overweight_child_description) + "\n\n" +
+                                String.format(
+                                    getString(R.string.bmi_result_suggest_start),
+                                    if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
+                                    else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
+                                )
                     )
                 }
                 binding.rcWtRange.setText(wtrange)
+                binding.rcWtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${wtType})")
             }
 
             "oc1" -> {
-                binding.rcCalTypeText.setText(getString(R.string.oc1))
+                binding.rcCalTypeText.setText(getString(R.string.bmi_range_obese_class1))
                 binding.rcCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(requireContext(), R.color.oc1)
                 )
@@ -367,26 +385,29 @@ class RecordFragment : DialogFragment() {
                 )
                 if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(
-                        getString(R.string.adult_ob1) + "\n\n" +
-                                getString(R.string.suggestion) + "(${
-                            if (htType == "cm") bmiInfo.ht_cm.toString() + "cm"
-                            else bmiInfo.ht_ft.toString() + "ft ${bmiInfo.ht_in}in"
-                        }):" + "\n"
+                        getString(R.string.bmi_range_obeseClassI_adult_description) + "\n\n" +
+                                String.format(
+                                    getString(R.string.bmi_result_suggest_start),
+                                    if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
+                                    else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
+                                )
                     )
                 } else {
                     binding.rcCalSuggest.setText(
-                        getString(R.string.child_ob1) + "\n\n" +
-                                getString(R.string.suggestion) + "(${
-                            if (htType == "cm") bmiInfo.ht_cm.toString() + "cm"
-                            else bmiInfo.ht_ft.toString() + "ft ${bmiInfo.ht_in}in"
-                        }):" + "\n"
+                        getString(R.string.bmi_range_obeseClassI_child_description) + "\n\n" +
+                                String.format(
+                                    getString(R.string.bmi_result_suggest_start),
+                                    if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
+                                    else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
+                                )
                     )
                 }
                 binding.rcWtRange.setText(wtrange)
+                binding.rcWtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${wtType})")
             }
 
             "oc2" -> {
-                binding.rcCalTypeText.setText(getString(R.string.oc2))
+                binding.rcCalTypeText.setText(getString(R.string.bmi_range_obese_class2))
                 binding.rcCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(requireContext(), R.color.oc2)
                 )
@@ -399,18 +420,20 @@ class RecordFragment : DialogFragment() {
                 )
                 if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(
-                        getString(R.string.adult_ob2) + "\n\n" +
-                                getString(R.string.suggestion) + "(${
-                            if (htType == "cm") bmiInfo.ht_cm.toString() + "cm"
-                            else bmiInfo.ht_ft.toString() + "ft ${bmiInfo.ht_in}in"
-                        }):" + "\n"
+                        getString(R.string.bmi_range_obeseClassII_description) + "\n\n" +
+                                String.format(
+                                    getString(R.string.bmi_result_suggest_start),
+                                    if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
+                                    else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
+                                )
                     )
                 }
                 binding.rcWtRange.setText(wtrange)
+                binding.rcWtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${wtType})")
             }
 
             "oc3" -> {
-                binding.rcCalTypeText.setText(getString(R.string.oc3))
+                binding.rcCalTypeText.setText(getString(R.string.bmi_range_obese_class3))
                 binding.rcCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(requireContext(), R.color.oc3)
                 )
@@ -423,52 +446,18 @@ class RecordFragment : DialogFragment() {
                 )
                 if (bmiInfo.age > 20) {
                     binding.rcCalSuggest.setText(
-                        getString(R.string.adult_ob3) + "\n\n" +
-                                getString(R.string.suggestion) + "(${
-                            if (htType == "cm") bmiInfo.ht_cm.toString() + "cm"
-                            else bmiInfo.ht_ft.toString() + "ft ${bmiInfo.ht_in}in"
-                        }):" + "\n"
+                        getString(R.string.bmi_range_obeseClassIII_description) + "\n\n" +
+                                String.format(
+                                    getString(R.string.bmi_result_suggest_start),
+                                    if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
+                                    else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
+                                )
                     )
                 }
                 binding.rcWtRange.setText(wtrange)
+                binding.rcWtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${wtType})")
             }
 
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    fun getWtHtType(newRecord: BmiInfo) {
-
-        val gender = if (newRecord.gender == '0') "Male" else "Female"
-
-        when (newRecord.wtHtType) {
-            "lbftin" -> {
-                binding.rcCalInfo.setText(
-                    "${newRecord.wt_lb} lb | ${newRecord.ht_ft} ft " +
-                            "${newRecord.ht_in} in | ${gender} | ${newRecord.age} years old"
-                )
-            }
-
-            "lbcm" -> {
-                binding.rcCalInfo.setText(
-                    "${newRecord.wt_lb} lb | " +
-                            " ${newRecord.ht_cm} cm | ${gender} | ${newRecord.age} years old"
-                )
-            }
-
-            "kgftin" -> {
-                binding.rcCalInfo.setText(
-                    "${newRecord.wt_kg} kg | ${newRecord.ht_ft} ft " +
-                            "${newRecord.ht_in} in | ${gender} | ${newRecord.age} years old"
-                )
-            }
-
-            "kgcm" -> {
-                binding.rcCalInfo.setText(
-                    "${newRecord.wt_kg} kg | ${newRecord.ht_cm} cm" +
-                            " | ${gender} | ${newRecord.age} years old"
-                )
-            }
         }
     }
 

@@ -50,6 +50,11 @@ class SettingFragment :DialogFragment() {
         binding.settingBack.setOnClickListener {
             onDestroyView()
         }
+
+        binding.settingLanguageCard.setOnClickListener {
+            val dialog=LanguageSelectFragment()
+            dialog.show(childFragmentManager,"LanguageSelectFragment")
+        }
     }
 
     override fun onResume() {

@@ -41,7 +41,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/bmi_verysevere_image"
                     android:gravity="center_vertical"
-                    android:text="Very Severely Underweight"
+                    android:text="@string/bmi_very_severely_underweight"
                     android:textColor="@color/black"
                     android:textFontWeight="400"
                     android:textSize="14sp" />
@@ -93,7 +93,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/bmi_severe_image"
                     android:gravity="center_vertical"
-                    android:text="Severely Underweight"
+                    android:text="@string/bmi_severely_underweight"
                     android:textColor="@color/black"
                     android:textFontWeight="400"
                     android:textSize="14sp" />
@@ -144,7 +144,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/bmi_uweight_image"
                     android:gravity="center_vertical"
-                    android:text="Underweight"
+                    android:text="@string/bmi_underweight"
                     android:textColor="@color/black"
                     android:textFontWeight="400"
                     android:textSize="14sp" />
@@ -195,7 +195,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/bmi_normal_image"
                     android:gravity="center_vertical"
-                    android:text="Normal"
+                    android:text="@string/normal_leg"
                     android:textColor="@color/black"
                     android:textFontWeight="400"
                     android:textSize="14sp" />
@@ -248,7 +248,7 @@
                     android:layout_marginEnd="25dp"
                     android:layout_toEndOf="@id/bmi_overweight_image"
                     android:gravity="center_vertical"
-                    android:text="Overweight"
+                    android:text="@string/bmi_overweight"
                     android:textColor="@color/black"
                     android:textFontWeight="400"
                     android:textSize="14sp" />
@@ -299,7 +299,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/bmi_ob1_image"
                     android:gravity="center_vertical"
-                    android:text="Obese Class I"
+                    android:text="@string/bmi_range_obese_class1"
                     android:textColor="@color/black"
                     android:textFontWeight="400"
                     android:textSize="14sp" />
@@ -350,7 +350,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/bmi_ob2_image"
                     android:gravity="center_vertical"
-                    android:text="Obese Class II"
+                    android:text="@string/bmi_range_obese_class2"
                     android:textColor="@color/black"
                     android:textFontWeight="400"
                     android:textSize="14sp" />
@@ -400,7 +400,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/bmi_ob3_image"
                     android:gravity="center_vertical"
-                    android:text="Obese Class III"
+                    android:text="@string/bmi_range_obese_class3"
                     android:textColor="@color/black"
                     android:textFontWeight="400"
                     android:textSize="14sp" />

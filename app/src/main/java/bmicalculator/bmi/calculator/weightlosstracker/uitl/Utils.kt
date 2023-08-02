@@ -2,6 +2,7 @@ package bmicalculator.bmi.calculator.weightlosstracker.uitl
 
 import android.content.Context
 import android.util.Log
+import bmicalculator.bmi.calculator.weightlosstracker.R
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.DMonth
 import java.time.LocalDate
 import java.util.Calendar
@@ -128,4 +129,44 @@ object Utils {
         return calendar.get(Calendar.MONTH)+1
     }
 
+
+    fun phaseToNum(context: Context,phase:String):Int{
+        when(phase){
+            context.resources.getString(R.string.morning)->{
+                return 1
+            }
+            context.resources.getString(R.string.afternoon)->{
+                return 2
+            }
+            context.resources.getString(R.string.evening)->{
+                return 3
+            }
+            context.resources.getString(R.string.night)->{
+                return 4
+            }
+            else->{
+                throw Exception("phaseToNum occur false")
+            }
+        }
+    }
+
+    fun numToPhase(context: Context,num:Int):String{
+        when(num){
+            1-> {
+                return context.resources.getString(R.string.morning)
+            }
+            2-> {
+                return context.resources.getString(R.string.afternoon)
+            }
+            3-> {
+                return context.resources.getString(R.string.evening)
+            }
+            4-> {
+                return context.resources.getString(R.string.night)
+            }
+            else->{
+                throw Exception("numToPhase occur error")
+            }
+        }
+    }
 }

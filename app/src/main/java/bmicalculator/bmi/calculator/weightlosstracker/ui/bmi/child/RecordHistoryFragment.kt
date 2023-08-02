@@ -184,15 +184,17 @@ class RecordHistoryFragment : DialogFragment() {
         val day = l1[1].split(",")[0]
         val month = Utils.monthToNumber(l1[0])
         val dayOfYear = Utils.getDayOfYear(day.toInt(), month)
-        return dayOfYear * 10 + bmiInfo.year * 1000 + phaseToNumber(bmiInfo.phase!!).toLong()
+        return dayOfYear * 10 + bmiInfo.year * 1000 + bmiInfo.phase.toLong()
     }
 
     fun phaseToNumber(phase: String): Int {
+        Log.d(TAG,"phase:${viewModel.selectedPhase.value}")
+        Log.d(TAG,"morn:${getString(R.string.morning)}")
         when (phase) {
-            "Morning" -> return 1
-            "Afternoon" -> return 2
-            "Evening" -> return 3
-            "Night" -> return 4
+            getString(R.string.morning) -> return 1
+            getString(R.string.afternoon) -> return 2
+            getString(R.string.evening) -> return 3
+            getString(R.string.night) -> return 4
             else -> throw Exception("phase Error")
         }
     }

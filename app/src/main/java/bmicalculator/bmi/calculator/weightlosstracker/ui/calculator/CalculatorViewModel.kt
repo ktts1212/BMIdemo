@@ -48,9 +48,9 @@ class CalculatorViewModel(private val repository: Repository) : ViewModel() {
     }
 
     //共享时段
-    var selectedPhase = MutableLiveData<String>()
+    var selectedPhase = MutableLiveData<Int>()
 
-    fun setPhase(data: String) {
+    fun setPhase(data: Int) {
         selectedPhase.value = data
     }
 

@@ -107,7 +107,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
                     isValid = false
                     if (!isValid && toasttimes == 0) {
                         Toast.makeText(
-                            requireContext(), "Please select a date that is earlier than today",
+                            requireContext(), getString(R.string.select_right_date_toast),
                             Toast.LENGTH_SHORT
                         ).show()
                         toasttimes = 1
@@ -154,7 +154,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
                     isValid = false
                     if (!isValid && toasttimes == 0) {
                         Toast.makeText(
-                            requireContext(), "Please select a date that is earlier than today",
+                            requireContext(), getString(R.string.select_right_date_toast),
                             Toast.LENGTH_SHORT
                         ).show()
                         toasttimes = 1
@@ -196,7 +196,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
                     isValid = false
                     if (!isValid && toasttimes == 0) {
                         Toast.makeText(
-                            requireContext(), "Please select a date that is earlier than today",
+                            requireContext(), getString(R.string.select_right_date_toast),
                             Toast.LENGTH_SHORT
                         ).show()
                         toasttimes = 1
@@ -232,7 +232,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
                 onDestroyView()
             } else {
                 Toast.makeText(
-                    requireContext(), "Please select a date that is earlier than today",
+                    requireContext(), getString(R.string.select_right_date_toast),
                     Toast.LENGTH_SHORT
                 ).show()
             }

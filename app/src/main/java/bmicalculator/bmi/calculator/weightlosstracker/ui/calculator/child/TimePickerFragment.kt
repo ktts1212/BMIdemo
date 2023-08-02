@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider
 import bmicalculator.bmi.calculator.weightlosstracker.R
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.FragmentTimePickerBinding
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import com.bumptech.glide.util.Util
 import com.github.gzuliyujiang.wheelview.contract.OnWheelChangedListener
 import com.github.gzuliyujiang.wheelview.widget.WheelView
 import java.time.LocalDateTime
@@ -27,12 +29,6 @@ class TimePickerFragment : DialogFragment() {
 
     private lateinit var binding: FragmentTimePickerBinding
 
-    val phases = mutableListOf<String>("Morning", "Afternoon", "Evening", "Night")
-
-//    private var isValid=false
-//
-//    private var toastCount=0
-
     private lateinit var mode: CalculatorViewModel
 
     @SuppressLint("WrongConstant")
@@ -40,9 +36,10 @@ class TimePickerFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val phases = mutableListOf<String>(getString(R.string.morning),
+            getString(R.string.afternoon), getString(R.string.evening),getString(R.string.night))
         val current = LocalDateTime.now()
         binding = FragmentTimePickerBinding.inflate(layoutInflater, container, false)
-        Log.d(TAG, hourtophase(current))
         binding.wheelPickerTimePhase.setData(phases)
         binding.wheelPickerTimePhase.setDefaultValue(hourtophase(current))
         binding.wheelPickerTimePhase.typeface =
@@ -66,24 +63,6 @@ class TimePickerFragment : DialogFragment() {
             }
 
             override fun onWheelSelected(view: WheelView?, position: Int) {
-                //               val current=LocalDateTime.now()
-//                if (phases.indexOf(view?.getCurrentItem())>phases.indexOf(hourtophase(current))){
-//                    binding.btnDonePhase.setBackgroundResource(R.drawable.shape_btn_done_invalid)
-//                    binding.btnDonePhase.setTextColor(Color.parseColor("#000000"))
-//                    isValid = false
-//                    if (!isValid && toastCount == 0) {
-//                        Toast.makeText(
-//                            requireContext(), "Please select a date that is earlier than today",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                        toastCount = 1
-//                    }
-//                }else{
-//                    binding.btnDonePhase.setBackgroundResource(R.drawable.shape_btn_done)
-//                    binding.btnDonePhase.setTextColor(Color.parseColor("#FFFFFF"))
-//                    isValid=true
-//                    toastCount=0
-//                }
             }
 
             override fun onWheelScrollStateChanged(view: WheelView?, state: Int) {
@@ -100,7 +79,7 @@ class TimePickerFragment : DialogFragment() {
         }
 
         binding.btnDonePhase.setOnClickListener {
-            mode.setPhase(binding.wheelPickerTimePhase.getCurrentItem())
+            mode.setPhase(Utils.phaseToNum(requireContext(),binding.wheelPickerTimePhase.getCurrentItem()))
             onDestroyView()
         }
     }
@@ -119,13 +98,13 @@ class TimePickerFragment : DialogFragment() {
     fun hourtophase(current: LocalDateTime): String {
 
         val phase: String = if (current.hour >= 23 && current.hour < 8) {
-            "Night"
+            getString(R.string.night)
         } else if (current.hour >= 8 && current.hour < 14) {
-            "Morning"
+            getString(R.string.morning)
         } else if (current.hour >= 14 && current.hour < 19) {
-            "Afternoon"
+            getString(R.string.afternoon)
         } else {
-            "Evening"
+            getString(R.string.evening)
         }
 
         return phase

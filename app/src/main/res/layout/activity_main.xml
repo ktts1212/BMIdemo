@@ -4,24 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:background="#F5F5F5"-->
-<!--        android:theme="@style/Theme.AppCompat.Light.DarkActionBar"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:popupTheme="@style/Theme.AppCompat.Light" />-->
-
-<!--    <FrameLayout-->
-<!--        android:id="@+id/fragment_container"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-
-<!--        app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="parent" />-->
 
     <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
@@ -31,8 +13,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
          />
-<!--    app:navGraph="@navigation/nav_graph"-->
-<!--    app:defaultNavHost="true"-->
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"

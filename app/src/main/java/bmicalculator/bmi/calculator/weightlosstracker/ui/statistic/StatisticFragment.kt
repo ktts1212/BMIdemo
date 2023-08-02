@@ -94,7 +94,7 @@ class StatisticFragment : Fragment() {
                     bmiList.clear()
                     val currentTime = LocalDateTime.now()
 
-
+                    
                     if (dayList.isEmpty()) {
                         dayList.add(Entry(0f, Float.NaN))
                     }
@@ -116,10 +116,6 @@ class StatisticFragment : Fragment() {
 
                     kgList.clear()
                     lbList.clear()
-
-
-
-
 
                     for (i in 0..list!!.size - 1) {
                         val l1 = list!![i].date!!.split(" ")

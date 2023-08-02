@@ -1,6 +1,5 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.calculator
 
-import kotlin.math.pow
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
@@ -32,7 +31,6 @@ import bmicalculator.bmi.calculator.weightlosstracker.databinding.FragmentCalcul
 import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFactory
-import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.adapter.AgeSelectorAdapter
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.CalculatorResultFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.DatePickerFragment
@@ -75,22 +73,27 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCalculatorBinding.inflate(layoutInflater, container, false)
-        //viewModel = ViewModelProvider(requireActivity()).get(CalculatorViewModel::class.java)
         val dao = AppDataBase.getDatabase(requireContext().applicationContext).bmiInfoDao()
         val repository = Repository(dao)
         val factory = ViewModelFactory(repository)
         viewModel =
             ViewModelProvider(requireActivity(), factory).get(CalculatorViewModel::class.java)
+        //设置toolbar的显示
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbarCal)
         return binding.root
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val dialog = CalculatorResultFragment()
-//        dialog.show(childFragmentManager, "CalculatorResult")
+
+        //标题用户点击
+        binding.calUser.setOnClickListener {
+            val dialog = SettingFragment()
+            dialog.show(childFragmentManager, "SettingFragment")
+        }
+
         //当输入完后点击键盘的done
         binding.root.setOnTouchListener { view, motionEvent ->
             if (view is TextInputLayout && motionEvent.action == MotionEvent.ACTION_DOWN) {
@@ -116,8 +119,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         binding.htInputFtin1.text = Editable.Factory.getInstance().newEditable("5" + "'")
         binding.htInputFtin2.text = Editable.Factory.getInstance().newEditable("7" + "''")
         binding.htInputCm.text = Editable.Factory.getInstance().newEditable("170.0")
-        //Log.d(TAG, "${viewModel.bmiInfo}")
-        //判断体重计量标准
 
         //当输入完edittext内容点击done对edittext内容进行修改
         binding.wtInput.setOnEditorActionListener { v, actionId, event ->
@@ -398,6 +399,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         //身高
         var htfirstConvert = true
         binding.htTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            @SuppressLint("SetTextI18n")
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab?.position == 0) {
                     binding.htCardFtin1.visibility = View.VISIBLE
@@ -506,7 +508,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
                 if (!str.isEmpty()) {
                     if (str.contains(".")) {
-                        binding.htInputFtin1.setError("只能输入整数")
+
                         binding.htInputFtin1.postDelayed({
                             binding.htInputFtin1.error = null
                         }, 3000)
@@ -535,7 +537,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                             binding.htInputFtin1.setText(
                                 ff.format(1)
                             )
-                            binding.htInputFtin1.setError("最小值为1")
                             binding.htInputFtin1.postDelayed({
                                 binding.htInputFtin1.error = null
                             }, 3000)
@@ -544,7 +545,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                             binding.htInputFtin1.setText(
                                 ff.format(8)
                             )
-                            binding.htInputFtin1.setError("最大值为8")
                             binding.htInputFtin1.postDelayed({
                                 binding.htInputFtin1.error = null
                             }, 3000)
@@ -600,21 +600,12 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     return
                 }
                 var str = p0.toString()
-//
-//                if (str.contains("'")) {
-//                    str = str.substring(0, str.indexOf("'"))
-//                    isChanged = true
-//                    binding.htInputFtin2.setText(
-//                        ff.format(str.toInt())
-//                    )
-//                }
 
                 if (str.contains("''")) {
                     str = str.dropLast(2)
                 }
 
                 if (str.contains(".")) {
-                    binding.htInputFtin2.setError("只能输入整数")
                     binding.htInputFtin2.postDelayed({
                         binding.htInputFtin2.error = null
                     }, 3000)
@@ -637,7 +628,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
                     if (str.length > 2) {
                         isChanged = true
-                        binding.htInputFtin2.setError("只能输入0-11整数")
                         binding.htInputFtin2.postDelayed({
                             binding.htInputFtin2.error = null
                         }, 3000)
@@ -795,23 +785,36 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
         Log.d(TAG, "current: ${current.hour}:${current.minute}:${current.second}")
         val phase: String = if (current.hour >= 23 && current.hour < 8) {
-            "Night"
+            getString(R.string.night)
         } else if (current.hour >= 8 && current.hour < 14) {
-            "Morning"
+            getString(R.string.morning)
         } else if (current.hour >= 14 && current.hour < 19) {
-            "Afternoon"
+            getString(R.string.afternoon)
         } else {
-            "Evening"
+            getString(R.string.evening)
         }
         binding.timeInputPhase.text = phase
-        viewModel.setPhase(binding.timeInputPhase.text.toString())
+        viewModel.setPhase(
+            Utils.phaseToNum(
+                requireContext(),
+                binding.timeInputPhase.text.toString()
+            )
+        )
         //时间
         binding.timeInputPhase.setOnClickListener {
             val dialog = TimePickerFragment()
             dialog.show(childFragmentManager, "TimePicker")
         }
         viewModel.selectedPhase.observe(requireActivity()) {
-            binding.timeInputPhase.setText(viewModel.selectedPhase.value)
+
+            if (isAdded){
+                binding.timeInputPhase.setText(
+                    Utils.numToPhase(
+                        requireContext(),
+                        viewModel.selectedPhase.value!!
+                    )
+                )
+            }
         }
         //年龄
         ageinit()
@@ -1022,11 +1025,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
     private val decelerateInterpolator = DecelerateInterpolator()
     fun scrollToCenter(position: Int) {
-        //var pos = if (position < childViewHalfCount) childViewHalfCount else position
-
-        //  Log.d(TAG, "itemCOunt :${adapter.itemCount}")
-//        var pos = if (position < adapter.itemCount - childViewHalfCount - 1) position
-//        else adapter.itemCount - childViewHalfCount - 1
 
         var pos = if (position < childViewHalfCount) childViewHalfCount
         else if (position >= childViewHalfCount && position < adapter.itemCount - childViewHalfCount - 1)
@@ -1050,22 +1048,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         adapter.setSelectPosition(pos)
         viewModel.setAge(pos - 1)
         Log.d(TAG, "当前选中:${ageList.get(pos)}")
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.toolbar_cal, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.user -> {
-                val dialog=SettingFragment()
-                dialog.show(childFragmentManager,"SettingFragment")
-            }
-            else -> return false
-        }
-        return true
     }
 
 }

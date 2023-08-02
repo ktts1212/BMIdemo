@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import bmicalculator.bmi.calculator.weightlosstracker.R
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.bmi.child.RecordFragment
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
 
 class RecordAdapter(
     private val context: Context, val bmiInfoList: ArrayList<BmiInfo>,
@@ -54,7 +55,7 @@ class RecordAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.recordBmi.setText(bmiInfoList[position].bmi.toString())
         holder.recordDate.setText(bmiInfoList[position].date)
-        holder.recordPhase.setText(bmiInfoList[position].phase)
+        holder.recordPhase.setText(Utils.numToPhase(context,bmiInfoList[position].phase))
         holder.recordType.setText(getBmiType(context, bmiInfoList[position].bmiType!!, holder))
     }
 
@@ -68,7 +69,7 @@ class RecordAdapter(
                         )
                     )
                 )
-                return context.getString(R.string.vsuw)
+                return context.getString(R.string.bmi_very_severely_underweight)
             }
 
             "suw" -> {
@@ -79,7 +80,7 @@ class RecordAdapter(
                         )
                     )
                 )
-                return context.getString(R.string.suw)
+                return context.getString(R.string.bmi_severely_underweight)
             }
 
             "uw" -> {
@@ -90,7 +91,7 @@ class RecordAdapter(
                         )
                     )
                 )
-                return context.getString(R.string.uw)
+                return context.getString(R.string.bmi_underweight)
             }
 
             "nm" -> {
@@ -101,7 +102,7 @@ class RecordAdapter(
                         )
                     )
                 )
-                return context.getString(R.string.nm)
+                return context.getString(R.string.normal_leg)
             }
 
             "ow" -> {
@@ -112,7 +113,7 @@ class RecordAdapter(
                         )
                     )
                 )
-                return context.getString(R.string.ow)
+                return context.getString(R.string.bmi_overweight)
             }
 
             "oc1" -> {
@@ -123,7 +124,7 @@ class RecordAdapter(
                         )
                     )
                 )
-                return context.getString(R.string.oc1)
+                return context.getString(R.string.bmi_range_obese_class1)
             }
 
             "oc2" -> {
@@ -134,7 +135,7 @@ class RecordAdapter(
                         )
                     )
                 )
-                return context.getString(R.string.oc2)
+                return context.getString(R.string.bmi_range_obese_class2)
             }
 
             "oc3" -> {
@@ -145,7 +146,7 @@ class RecordAdapter(
                         )
                     )
                 )
-                return context.getString(R.string.oc3)
+                return context.getString(R.string.bmi_range_obese_class3)
             }
 
             else -> {
@@ -153,6 +154,5 @@ class RecordAdapter(
             }
         }
     }
-
 }
 

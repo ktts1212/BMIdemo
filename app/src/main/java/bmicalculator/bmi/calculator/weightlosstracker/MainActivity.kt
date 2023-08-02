@@ -32,29 +32,15 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-//    private val fragments = lazy {
-//        listOf(
-//            CalculatorFragment(),
-//            BmiFragment(),
-//            StatisticFragment()
-//        )
-//    }
-
-
     private lateinit var viewModel: CalculatorViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //setSupportActionBar(binding.toolbar)
-
-        val prefs = getSharedPreferences("data", Context.MODE_PRIVATE)
-        val hasdata = prefs.getBoolean("hasdata", false)
 
         val dao = AppDataBase.getDatabase(application).bmiInfoDao()
         val factory = ViewModelFactory(Repository(dao))
-
         //获取viewModel实例
         viewModel = ViewModelProvider(this, factory).get(
             CalculatorViewModel::class.java
@@ -66,28 +52,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        viewModel.UserStatus.observe(this) {
-//            if (it) {
-//                binding.bottomNavigationView.post {
-//                    val height = binding.bottomNavigationView.height
-//                    val params =
-//                        binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
-//                    params.bottomMargin = height
-//                    binding.fragmentContainer.layoutParams = params
-//                }
-//                //binding.fragmentContainer.visibility = View.VISIBLE
-//                binding.bottomNavigationView.visibility = View.VISIBLE
-//                UserStatus.ishasRecord = true
-//            } else {
-//                binding.bottomNavigationView.visibility = View.GONE
-//                val params =
-//                    binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
-//                params.bottomMargin = 0
-//                binding.fragmentContainer.layoutParams = params
-//                UserStatus.ishasRecord = false
-//            }
-//        }
 
+        //根据查询到的信息来判断是否是新老用户
         viewModel.allInfo.observe(this) {
             if (!it.isNullOrEmpty()) {
                 binding.bottomNavigationView.post {
@@ -97,7 +63,6 @@ class MainActivity : AppCompatActivity() {
                     params.bottomMargin = height
                     binding.fragmentContainer.layoutParams = params
                 }
-                //binding.fragmentContainer.visibility = View.VISIBLE
                 binding.bottomNavigationView.visibility = View.VISIBLE
                 UserStatus.ishasRecord = true
             } else {
@@ -110,43 +75,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        Log.d(TAG, "num:${viewModel.infoCount.value}")
-        //判断底部导航栏是否显示
-
-//        viewModel.allInfo.observe(this){
-//            if (it.size>0||it!=null){
-//                binding.bottomNavigationView.post {
-//                    val height = binding.bottomNavigationView.height
-//                    val params =
-//                        binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
-//                    params.bottomMargin = height
-//                    binding.fragmentContainer.layoutParams = params
-//                }
-//                //binding.fragmentContainer.visibility = View.VISIBLE
-//                binding.bottomNavigationView.visibility = View.VISIBLE
-//                UserStatus.ishasRecord=true
-//            }else{
-//                binding.bottomNavigationView.visibility = View.GONE
-//                UserStatus.ishasRecord=false
-//            }
-//        }
-
-//        if (hasdata){
-//            binding.bottomNavigationView.post {
-//                val height = binding.bottomNavigationView.height
-//                val params =
-//                    binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
-//                params.bottomMargin = height
-//                binding.fragmentContainer.layoutParams = params
-//            }
-//            //binding.fragmentContainer.visibility = View.VISIBLE
-//            binding.bottomNavigationView.visibility = View.VISIBLE
-//            UserStatus.ishasRecord=true
-//        }else{
-//            binding.bottomNavigationView.visibility = View.GONE
-//            UserStatus.ishasRecord=false
-//        }
-
         //更改状态栏字体颜色
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
@@ -154,7 +82,6 @@ class MainActivity : AppCompatActivity() {
 
         //fragment切换
         val fragmentManager = supportFragmentManager
-        //val transaction = fragmentManager.beginTransaction()
         var mCurrentFragment: Fragment = CalculatorFragment()
         val transcation = fragmentManager.beginTransaction()
         transcation.add(R.id.fragment_container, mCurrentFragment, "calculator")
@@ -164,7 +91,6 @@ class MainActivity : AppCompatActivity() {
 
             val transcation = fragmentManager.beginTransaction()
             transcation.hide(mCurrentFragment)
-
             when (it.itemId) {
                 R.id.menu_calculator -> {
                     val calculatorFragment = fragmentManager.findFragmentByTag("calculator")
@@ -205,20 +131,4 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
-
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.toolbar, menu)
-//        return true
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.user -> Toast.makeText(this, "you click me", Toast.LENGTH_SHORT).show()
-//            else -> return false
-//        }
-//        return true
-//    }
-
-
 }

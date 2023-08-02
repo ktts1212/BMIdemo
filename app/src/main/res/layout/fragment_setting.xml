@@ -37,7 +37,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="15dp"
                 android:fontFamily="@font/montserrat_extrabold"
-                android:text="ME"
+                android:text="@string/mine"
                 android:textColor="@color/black"
                 android:textFontWeight="400"
                 android:textSize="20sp"
@@ -84,7 +84,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="20dp"
                         android:fontFamily="@font/montserrat_extrabold"
-                        android:text="Backup &amp; Restore"
+                        android:text="@string/set_backup"
                         android:textColor="@color/black"
                         android:textFontWeight="800"
                         android:textSize="16sp" />
@@ -110,7 +110,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/setting_txt1"
                         android:layout_marginStart="15dp"
-                        android:text="Synchronize your data"
+                        android:text="@string/drive_syncing_data"
                         android:textColor="@color/black"
                         android:textFontWeight="800"
                         android:textSize="16sp" />
@@ -162,7 +162,7 @@
                                 android:layout_toEndOf="@id/setting_card2_image1"
                                 android:gravity="center"
                                 android:lineHeight="21sp"
-                                android:text="Languange"
+                                android:text="@string/language_title"
                                 android:textColor="@color/black"
                                 android:textSize="16sp" />
                         </RelativeLayout>
@@ -194,7 +194,7 @@
                                 android:layout_marginTop="20dp"
                                 android:layout_toEndOf="@id/setting_card2_image2"
                                 android:lineHeight="21sp"
-                                android:text="Connect to Google Fit"
+                                android:text="@string/connect_with_google_fit"
                                 android:textColor="@color/black"
                                 android:textSize="16sp" />
 
@@ -270,7 +270,7 @@
                                 android:layout_marginTop="19.5dp"
                                 android:layout_toEndOf="@id/card3_rad_img"
                                 android:lineHeight="21sp"
-                                android:text="Remove Ads"
+                                android:text="@string/remove_ad"
                                 android:textColor="@color/black"
                                 android:textSize="16sp" />
 
@@ -310,7 +310,7 @@
                                 android:layout_marginTop="19.5dp"
                                 android:layout_toEndOf="@id/card3_rtu_img"
                                 android:lineHeight="21sp"
-                                android:text="Rate us"
+                                android:text="@string/rate_us"
                                 android:textColor="@color/black"
                                 android:textSize="16sp" />
 
@@ -350,7 +350,7 @@
                                 android:layout_marginTop="19.5dp"
                                 android:layout_toEndOf="@id/card3_fb_img"
                                 android:lineHeight="21sp"
-                                android:text="Feedback"
+                                android:text="@string/feedback"
                                 android:textColor="@color/black"
                                 android:textSize="16sp" />
 
@@ -390,7 +390,7 @@
                                 android:layout_marginTop="19.5dp"
                                 android:layout_toEndOf="@id/card3_pp_img"
                                 android:lineHeight="21sp"
-                                android:text="Privacy policy"
+                                android:text="@string/privacy_policy"
                                 android:textColor="@color/black"
                                 android:textSize="16sp" />
 

@@ -81,6 +81,11 @@ class BmiFragment : Fragment() {
                 allInfo.add(it[i])
             }
 
+            if (isAdded){
+                binding.bmiLabel.setText(String.format(getString(R.string.bmi_tip_description),"..."))
+            }
+
+
             allInfo.sortByDescending { it.timestape }
             val newRecord = allInfo.maxBy { it.timestape }
             Log.d(TAG, newRecord.toString())
@@ -90,10 +95,8 @@ class BmiFragment : Fragment() {
                 binding.bmiArrow.rotation = SweepAngel.sweepAngle(newRecord.bmi)
                 binding.bmiDate.setText(newRecord.date)
                 binding.bmiValue.setText(newRecord.bmi.toString())
-
                 getBmiType(newRecord.bmiType!!)
                 getWtHtType(newRecord)
-
             } else {
                 binding.typeTableChildDial.visibility = View.VISIBLE
                 binding.typeTableDial.visibility = View.GONE
@@ -130,7 +133,7 @@ class BmiFragment : Fragment() {
         when (bmiType) {
             "vsuw" -> {
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.vsuw))
+                    binding.bmiCalTypeTextNew.setText(getString(R.string.bmi_very_severely_underweight))
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -174,7 +177,7 @@ class BmiFragment : Fragment() {
 
             "suw" -> {
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.suw))
+                    binding.bmiCalTypeTextNew.setText(getString(R.string.bmi_severely_underweight))
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -219,7 +222,7 @@ class BmiFragment : Fragment() {
 
             "uw" -> {
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.uw))
+                    binding.bmiCalTypeTextNew.setText(getString(R.string.bmi_underweight))
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -265,7 +268,7 @@ class BmiFragment : Fragment() {
             "nm" -> {
 
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.nm))
+                    binding.bmiCalTypeTextNew.setText(getString(R.string.normal_leg))
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -310,7 +313,7 @@ class BmiFragment : Fragment() {
 
             "ow" -> {
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.ow))
+                    binding.bmiCalTypeTextNew.setText(getString(R.string.bmi_overweight))
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -355,7 +358,7 @@ class BmiFragment : Fragment() {
 
             "oc1" -> {
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.oc1))
+                    binding.bmiCalTypeTextNew.setText(getString(R.string.bmi_range_obese_class1))
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -399,7 +402,7 @@ class BmiFragment : Fragment() {
 
             "oc2" -> {
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.oc2))
+                    binding.bmiCalTypeTextNew.setText(getString(R.string.bmi_range_obese_class2))
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -443,7 +446,7 @@ class BmiFragment : Fragment() {
 
             "oc3" -> {
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.oc3))
+                    binding.bmiCalTypeTextNew.setText(getString(R.string.bmi_range_obese_class3))
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -490,34 +493,36 @@ class BmiFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     fun getWtHtType(newRecord: BmiInfo) {
 
-        val gender = if (newRecord.gender == '0') "Male" else "Female"
+        val gender = if (newRecord.gender == '0') getString(R.string.male) else getString(
+            R.string.female
+        )
 
         when (newRecord.wtHtType) {
             "lbftin" -> {
                 binding.bmiCalInfoNew.setText(
-                    "${newRecord.wt_lb} lb | ${newRecord.ht_ft} ft " +
-                            "${newRecord.ht_in} in | ${gender} | ${newRecord.age} years old"
+                    String.format(getString(R.string.bmi_input_data),"${newRecord.wt_lb} lb"
+                    ,"${newRecord.ht_ft} ft ${newRecord.ht_in} in",gender,"${newRecord.age}")
                 )
             }
 
             "lbcm" -> {
                 binding.bmiCalInfoNew.setText(
-                    "${newRecord.wt_lb} lb | " +
-                            " ${newRecord.ht_cm} cm | ${gender} | ${newRecord.age} years old"
+                    String.format(getString(R.string.bmi_input_data),"${newRecord.wt_lb} lb"
+                        ,"${newRecord.ht_cm} cm",gender,"${newRecord.age}")
                 )
             }
 
             "kgftin" -> {
                 binding.bmiCalInfoNew.setText(
-                    "${newRecord.wt_kg} kg | ${newRecord.ht_ft} ft " +
-                            "${newRecord.ht_in} in | ${gender} | ${newRecord.age} years old"
+                        String.format(getString(R.string.bmi_input_data),"${newRecord.wt_kg} kg"
+                            ,"${newRecord.ht_ft} ft ${newRecord.ht_in} in",gender,"${newRecord.age}")
                 )
             }
 
             "kgcm" -> {
                 binding.bmiCalInfoNew.setText(
-                    "${newRecord.wt_kg} kg | ${newRecord.ht_cm} cm" +
-                            " | ${gender} | ${newRecord.age} years old"
+                    String.format(getString(R.string.bmi_input_data),"${newRecord.wt_kg} kg"
+                        ,"${newRecord.ht_cm} cm",gender,"${newRecord.age}")
                 )
             }
         }
