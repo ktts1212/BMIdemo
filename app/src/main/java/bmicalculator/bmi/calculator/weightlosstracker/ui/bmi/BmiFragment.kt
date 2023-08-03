@@ -95,8 +95,11 @@ class BmiFragment : Fragment() {
                 binding.bmiArrow.rotation = SweepAngel.sweepAngle(newRecord.bmi)
                 binding.bmiDate.setText(newRecord.date)
                 binding.bmiValue.setText(newRecord.bmi.toString())
-                getBmiType(newRecord.bmiType!!)
-                getWtHtType(newRecord)
+                if (isAdded){
+                    getBmiType(newRecord.bmiType!!)
+                    getWtHtType(newRecord)
+                }
+
             } else {
                 binding.typeTableChildDial.visibility = View.VISIBLE
                 binding.typeTableDial.visibility = View.GONE

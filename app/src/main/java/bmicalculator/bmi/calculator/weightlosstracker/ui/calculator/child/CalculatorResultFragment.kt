@@ -913,7 +913,6 @@ class CalculatorResultFragment : DialogFragment() {
             val transition = fragmentManager.beginTransaction()
             transition.replace(R.id.fragment_container, StatisticFragment())
             transition.commit()
-            viewModel.UserStatus.value = true
         }
 
     }

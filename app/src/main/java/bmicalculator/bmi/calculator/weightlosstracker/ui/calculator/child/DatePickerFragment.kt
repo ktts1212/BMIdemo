@@ -2,6 +2,7 @@ package bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
@@ -46,6 +47,8 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        retainInstance=true
         model = ViewModelProvider(requireActivity()).get(CalculatorViewModel::class.java)
         binding = FragmentDatePickerBinding.inflate(layoutInflater, container, false)
         binding.wheelPickerDateYearWheel.setRange(2000, 2035, 1)
@@ -253,6 +256,10 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
     }
 
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        onDestroyView()
+    }
 
     fun MonthtoNumber(month: String): Int {
         val monthnum = when (month) {

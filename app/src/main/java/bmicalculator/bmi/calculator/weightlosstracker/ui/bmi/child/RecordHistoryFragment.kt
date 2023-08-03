@@ -94,7 +94,6 @@ class RecordHistoryFragment : DialogFragment() {
                     val transition = fragmentManager.beginTransaction()
                     transition.replace(R.id.fragment_container, CalculatorFragment())
                     transition.commit()
-                    viewModel.UserStatus.value = false
                 }
 
 

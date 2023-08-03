@@ -19,8 +19,8 @@ class CalculatorViewModel(private val repository: Repository) : ViewModel() {
     val message: LiveData<Event<String>>
         get() = statusMessage
 
-    var UserStatus = MutableLiveData<Boolean>(false)
 
+    val LocaleLanguage=null
 
     //记录用户的cal选择
     var wtval: Float = 0f

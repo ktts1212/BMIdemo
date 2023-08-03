@@ -75,7 +75,7 @@
 	<string name="log_out_google_account">已登出 Google 帳號並中斷與 Google Fit 的連線。</string>
 	<string name="calculator">計算器</string>
 	<string name="bmi_range_normal_adult_description">恭喜！您的體重很理想。維持健康好習慣，繼續保持健康的體重。</string>
-	<string name="habit_morning">早上</string>
+	<string name="morning">早上</string>
 	<string name="afternoon">下午</string>
 	<string name="evening">晚上</string>
 	<string name="night">深夜</string>

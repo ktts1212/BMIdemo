@@ -1,8 +1,10 @@
 package bmicalculator.bmi.calculator.weightlosstracker
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.os.LocaleList
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -12,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -24,7 +27,10 @@ import bmicalculator.bmi.calculator.weightlosstracker.ui.bmi.BmiFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
 import bmicalculator.bmi.calculator.weightlosstracker.ui.statistic.StatisticFragment
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.ContextWrapper
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.LanguageHelper
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.UserStatus
+import java.util.Locale
 
 private const val TAG = "MainActivity"
 
@@ -38,6 +44,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val fragments=supportFragmentManager.fragments
+        if (fragments!=null){
+            val ft=supportFragmentManager.beginTransaction()
+            for(fragment in fragments){
+                if (fragment!=null){
+                    ft.remove(fragment)
+                }
+            }
+            ft.commit()
+        }
 
         val dao = AppDataBase.getDatabase(application).bmiInfoDao()
         val factory = ViewModelFactory(Repository(dao))
@@ -130,5 +147,12 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        val context=newBase?.let {
+            ContextWrapper.wrap(newBase,LanguageHelper.getLocale(newBase))
+        }
+        super.attachBaseContext(newBase)
     }
 }
