@@ -56,6 +56,14 @@ class MainActivity : AppCompatActivity() {
             ft.commit()
         }
 
+
+        if (supportFragmentManager.findFragmentByTag("statistic")!=null){
+            Log.d(TAG,"存在")
+            val ft=supportFragmentManager.beginTransaction()
+            ft.remove(supportFragmentManager.findFragmentByTag("statistic")!!)
+            ft.commit()
+        }
+
         val dao = AppDataBase.getDatabase(application).bmiInfoDao()
         val factory = ViewModelFactory(Repository(dao))
         //获取viewModel实例

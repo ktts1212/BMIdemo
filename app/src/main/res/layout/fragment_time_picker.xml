@@ -22,7 +22,7 @@
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/montserrat_extrabold"
                 android:gravity="center_vertical"
-                android:text="TIME"
+                android:text="@string/log_weight_time"
                 android:textColor="@color/black"
                 android:textSize="30sp" />
 

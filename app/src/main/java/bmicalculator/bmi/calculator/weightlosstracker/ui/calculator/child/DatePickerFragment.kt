@@ -48,7 +48,6 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         savedInstanceState: Bundle?
     ): View? {
 
-        retainInstance=true
         model = ViewModelProvider(requireActivity()).get(CalculatorViewModel::class.java)
         binding = FragmentDatePickerBinding.inflate(layoutInflater, container, false)
         binding.wheelPickerDateYearWheel.setRange(2000, 2035, 1)

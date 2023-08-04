@@ -95,7 +95,8 @@ class CalculatorResultFragment : DialogFragment() {
         binding.bmiTip.setText(String.format(getString(R.string.bmi_tip_description), "..."))
 
         viewModel.bmival.observe(requireActivity()) {
-            binding.bmiNum.text = viewModel.bmival.value.toString()
+            binding.bmiNum.text =
+                viewModel.bmival.value.toString()
         }
 
         binding.bmiArrow.pivotX = Utils.dip2px(
@@ -937,7 +938,7 @@ class CalculatorResultFragment : DialogFragment() {
 
     fun sweepAngle(num: Float): Float {
         val bmival = if (num > 40.3) 40.3f else if (num < 15.6) 15.6f else num
-        return DcFormat.tf.format((bmival - 15.6) / 24.8 * 180 + 90).toFloat()
+        return DcFormat.tf.format((bmival - 15.6) / 24.8 * 180 + 90).replace(",",".").toFloat()
     }
 
     fun childSweepAngle(num: Float): Float {

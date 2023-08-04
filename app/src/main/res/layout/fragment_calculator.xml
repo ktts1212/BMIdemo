@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/f_layout"
     android:background="#F5F5F5"
     tools:context=".ui.calculator.CalculatorFragment">
 
@@ -67,20 +68,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="72dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="19dp"
                 android:text="@string/weight"
                 android:textColor="@color/black"
-                android:textSize="17sp"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/wt_card"
                 android:layout_width="160dp"
-                android:layout_height="70dp"
+                android:layout_height="68dp"
                 android:layout_below="@id/wt_display"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="15dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="15dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -90,6 +91,8 @@
                     android:id="@+id/wt_textField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     app:boxBackgroundMode="none"
                     app:errorEnabled="true">
 
@@ -114,7 +117,7 @@
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/wt_tab"
                 android:layout_width="160dp"
-                android:layout_height="48dp"
+                android:layout_height="36dp"
                 android:layout_below="@id/wt_card"
                 android:layout_alignStart="@id/wt_card"
                 android:layout_alignEnd="@id/wt_card"
@@ -146,12 +149,12 @@
                 android:id="@+id/ht_display"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="75dp"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="76dp"
                 android:layout_toEndOf="@id/wt_display"
                 android:text="@string/height"
                 android:textColor="@color/black"
-                android:textSize="17sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -193,12 +196,12 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/ht_card_ftin1"
                 android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="106dp"
+                android:layout_height="68dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="5.5dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="15dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ht_card_ftin2"
                 app:layout_constraintTop_toBottomOf="@id/ht_display">
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -226,9 +229,9 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/ht_card_ftin2"
-                android:layout_width="80dp"
-                android:layout_height="70dp"
-                android:layout_marginTop="12dp"
+                android:layout_width="84.5dp"
+                android:layout_height="68dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="15dp"
@@ -261,7 +264,7 @@
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/ht_tab"
                 android:layout_width="160dp"
-                android:layout_height="48dp"
+                android:layout_height="36dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
@@ -296,7 +299,7 @@
                 android:layout_marginTop="30dp"
                 android:text="@string/log_weight_time"
                 android:textColor="@color/black"
-                android:textSize="17sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/wt_tab" />
@@ -306,7 +309,7 @@
                 android:layout_width="160dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="15dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="15dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -323,6 +326,8 @@
                     android:inputType="numberDecimal"
                     android:text="@string/date"
                     android:textColor="@color/black"
+                    android:autoSizeMaxTextSize="20sp"
+                    android:autoSizeTextType="uniform"
                     android:textSize="20sp" />
 
 
@@ -332,7 +337,7 @@
                 android:id="@+id/time_phase"
                 android:layout_width="160dp"
                 android:layout_height="60dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="15dp"
@@ -349,8 +354,10 @@
                     android:gravity="center"
                     android:inputType="numberDecimal"
                     android:text="@string/phase"
+                    android:autoSizeMaxTextSize="20sp"
+                    android:autoSizeTextType="uniform"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -361,7 +368,7 @@
                 android:layout_marginTop="30dp"
                 android:text="@string/age"
                 android:textColor="@color/black"
-                android:textSize="17sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/time_date" />
@@ -370,9 +377,9 @@
                 android:id="@+id/age_card"
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
-                android:layout_marginStart="18dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginEnd="18dp"
+                android:layout_marginEnd="15dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -507,10 +514,10 @@
                 android:id="@+id/btn_calculate"
                 style="@style/ThemeOverlay.Material3.Button"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="18dp"
+                android:layout_height="57.5dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="63.5dp"
+                android:layout_marginEnd="15dp"
                 android:background="@drawable/btn_selector"
                 android:fontFamily="@font/montserrat_extrabold"
                 android:gravity="center"
