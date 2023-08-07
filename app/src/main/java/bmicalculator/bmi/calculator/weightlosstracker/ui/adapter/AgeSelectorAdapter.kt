@@ -46,15 +46,7 @@ class AgeSelectorAdapter(val ageList: ArrayList<String?>) :
             holder.ageView.setTextColor(Color.parseColor("#DCDCDC"))
         }
 
-
         holder.ageView.setText(ageList.get(position))
-
-//        if (TextUtils.isEmpty(ageList.get(position))){
-//            holder.itemView.visibility=View.INVISIBLE
-//        }else{
-//            holder.ageView.visibility=View.VISIBLE
-//            holder.ageView.setText(ageList.get(position))
-//        }
 
     }
 

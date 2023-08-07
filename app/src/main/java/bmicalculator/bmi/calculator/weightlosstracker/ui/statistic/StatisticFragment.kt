@@ -94,24 +94,22 @@ class StatisticFragment : Fragment() {
                     bmiList.clear()
                     val currentTime = LocalDateTime.now()
 
-                    
-                    if (dayList.isEmpty()) {
-                        dayList.add(Entry(0f, Float.NaN))
+                    //dayList记录已天为单位的数据
+                    if (!dayList.isEmpty()) {
+                        dayList.clear()
                     }
-                    for (i in 1..currentTime.dayOfYear) {
-                        dayList.add(Entry(i.toFloat(), Float.NaN))
-                    }
-
+                    //往dayList中添加数据
                     for (i in 0 until list!!.size) {
                         val l1 = list!![i].date!!.split(" ")
                         //获取当前的月份和天数
                         val day = l1[1].split(",")[0]
                         val month = Utils.monthToNumber(l1[0])
                         val dayOfYear = Utils.getDayOfYear(day.toInt(), month)
-                        dayList[dayOfYear].y = list!![i].bmi
+                        dayList.add(Entry(dayOfYear.toFloat(),list!![i].bmi))
                     }
 
                     Log.d(TAG, "dayList:${dayList}")
+                    dayList.sortBy { it.x }
 
 
                     kgList.clear()
@@ -142,33 +140,6 @@ class StatisticFragment : Fragment() {
 
                     }
                     chartStyle(dayList)
-                    if (viewModel.wttype == "kg") {
-                        kgList.sortBy { it.x }
-                        if (kgList[0].x != 1f) {
-                            kgList.add(0, Entry(1f, 0f))
-                        }
-                        chart2Style(kgList)
-                    } else {
-                        lbList.sortBy { it.x }
-                        if (lbList[0].x != 1f) {
-                            lbList.add(0, Entry(1f, 0f))
-                        }
-                        chart2Style(lbList)
-                    }
-
-
-                    binding.staLinechart2.apply {
-                        setTouchEnabled(true)
-                        setDrawGridBackground(false)
-                        legend.isEnabled = false
-                        //自适应
-                        isAutoScaleMinMaxEnabled = true
-                        //x轴可拖拽
-                        isDragXEnabled = true
-                        setDrawBorders(false)
-                        setScaleEnabled(false)
-                        description.isEnabled = false
-                    }
 
                     binding.staLinechart1.apply {
                         setTouchEnabled(true)
@@ -181,44 +152,6 @@ class StatisticFragment : Fragment() {
                         setDrawBorders(false)
                         setScaleEnabled(false)
                         description.isEnabled = false
-                    }
-
-                    val xAxisto = binding.staLinechart2.xAxis
-
-                    xAxisto.apply {
-                        isEnabled = true
-                        gridColor = Color.parseColor("#EEEEEE")
-                        if (isAdded()) {
-                            gridLineWidth = Utils.dip2px(requireContext(), 0.5f).toFloat()
-                        }
-                        //是否绘制x轴
-                        setDrawAxisLine(false)
-                        textColor = Color.WHITE
-                        textSize = 12f
-                        if (isAdded()) {
-                            typeface = ResourcesCompat.getFont(
-                                requireContext(),
-                                R.font.montserrat_extrabold
-                            )
-                        }
-
-                        //setCenterAxisLabels(true)
-                        setDrawLimitLinesBehindData(false)
-                        position = XAxis.XAxisPosition.BOTTOM
-                        //yOffset=20f
-                        valueFormatter = object : ValueFormatter() {
-                            override fun getFormattedValue(value: Float): String {
-                                if (binding.staTabHeader.getTabAt(0)!!.isSelected) {
-                                    val dMonth = Utils.getDayOfMonth(value.toInt())
-
-                                    return dMonth.day.toString()
-                                } else {
-                                    return value.toInt().toString()
-                                }
-
-                            }
-                        }
-                        spaceMax = 0.5f
                     }
 
                     val xAxis = binding.staLinechart1.xAxis
@@ -246,8 +179,6 @@ class StatisticFragment : Fragment() {
                         //setCenterAxisLabels(true)
                         setDrawLimitLinesBehindData(false)
                         position = XAxis.XAxisPosition.BOTTOM
-
-
                         //yOffset=20f
                         valueFormatter = object : ValueFormatter() {
                             override fun getFormattedValue(value: Float): String {
@@ -262,55 +193,7 @@ class StatisticFragment : Fragment() {
                         }
                         spaceMax = 0.5f
                     }
-
-                    binding.staLinechart2.axisRight.apply {
-                        isEnabled = false
-                        setDrawGridLines(false)
-                    }
-
-                    binding.staLinechart2.axisLeft.apply {
-                        setDrawAxisLine(false)
-                        setDrawGridLines(false)
-                        setDrawZeroLine(false)
-                        textColor = Color.WHITE
-                        textSize = 12f
-                        if (isAdded) {
-                            typeface = ResourcesCompat.getFont(
-                                requireContext(),
-                                R.font.montserrat_extrabold
-                            )
-
-                        }
-                        setLabelCount(6, true)
-                        xOffset = 15f
-                        axisMinimum = 0f
-                        minWidth = 45f
-                        maxWidth = 45f
-                        valueFormatter = object : ValueFormatter() {
-                            override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-                                if (value == 0f) {
-                                    return 0f.toString()
-                                } else {
-                                    return DcFormat.tf.format(value)
-                                }
-                            }
-                        }
-
-                        spaceTop = 25f
-                    }
-
-                    binding.staLinechart2.isHighlightPerTapEnabled = true
-                    val set2 = binding.staLinechart2.data.getDataSetByIndex(0)
-                    val lastEntryIndex2 = set2.entryCount - 1
-                    val lastEntry2 = set2.getEntryForIndex(lastEntryIndex2)
-                    binding.staLinechart2.highlightValue(lastEntry2.x, 0, true)
-                    //使用markview显示
-                    binding.staLinechart2.data.isHighlightEnabled = true
-
-                    //重绘刷新
-                    binding.staLinechart2.notifyDataSetChanged()
-                    binding.staLinechart2.invalidate()
-
+                    //取消右侧y轴
                     binding.staLinechart1.axisRight.apply {
                         isEnabled = false
                         setDrawGridLines(false)
@@ -367,6 +250,125 @@ class StatisticFragment : Fragment() {
                     //重绘刷新
                     binding.staLinechart1.notifyDataSetChanged()
                     binding.staLinechart1.invalidate()
+
+
+
+
+                    if (viewModel.wttype == "kg") {
+                        kgList.sortBy { it.x }
+                        if (kgList[0].x != 1f) {
+                            kgList.add(0, Entry(1f, 0f))
+                        }
+                        chart2Style(kgList)
+                    } else {
+                        lbList.sortBy { it.x }
+                        if (lbList[0].x != 1f) {
+                            lbList.add(0, Entry(1f, 0f))
+                        }
+                        chart2Style(lbList)
+                    }
+
+
+                    binding.staLinechart2.apply {
+                        setTouchEnabled(true)
+                        setDrawGridBackground(false)
+                        legend.isEnabled = false
+                        //自适应
+                        isAutoScaleMinMaxEnabled = true
+                        //x轴可拖拽
+                        isDragXEnabled = true
+                        setDrawBorders(false)
+                        setScaleEnabled(false)
+                        description.isEnabled = false
+                    }
+
+
+                    val xAxisto = binding.staLinechart2.xAxis
+
+                    xAxisto.apply {
+                        isEnabled = true
+                        gridColor = Color.parseColor("#EEEEEE")
+                        if (isAdded()) {
+                            gridLineWidth = Utils.dip2px(requireContext(), 0.5f).toFloat()
+                        }
+                        //是否绘制x轴
+                        setDrawAxisLine(false)
+                        textColor = Color.WHITE
+                        textSize = 12f
+                        if (isAdded()) {
+                            typeface = ResourcesCompat.getFont(
+                                requireContext(),
+                                R.font.montserrat_extrabold
+                            )
+                        }
+
+                        //setCenterAxisLabels(true)
+                        setDrawLimitLinesBehindData(false)
+                        position = XAxis.XAxisPosition.BOTTOM
+                        //yOffset=20f
+                        valueFormatter = object : ValueFormatter() {
+                            override fun getFormattedValue(value: Float): String {
+                                if (binding.staTabHeader.getTabAt(0)!!.isSelected) {
+                                    val dMonth = Utils.getDayOfMonth(value.toInt())
+
+                                    return dMonth.day.toString()
+                                } else {
+                                    return value.toInt().toString()
+                                }
+
+                            }
+                        }
+                        spaceMax = 0.5f
+                    }
+
+
+                    binding.staLinechart2.axisRight.apply {
+                        isEnabled = false
+                        setDrawGridLines(false)
+                    }
+
+                    binding.staLinechart2.axisLeft.apply {
+                        setDrawAxisLine(false)
+                        setDrawGridLines(false)
+                        setDrawZeroLine(false)
+                        textColor = Color.WHITE
+                        textSize = 12f
+                        if (isAdded) {
+                            typeface = ResourcesCompat.getFont(
+                                requireContext(),
+                                R.font.montserrat_extrabold
+                            )
+
+                        }
+                        setLabelCount(6, true)
+                        xOffset = 15f
+                        axisMinimum = 0f
+                        minWidth = 45f
+                        maxWidth = 45f
+                        valueFormatter = object : ValueFormatter() {
+                            override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+                                if (value == 0f) {
+                                    return 0f.toString()
+                                } else {
+                                    return DcFormat.tf.format(value)
+                                }
+                            }
+                        }
+
+                        spaceTop = 25f
+                    }
+
+                    binding.staLinechart2.isHighlightPerTapEnabled = true
+                    val set2 = binding.staLinechart2.data.getDataSetByIndex(0)
+                    val lastEntryIndex2 = set2.entryCount - 1
+                    val lastEntry2 = set2.getEntryForIndex(lastEntryIndex2)
+                    binding.staLinechart2.highlightValue(lastEntry2.x, 0, true)
+                    //使用markview显示
+                    binding.staLinechart2.data.isHighlightEnabled = true
+
+                    //重绘刷新
+                    binding.staLinechart2.notifyDataSetChanged()
+                    binding.staLinechart2.invalidate()
                 }
             }
         }

@@ -86,7 +86,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             ViewModelProvider(requireActivity(), factory).get(CalculatorViewModel::class.java)
         //设置toolbar的显示
         setHasOptionsMenu(true)
-
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbarCal)
         return binding.root
     }
@@ -100,20 +99,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             val dialog = SettingFragment()
             dialog.show(childFragmentManager, "SettingFragment")
         }
-        
-        
-        binding.wtTextField.setOnTouchListener { view, motionEvent ->
-            binding.wtTextField
-                .apply {
-                focusable=View.FOCUSABLE
-                isFocusableInTouchMode=true
-            }
-
-            binding.wtTextField.requestFocus()
-            false
-        }
-        
-
 
         val formatEnglish = NumberFormat.getNumberInstance(Locale.ENGLISH)
         val ln = (activity as AppCompatActivity).getSharedPreferences("settings", 0).getString(
@@ -121,13 +106,12 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         )
         val formatEurpo = NumberFormat.getNumberInstance(Locale.forLanguageTag(ln!!))
 
-
         val df = DecimalFormat("#.00")
         //用于身高保留一位小数
         val tf = DecimalFormat("#.0")
 
         val ff = DecimalFormat("#")
-
+        //判断是否需要修改数字样式
         val isEu = LanguageHelper.euList.contains(ln)
 
         //初始化
@@ -247,7 +231,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 if (tab?.position == 0) {
                     binding.wtInput.setText(
                         if (isEu) {
-                            Log.d(TAG, "lb:${viewModel.wt_lb.value}")
                             df.format(
                                 formatEurpo.format(viewModel.wt_lb.value).replace(",", ".")
                                     .toDouble()
@@ -274,32 +257,28 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             override fun onTabUnselected(tab: TabLayout.Tab?) {
                 val p0: Editable? = binding.wtInput.text
                 val num = binding.wtInput.text.toString()
-                var str = formatEnglish.format(formatEurpo.parse(num))
-                if (isEu) {
+                var str=""
+                if (!num.isEmpty()) {
+                    str = formatEnglish.format(formatEurpo.parse(num))
+                }
+                if (isEu&&!str.isEmpty()) {
                     str = df.format(str.toDouble()).replace(",", ".")
-
                 }
                 Log.d(TAG, "isEu:${isEu}")
                 Log.d(TAG, "267str:${str}")
                 if (tab?.position == 0) {
-                    if (str.toDouble() < 2) {
+                    if (str.isEmpty()||str.toDouble() < 2) {
                         Toast.makeText(
                             requireContext(),
                             "Please input a valid weight to calculate your BMI accurately",
                             Toast.LENGTH_SHORT
                         ).show()
                         viewModel.setwtlb(
-                            if (isEu) {
-                                df.format(2).toDouble()
-                                //formatEnglish.format(df.format(2).toDouble()).toDouble()
-                            } else {
-                                df.format(2).toDouble()
-                            }
+                            df.format(2).replace(",",".").toDouble()
                         )
                     } else {
                         viewModel.setwtlb(
                             if (isEu) {
-                                //df.format(formatEnglish.format(str.toDouble()).toDouble()).toDouble()
                                 df.format(str.toDouble()).replace(",", ".").toDouble()
                             } else {
                                 df.format(str.toDouble()).toDouble()
@@ -314,7 +293,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                             viewModel.setwtkg(
                                 if (isEu) {
                                     //formatEnglish.format(df.format(1).toDouble()).toDouble()
-                                    df.format(1).toDouble()
+                                    df.format(1).replace(",",".").toDouble()
                                 } else {
                                     df.format(1).toDouble()
                                 }
@@ -333,7 +312,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     }
                     firstConvert = false
                 } else {
-                    if (str.toDouble() < 1) {
+                    if (str.isEmpty()||str.toDouble() < 1) {
                         Toast.makeText(
                             requireContext(),
                             "Please input a valid weight to calculate your BMI accurately",
@@ -342,7 +321,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         viewModel.setwtkg(
                             if (isEu) {
                                 // nf_en.format(df.format(1).toDouble()).toDouble()
-                                df.format(1).toDouble()
+                                df.format(1).replace(",",".").toDouble()
                             } else {
                                 df.format(1).toDouble()
                             }
@@ -392,33 +371,33 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     binding.wtInput.setText(str.replace(",", "."))
                 }
 
-                if (str.length==1&&(str=="."||str==",")){
-                    isChanged=true
+                if (str.length == 1 && (str == "." || str == ",")) {
+                    isChanged = true
                     binding.wtInput.setText(
                         df.format(1)
                     )
                 }
 
                 if (isEu && !str.isEmpty()) {
-                    str = str.replace(",",".")
-                }else if (!isEu&&!str.isEmpty()){
-                    str=str.replace(",",".")
+                    str = str.replace(",", ".")
+                } else if (!isEu && !str.isEmpty()) {
+                    str = str.replace(",", ".")
                 }
 
-                Log.d(TAG,"first str:${str}")
+                Log.d(TAG, "first str:${str}")
 
-                if (!str.isEmpty()){
-                    if (str.contains(".")&&str[str.length-1]!='.') {
+                if (!str.isEmpty()) {
+                    if (str.contains(".") && str[str.length - 1] != '.') {
                         //规定小数位数
-                        var decimalPart=""
-                        val dotIndex=str.indexOf('.')
-                        val lastDotIndex=str.lastIndexOf('.')
-                        if (dotIndex!=lastDotIndex) {
+                        var decimalPart = ""
+                        val dotIndex = str.indexOf('.')
+                        val lastDotIndex = str.lastIndexOf('.')
+                        if (dotIndex != lastDotIndex) {
                             str = str.removeRange(lastDotIndex, lastDotIndex + 1)
                         }
 
-                        decimalPart=str.substring(str.indexOf(".") + 1)
-                        Log.d(TAG,"decimalForamat:${decimalPart}")
+                        decimalPart = str.substring(str.indexOf(".") + 1)
+                        Log.d(TAG, "decimalForamat:${decimalPart}")
                         val decimalnumber = decimalPart.length
                         if (decimalnumber > 2) {
                             Toast.makeText(
@@ -428,7 +407,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                             ).show()
                             isChanged = true
                             val subStr = str.substring(0, str.indexOf(".") + 3)
-                            Log.d(TAG,"subStr:${subStr}")
+                            Log.d(TAG, "subStr:${subStr}")
                             binding.wtInput.setText(
                                 if (isEu) {
                                     df.format(subStr.toDouble())
@@ -491,7 +470,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                                 )
                             }
                         }
-                    } else if (!str.contains(".")){
+                    } else if (!str.contains(".")) {
                         if (binding.wtTab.getTabAt(0)?.isSelected == true) {
 
                             if (str.length > 3) {
@@ -501,14 +480,14 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                                     Toast.LENGTH_SHORT
                                 ).show()
 
-                                str=str.substring(str.length-3)
-                                Log.d(TAG,"wwwwww:str:${str}")
+                                str = str.substring(str.length - 3)
+                                Log.d(TAG, "wwwwww:str:${str}")
                                 isChanged = true
                                 binding.wtInput.setText(
 
-                                    if (isEu){
+                                    if (isEu) {
                                         df.format(str.toInt())
-                                    }else{
+                                    } else {
                                         df.format(str.toInt())
                                     }
 
@@ -534,7 +513,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         } else if (binding.wtTab.getTabAt(1)?.isSelected == true) {
 
                             if (str.length > 3) {
-                                str=str.substring(str.length - 3)
+                                str = str.substring(str.length - 3)
                                 isChanged = true
                                 binding.wtInput.setText(
                                     df.format(str.toInt())
@@ -581,11 +560,12 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     binding.htCardFtin2.visibility = View.INVISIBLE
                     binding.htCardCm.visibility = View.VISIBLE
                     binding.htInputCm.setText(
-                        if (isEu){
-                            formatEurpo.format(viewModel.ht_cm.value)
-                        }else{
+                        if (isEu) {
+                            tf.format(viewModel.ht_cm.value?.toDouble())
+                        } else {
                             viewModel.ht_cm.value.toString()
-                        })
+                        }
+                    )
                 }
             }
 
@@ -593,33 +573,43 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 if (tab?.position == 0) {
                     val strft = binding.htInputFtin1.text.toString()
                     val strin = binding.htInputFtin2.text.toString()
-                    if (strft.contains("'")) {
-                        viewModel.sethtft(
-                            strft.dropLast(1).toInt()
-                        )
-                    } else {
-                        viewModel.sethtft(
-                            strft.toInt()
-                        )
+                    if (!strft.isEmpty()){
+                        if (strft.contains("'")) {
+                            viewModel.sethtft(
+                                strft.dropLast(1).toInt()
+                            )
+                        } else {
+                            viewModel.sethtft(
+                                strft.toInt()
+                            )
+                        }
+                    }else{
+                        viewModel.sethtft(1)
                     }
-                    if (strin.contains("''")) {
-                        viewModel.sethtin(
-                            strin.dropLast(2).toInt()
-                        )
-                    } else if (strin.contains("'")) {
-                        viewModel.sethtin(
-                            strin.dropLast(1).toInt()
-                        )
-                    } else {
-                        viewModel.sethtin(
-                            strin.toInt()
-                        )
+                    if (!strin.isEmpty()){
+                        if (strin.contains("''")) {
+                            viewModel.sethtin(
+                                strin.dropLast(2).toInt()
+                            )
+                        } else if (strin.contains("'")) {
+                            viewModel.sethtin(
+                                strin.dropLast(1).toInt()
+                            )
+                        } else {
+                            viewModel.sethtin(
+                                strin.toInt()
+                            )
+                        }
+                    }else{
+                        viewModel.sethtin(0)
                     }
+
+
                     if (htfirstConvert) {
                         viewModel.sethtcm(
-                            if (isEu){
-                                tf.format(170).replace(",",".").toDouble()
-                            }else{
+                            if (isEu) {
+                                tf.format(170).replace(",", ".").toDouble()
+                            } else {
                                 tf.format(170).toDouble()
                             }
                         )
@@ -627,12 +617,12 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     } else {
                         viewModel.sethtcm(
 
-                            if (isEu){
+                            if (isEu) {
                                 tf.format(
                                     viewModel.ht_in.value!! * Mult_htin +
                                             viewModel.ht_ft.value!! * Mult_htft
-                                ).replace(",",".").toDouble()
-                            }else{
+                                ).replace(",", ".").toDouble()
+                            } else {
                                 tf.format(
                                     viewModel.ht_in.value!! * Mult_htin +
                                             viewModel.ht_ft.value!! * Mult_htft
@@ -644,14 +634,28 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     }
 
                 } else {
-                    viewModel.sethtcm(
+                    val htcm=binding.htInputCm.text.toString()
+                    if (!htcm.isEmpty()){
+                        viewModel.sethtcm(
+                            if (isEu) {
+                                binding.htInputCm.text.toString().replace(",", ".").toDouble()
+                            } else {
+                                binding.htInputCm.text.toString().toDouble()
+                            }
+                        )
+                    }else{
                         if (isEu){
-                            binding.htInputCm.text.toString().replace(",",".").toDouble()
+                            viewModel.sethtcm(
+                                tf.format(1).replace(",",".").toDouble()
+                            )
                         }else{
-                            binding.htInputCm.text.toString().toDouble()
+                            viewModel.sethtcm(
+                                tf.format(1).toDouble()
+                            )
                         }
 
-                    )
+                    }
+
 
                     viewModel.sethtft(
                         ff.format((viewModel.ht_cm.value!! / Mult_htft).toInt()).toInt()
@@ -750,14 +754,20 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         })
 
         binding.htInputFtin1.setOnFocusChangeListener { view, hasFocus ->
-            if (!hasFocus) {
-                if (!binding.htInputFtin1.text.toString().contains("'")) {
-                    binding.htInputFtin1.setText(
-                        binding.htInputFtin1.text.toString() + "'"
-                    )
+            if (!binding.htInputFtin1.text.isEmpty()){
+                if (!hasFocus) {
+                    if (!binding.htInputFtin1.text.toString().contains("'")) {
+                        binding.htInputFtin1.setText(
+                            binding.htInputFtin1.text.toString() + "'"
+                        )
+                    }
+                } else {
+                    binding.htInputFtin1.setText(binding.htInputFtin1.text.toString().dropLast(1))
                 }
-            } else {
-                binding.htInputFtin1.setText(binding.htInputFtin1.text.toString().dropLast(1))
+            }else{
+                if (!hasFocus){
+                    binding.htInputFtin1.setText("1'")
+                }
             }
         }
 
@@ -826,17 +836,24 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         })
 
         binding.htInputFtin2.setOnFocusChangeListener { view, hasFocus ->
-            if (!hasFocus) {
-                if (!binding.htInputFtin2.text.toString().contains("''")) {
+            if (!binding.htInputFtin2.text.isEmpty()){
+                if (!hasFocus) {
+                    if (!binding.htInputFtin2.text.toString().contains("''")) {
+                        binding.htInputFtin2.setText(
+                            binding.htInputFtin2.text.toString() + "''"
+                        )
+                    }
+                } else {
                     binding.htInputFtin2.setText(
-                        binding.htInputFtin2.text.toString() + "''"
+                        binding.htInputFtin2.text.toString().dropLast(2)
                     )
                 }
-            } else {
-                binding.htInputFtin2.setText(
-                    binding.htInputFtin2.text.toString().dropLast(2)
-                )
+            }else{
+                if (!hasFocus){
+                    binding.htInputFtin2.setText("0''")
+                }
             }
+
         }
 
         binding.htInputCm.addTextChangedListener(object : TextWatcher {
@@ -862,28 +879,28 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     binding.htInputCm.setText(str.replace(",", "."))
                 }
 
-                if (isEu&&!str.isEmpty()){
-                    str=str.replace(",",".")
-                }else if (!isEu&&!str.isEmpty()){
-                    str=str.replace(",",".")
+                if (isEu && !str.isEmpty()) {
+                    str = str.replace(",", ".")
+                } else if (!isEu && !str.isEmpty()) {
+                    str = str.replace(",", ".")
                 }
 
                 if (!str.isEmpty()) {
-                    if (str.contains(".")&&str[str.length-1]!='.') {
+                    if (str.contains(".") && str[str.length - 1] != '.') {
                         //规定小数位数
-                        var decimalCount=""
-                        val dotIndex=str.indexOf('.')
-                        val lastDotIndex=str.lastIndexOf('.')
-                        if (dotIndex!=lastDotIndex){
-                            str=str.removeRange(lastDotIndex,lastDotIndex+1)
+                        var decimalCount = ""
+                        val dotIndex = str.indexOf('.')
+                        val lastDotIndex = str.lastIndexOf('.')
+                        if (dotIndex != lastDotIndex) {
+                            str = str.removeRange(lastDotIndex, lastDotIndex + 1)
                         }
-                         decimalCount = str.substring(str.indexOf(".")+1)
+                        decimalCount = str.substring(str.indexOf(".") + 1)
                         if (decimalCount.length > 1) {
                             isChanged = true
                             binding.htInputCm.setText(
-                                if (isEu){
-                                    formatEurpo.format(str.substring(0, str.indexOf(".") + 2))
-                                }else{
+                                if (isEu) {
+                                    formatEurpo.format(str.substring(0, str.indexOf(".") + 2).toDouble())
+                                } else {
                                     str.substring(0, str.indexOf(".") + 2)
                                 }
                             )
@@ -906,16 +923,16 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                                 tf.format(250)
                             )
                         }
-                    } else if (!str.contains(".")&&!str.isEmpty()){
+                    } else if (!str.contains(".") && !str.isEmpty()) {
                         if (str.length > 3) {
                             isChanged = true
                             binding.htInputCm.setText(
-                                if (isEu){
+                                if (isEu) {
                                     tf.format(str.toInt())
-                                }else{
+                                } else {
                                     tf.format(str.toInt())
                                 }
-                               // tf.format((str).toDouble())
+                                // tf.format((str).toDouble())
                             )
                         }
                         if (str.toDouble() > 250) {
@@ -925,12 +942,13 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                             )
                         }
                     }
-                } else {
-                    isChanged = true
-                    binding.htInputCm.setText(
-                        tf.format(170)
-                    )
                 }
+//                else {
+//                    isChanged = true
+//                    binding.htInputCm.setText(
+//                        tf.format(170)
+//                    )
+//                }
                 isChanged = false
             }
 
@@ -1039,7 +1057,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         ((viewModel.ht_ft.value!! * 12 +
                                 viewModel.ht_in.value!!)).toDouble(), 2.0
                     ) * 703
-                    viewModel.setBmival(tf.format(bmival.toFloat()).replace(",",".").toFloat())
+                    viewModel.setBmival(tf.format(bmival.toFloat()).replace(",", ".").toFloat())
                     viewModel.wttype = "lb"
                     viewModel.httype = "ftin"
                 }
@@ -1051,7 +1069,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         viewModel.ht_cm.value!! * 0.01,
                         2.0
                     )
-                    viewModel.setBmival(tf.format(bmival.toFloat()).replace(",",".").toFloat())
+                    viewModel.setBmival(tf.format(bmival.toFloat()).replace(",", ".").toFloat())
                     viewModel.wttype = "lb"
                     viewModel.httype = "cm"
                 }
@@ -1062,7 +1080,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     val bmival = viewModel.wt_kg.value!! / Math.pow(
                         viewModel.ht_ft.value!! * 0.3048 + viewModel.ht_in.value!! * 0.0254, 2.0
                     )
-                    viewModel.setBmival(tf.format(bmival.toFloat()).replace(",",".").toFloat())
+                    viewModel.setBmival(tf.format(bmival.toFloat()).replace(",", ".").toFloat())
                     viewModel.wttype = "kg"
                     viewModel.httype = "ftin"
                 }
@@ -1073,7 +1091,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     val bmival = viewModel.wt_kg.value!! / Math.pow(
                         viewModel.ht_cm.value!! * 0.01, 2.0
                     )
-                    viewModel.setBmival(tf.format(bmival.toFloat()).replace(",",".").toFloat())
+                    viewModel.setBmival(tf.format(bmival.toFloat()).replace(",", ".").toFloat())
                     viewModel.wttype = "kg"
                     viewModel.httype = "cm"
                 }
