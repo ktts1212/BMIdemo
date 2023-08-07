@@ -1048,6 +1048,41 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
         binding.btnCalculate.setOnClickListener {
 
+            if (binding.wtTab.getTabAt(0)!!.isSelected){
+                val str=binding.wtInput.text.toString()
+                if (!str.isEmpty()){
+                    viewModel.setwtlb(
+
+                        if (isEu){
+                            str.replace(",",".").toDouble()
+                        }else{
+                            str.toDouble()
+                        }
+                    )
+                }else{
+                    viewModel.setwtlb(
+                        140.00
+                    )
+                }
+
+            }else{
+                val str=binding.wtInput.text.toString()
+                if (!str.isEmpty()){
+                    viewModel.setwtkg(
+
+                        if (isEu){
+                            str.replace(",",".").toDouble()
+                        }else{
+                            str.toDouble()
+                        }
+                    )
+                }else{
+                    viewModel.setwtkg(
+                        65.00
+                    )
+                }
+            }
+
             if (viewModel.selectedGender.value != null) {
 
                 if (binding.wtTab.getTabAt(0)!!.isSelected &&

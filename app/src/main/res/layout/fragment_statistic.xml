@@ -58,21 +58,21 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:minHeight="48dp"
                     android:text="@string/day"/>
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:minHeight="48dp"
                     android:text="@string/week"/>
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:minHeight="48dp"
                     android:text="@string/month"/>
 

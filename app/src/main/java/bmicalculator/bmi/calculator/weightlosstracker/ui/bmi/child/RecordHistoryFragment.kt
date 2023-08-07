@@ -128,16 +128,11 @@ class RecordHistoryFragment : DialogFragment() {
 
     fun orderList(list: List<BmiInfo>): List<BmiInfo> {
 
-        Log.d(TAG, "ino list:${list.size}")
         val ls = mutableListOf<History>()
         for (i in 0 until list.size) {
             ls.add(History(list[i], orderTime(list[i])))
         }
         ls.sortByDescending { it.datetimestamp }
-        for (i in 0 until ls.size) {
-            Log.d(TAG, "ls :${ls[i].datetimestamp}")
-            Log.d(TAG, "ls :${ls[i].bmiInfo}")
-        }
 
         var x = 0
         var y = 1
@@ -176,14 +171,14 @@ class RecordHistoryFragment : DialogFragment() {
         return orderedList
     }
 
-    fun orderTime(bmiInfo: BmiInfo): Long {
+    fun orderTime(bmiInfo: BmiInfo): Long{
 
         val l1 = bmiInfo.date!!.split(" ")
         //获取当前的月份和天数
         val day = l1[1].split(",")[0]
         val month = Utils.monthToNumber(l1[0])
-        val dayOfYear = Utils.getDayOfYear(day.toInt(), month)
-        return dayOfYear * 10 + bmiInfo.year * 1000 + bmiInfo.phase.toLong()
+        val dayOfYear = Utils.getDayOfYear(day.toInt(), month,bmiInfo.year)
+        return dayOfYear * 10 + bmiInfo.year * 10000 + bmiInfo.phase.toLong()
     }
 
     fun phaseToNumber(phase: String): Int {

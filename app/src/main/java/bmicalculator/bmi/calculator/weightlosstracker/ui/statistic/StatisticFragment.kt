@@ -18,15 +18,15 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatab
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFactory
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.DWeek
-import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.DYear
-import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.WtWeek
-import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.WtYear
+import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.History
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.CustomMarkerView
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.CustomXAxisRenderer
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.DcFormat
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -36,7 +36,9 @@ import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.android.material.tabs.TabLayout
-import java.time.LocalDateTime
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.concurrent.TimeUnit
 
 private const val TAG = "StatisticFragment"
 
@@ -49,6 +51,8 @@ class StatisticFragment : Fragment() {
     private val kgList = ArrayList<Entry>()
 
     private val lbList = ArrayList<Entry>()
+
+    private val dateList=ArrayList<History>()
 
     private lateinit var viewModel: CalculatorViewModel
 
@@ -81,7 +85,7 @@ class StatisticFragment : Fragment() {
             viewModel.wttype = "kg"
         }
 
-        viewModel.listByYear.observe(requireActivity()) { info ->
+        viewModel.allInfo.observe(requireActivity()) { info ->
 
             info?.let {
                 if (it.isNullOrEmpty()) {
@@ -90,55 +94,49 @@ class StatisticFragment : Fragment() {
 
                     //设置dayBMI
                     viewModel.infoCount.postValue(it.size)
-                    list = orderList(viewModel.listByYear.value!!)
-                    bmiList.clear()
-                    val currentTime = LocalDateTime.now()
+                    //每日数据只有一个且为最新保存的数据
+                    list = orderList(viewModel.allInfo.value!!)
 
                     //dayList记录已天为单位的数据
                     if (!dayList.isEmpty()) {
                         dayList.clear()
                     }
-                    //往dayList中添加数据
+
+                    dateList.clear()
+                    //往dateList中添加数据
+                    //将所有数据及其根据日期获得的时间戳加入dateList
                     for (i in 0 until list!!.size) {
+                        if (list!![i].bmi>maxY){
+                            maxY=list!![i].bmi
+                        }
+
                         val l1 = list!![i].date!!.split(" ")
-                        //获取当前的月份和天数
+                        //获取当前的月份和天数，年
                         val day = l1[1].split(",")[0]
                         val month = Utils.monthToNumber(l1[0])
-                        val dayOfYear = Utils.getDayOfYear(day.toInt(), month)
-                        dayList.add(Entry(dayOfYear.toFloat(),list!![i].bmi))
+                        val year=list!![i].year
+                        val date= LocalDate.of(year,month,day.toInt())
+                        val timeStamp=date.atStartOfDay(
+                            ZoneId.systemDefault()
+                        ).toInstant().toEpochMilli()
+                        dateList.add(History(list!![i],timeStamp))
+                    }
+                    //对dateList进行排序，获取正确的数据顺序
+                    //将第一个数据设置为起始1，
+                    dateList.sortBy { it.datetimestamp }
+                    dayList.add(Entry(1f,dateList[0].bmiInfo.bmi))
+                    //将第一个数据设置为起始1，添加其他数据并计算相差天数
+                    for (i in 1 until dateList.size){
+                        val timeStamp=dateList[i].datetimestamp
+                        val diffInMill=Math.abs(timeStamp-dateList[0].datetimestamp)
+                        //将毫秒转化为天数
+                        Log.d(TAG,"diffInMill:${diffInMill}")
+                        val diffInDays= TimeUnit.MILLISECONDS.toDays(diffInMill)
+                        Log.d(TAG,"diffInDays:${diffInDays}")
+                        dayList.add(Entry((diffInDays+1).toFloat(),dateList[i].bmiInfo.bmi ))
                     }
 
                     Log.d(TAG, "dayList:${dayList}")
-                    dayList.sortBy { it.x }
-
-
-                    kgList.clear()
-                    lbList.clear()
-
-                    for (i in 0..list!!.size - 1) {
-                        val l1 = list!![i].date!!.split(" ")
-                        //获取当前的月份和天数
-                        val day = l1[1].split(",")[0]
-                        val month = Utils.monthToNumber(l1[0])
-
-                        val dayOfYear = Utils.getDayOfYear(day.toInt(), month)
-                        kgList.add(Entry(dayOfYear.toFloat(), list!![i].wt_kg.toFloat()))
-                        lbList.add(Entry(dayOfYear.toFloat(), list!![i].wt_lb.toFloat()))
-                        bmiList.add(Entry(dayOfYear.toFloat(), list!![i].bmi))
-                    }
-
-
-                    bmiList.sortBy { it.x }
-                    if (bmiList[0].x != 1f) {
-                        bmiList.add(0, Entry(1f, 0f))
-                    }
-
-                    val currentDate = LocalDateTime.now()
-                    while (bmiList[bmiList.size - 1].x < currentDate.dayOfYear) {
-                        val day = bmiList[bmiList.size - 1].x + 1
-                        bmiList.add(Entry(day, 0f))
-
-                    }
                     chartStyle(dayList)
 
                     binding.staLinechart1.apply {
@@ -154,14 +152,21 @@ class StatisticFragment : Fragment() {
                         description.isEnabled = false
                     }
 
+                    if (isAdded){
+                        binding.staLinechart1.setXAxisRenderer(
+                            CustomXAxisRenderer(0,
+                                dateList[0].datetimestamp.toString(),requireContext(),
+                            binding.staLinechart1.viewPortHandler,binding.staLinechart1.xAxis,
+                            binding.staLinechart1.getTransformer(YAxis.AxisDependency.LEFT)
+                        )
+                        )
+                    }
+
                     val xAxis = binding.staLinechart1.xAxis
-//                    val render=MyLineChartXRender(binding.staLinechart1.viewPortHandler,
-//                    binding.staLinechart1.xAxis,binding.staLinechart1.getTransformer(YAxis.AxisDependency.LEFT))
-//                    binding.staLinechart1.setXAxisRenderer(render)
 
                     xAxis.apply {
                         isEnabled = true
-                        gridColor = Color.parseColor("#EEEEEE")
+                        gridColor = Color.parseColor("#60EEEEEE")
                         if (isAdded()) {
                             gridLineWidth = Utils.dip2px(requireContext(), 0.5f).toFloat()
                         }
@@ -175,22 +180,8 @@ class StatisticFragment : Fragment() {
                                 R.font.montserrat_extrabold
                             )
                         }
-
-                        //setCenterAxisLabels(true)
                         setDrawLimitLinesBehindData(false)
                         position = XAxis.XAxisPosition.BOTTOM
-                        //yOffset=20f
-                        valueFormatter = object : ValueFormatter() {
-                            override fun getFormattedValue(value: Float): String {
-                                if (binding.staTabHeader.getTabAt(0)!!.isSelected) {
-                                    val dMonth = Utils.getDayOfMonth(value.toInt())
-                                    return dMonth.day.toString()
-                                } else {
-                                    return value.toInt().toString()
-                                }
-
-                            }
-                        }
                         spaceMax = 0.5f
                     }
                     //取消右侧y轴
@@ -210,32 +201,18 @@ class StatisticFragment : Fragment() {
                                 requireContext(),
                                 R.font.montserrat_extrabold
                             )
-
                         }
                         setLabelCount(6, true)
                         xOffset = 15f
-                        axisMinimum = 0f
+                        //axisMinimum = 0f
+                        axisMaximum=maxY*4/3
                         minWidth = 45f
                         maxWidth = 45f
                         valueFormatter = object : ValueFormatter() {
                             override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-                                if (value == 0f) {
-                                    return 0f.toString()
-                                } else {
                                     return DcFormat.tf.format(value)
-                                }
-                            }
-
-                            override fun getFormattedValue(value: Float): String {
-                                Log.d(TAG, "value:${value}")
-                                if (value == 0f) {
-                                    return ""
-                                } else {
-                                    return value.toString()
-                                }
                             }
                         }
-
                         spaceTop = 25f
                     }
 
@@ -253,122 +230,149 @@ class StatisticFragment : Fragment() {
 
 
 
-
-                    if (viewModel.wttype == "kg") {
-                        kgList.sortBy { it.x }
-                        if (kgList[0].x != 1f) {
-                            kgList.add(0, Entry(1f, 0f))
-                        }
-                        chart2Style(kgList)
-                    } else {
-                        lbList.sortBy { it.x }
-                        if (lbList[0].x != 1f) {
-                            lbList.add(0, Entry(1f, 0f))
-                        }
-                        chart2Style(lbList)
-                    }
-
-
-                    binding.staLinechart2.apply {
-                        setTouchEnabled(true)
-                        setDrawGridBackground(false)
-                        legend.isEnabled = false
-                        //自适应
-                        isAutoScaleMinMaxEnabled = true
-                        //x轴可拖拽
-                        isDragXEnabled = true
-                        setDrawBorders(false)
-                        setScaleEnabled(false)
-                        description.isEnabled = false
-                    }
-
-
-                    val xAxisto = binding.staLinechart2.xAxis
-
-                    xAxisto.apply {
-                        isEnabled = true
-                        gridColor = Color.parseColor("#EEEEEE")
-                        if (isAdded()) {
-                            gridLineWidth = Utils.dip2px(requireContext(), 0.5f).toFloat()
-                        }
-                        //是否绘制x轴
-                        setDrawAxisLine(false)
-                        textColor = Color.WHITE
-                        textSize = 12f
-                        if (isAdded()) {
-                            typeface = ResourcesCompat.getFont(
-                                requireContext(),
-                                R.font.montserrat_extrabold
-                            )
-                        }
-
-                        //setCenterAxisLabels(true)
-                        setDrawLimitLinesBehindData(false)
-                        position = XAxis.XAxisPosition.BOTTOM
-                        //yOffset=20f
-                        valueFormatter = object : ValueFormatter() {
-                            override fun getFormattedValue(value: Float): String {
-                                if (binding.staTabHeader.getTabAt(0)!!.isSelected) {
-                                    val dMonth = Utils.getDayOfMonth(value.toInt())
-
-                                    return dMonth.day.toString()
-                                } else {
-                                    return value.toInt().toString()
-                                }
-
-                            }
-                        }
-                        spaceMax = 0.5f
-                    }
-
-
-                    binding.staLinechart2.axisRight.apply {
-                        isEnabled = false
-                        setDrawGridLines(false)
-                    }
-
-                    binding.staLinechart2.axisLeft.apply {
-                        setDrawAxisLine(false)
-                        setDrawGridLines(false)
-                        setDrawZeroLine(false)
-                        textColor = Color.WHITE
-                        textSize = 12f
-                        if (isAdded) {
-                            typeface = ResourcesCompat.getFont(
-                                requireContext(),
-                                R.font.montserrat_extrabold
-                            )
-
-                        }
-                        setLabelCount(6, true)
-                        xOffset = 15f
-                        axisMinimum = 0f
-                        minWidth = 45f
-                        maxWidth = 45f
-                        valueFormatter = object : ValueFormatter() {
-                            override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-                                if (value == 0f) {
-                                    return 0f.toString()
-                                } else {
-                                    return DcFormat.tf.format(value)
-                                }
-                            }
-                        }
-
-                        spaceTop = 25f
-                    }
-
-                    binding.staLinechart2.isHighlightPerTapEnabled = true
-                    val set2 = binding.staLinechart2.data.getDataSetByIndex(0)
-                    val lastEntryIndex2 = set2.entryCount - 1
-                    val lastEntry2 = set2.getEntryForIndex(lastEntryIndex2)
-                    binding.staLinechart2.highlightValue(lastEntry2.x, 0, true)
-                    //使用markview显示
-                    binding.staLinechart2.data.isHighlightEnabled = true
-
-                    //重绘刷新
-                    binding.staLinechart2.notifyDataSetChanged()
-                    binding.staLinechart2.invalidate()
+//                    kgList.clear()
+//                    lbList.clear()
+//
+//                    for (i in 0..list!!.size - 1) {
+//                        val l1 = list!![i].date!!.split(" ")
+//                        //获取当前的月份和天数
+//                        val day = l1[1].split(",")[0]
+//                        val month = Utils.monthToNumber(l1[0])
+//
+//                        val dayOfYear = Utils.getDayOfYear(day.toInt(), month)
+//                        kgList.add(Entry(dayOfYear.toFloat(), list!![i].wt_kg.toFloat()))
+//                        lbList.add(Entry(dayOfYear.toFloat(), list!![i].wt_lb.toFloat()))
+//                        bmiList.add(Entry(dayOfYear.toFloat(), list!![i].bmi))
+//                    }
+//
+//
+//                    bmiList.sortBy { it.x }
+//                    if (bmiList[0].x != 1f) {
+//                        bmiList.add(0, Entry(1f, 0f))
+//                    }
+//
+//                    val currentDate = LocalDateTime.now()
+//                    while (bmiList[bmiList.size - 1].x < currentDate.dayOfYear) {
+//                        val day = bmiList[bmiList.size - 1].x + 1
+//                        bmiList.add(Entry(day, 0f))
+//
+//                    }
+//
+//                    if (viewModel.wttype == "kg") {
+//                        kgList.sortBy { it.x }
+//                        if (kgList[0].x != 1f) {
+//                            kgList.add(0, Entry(1f, 0f))
+//                        }
+//                        chart2Style(kgList)
+//                    } else {
+//                        lbList.sortBy { it.x }
+//                        if (lbList[0].x != 1f) {
+//                            lbList.add(0, Entry(1f, 0f))
+//                        }
+//                        chart2Style(lbList)
+//                    }
+//
+//
+//                    binding.staLinechart2.apply {
+//                        setTouchEnabled(true)
+//                        setDrawGridBackground(false)
+//                        legend.isEnabled = false
+//                        //自适应
+//                        isAutoScaleMinMaxEnabled = true
+//                        //x轴可拖拽
+//                        isDragXEnabled = true
+//                        setDrawBorders(false)
+//                        setScaleEnabled(false)
+//                        description.isEnabled = false
+//                    }
+//
+//
+//                    val xAxisto = binding.staLinechart2.xAxis
+//
+//                    xAxisto.apply {
+//                        isEnabled = true
+//                        gridColor = Color.parseColor("#EEEEEE")
+//                        if (isAdded()) {
+//                            gridLineWidth = Utils.dip2px(requireContext(), 0.5f).toFloat()
+//                        }
+//                        //是否绘制x轴
+//                        setDrawAxisLine(false)
+//                        textColor = Color.WHITE
+//                        textSize = 12f
+//                        if (isAdded()) {
+//                            typeface = ResourcesCompat.getFont(
+//                                requireContext(),
+//                                R.font.montserrat_extrabold
+//                            )
+//                        }
+//
+//                        //setCenterAxisLabels(true)
+//                        setDrawLimitLinesBehindData(false)
+//                        position = XAxis.XAxisPosition.BOTTOM
+//                        //yOffset=20f
+//                        valueFormatter = object : ValueFormatter() {
+//                            override fun getFormattedValue(value: Float): String {
+//                                if (binding.staTabHeader.getTabAt(0)!!.isSelected) {
+//                                    val dMonth = Utils.getDayOfMonth(value.toInt())
+//
+//                                    return dMonth.day.toString()
+//                                } else {
+//                                    return value.toInt().toString()
+//                                }
+//
+//                            }
+//                        }
+//                        spaceMax = 0.5f
+//                    }
+//
+//
+//                    binding.staLinechart2.axisRight.apply {
+//                        isEnabled = false
+//                        setDrawGridLines(false)
+//                    }
+//
+//                    binding.staLinechart2.axisLeft.apply {
+//                        setDrawAxisLine(false)
+//                        setDrawGridLines(false)
+//                        setDrawZeroLine(false)
+//                        textColor = Color.WHITE
+//                        textSize = 12f
+//                        if (isAdded) {
+//                            typeface = ResourcesCompat.getFont(
+//                                requireContext(),
+//                                R.font.montserrat_extrabold
+//                            )
+//
+//                        }
+//                        setLabelCount(6, true)
+//                        xOffset = 15f
+//                        axisMinimum = 0f
+//                        minWidth = 45f
+//                        maxWidth = 45f
+//                        valueFormatter = object : ValueFormatter() {
+//                            override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+//                                if (value == 0f) {
+//                                    return 0f.toString()
+//                                } else {
+//                                    return DcFormat.tf.format(value)
+//                                }
+//                            }
+//                        }
+//
+//                        spaceTop = 25f
+//                    }
+//
+//                    binding.staLinechart2.isHighlightPerTapEnabled = true
+//                    val set2 = binding.staLinechart2.data.getDataSetByIndex(0)
+//                    val lastEntryIndex2 = set2.entryCount - 1
+//                    val lastEntry2 = set2.getEntryForIndex(lastEntryIndex2)
+//                    binding.staLinechart2.highlightValue(lastEntry2.x, 0, true)
+//                    //使用markview显示
+//                    binding.staLinechart2.data.isHighlightEnabled = true
+//
+//                    //重绘刷新
+//                    binding.staLinechart2.notifyDataSetChanged()
+//                    binding.staLinechart2.invalidate()
                 }
             }
         }
@@ -443,6 +447,7 @@ class StatisticFragment : Fragment() {
 
         binding.staTabHeader.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                //以周为单位
                 if (tab!!.position == 1) {
                     val ls = orderList(viewModel.listByYear.value!!)
                     val list = weekOrderdList(ls)
@@ -635,49 +640,49 @@ class StatisticFragment : Fragment() {
         return ls
     }
 
-    fun wtKgWeekOrderList(list: List<BmiInfo>): List<WtWeek> {
-        val ls = mutableListOf<WtWeek>()
-        for (i in 0 until list.size) {
-            if (ls.filter {
-                    it.week == Utils.dayToWeek(getDayOfYearFromDate(list[i]))
-                }.isEmpty()) {
-                ls.add(
-                    WtWeek(
-                        Utils.dayToWeek(getDayOfYearFromDate(list[i])),
-                        list[i].wt_kg.toFloat()
-                    )
-                )
-            } else {
-                val index =
-                    ls.indexOfFirst { it.week == Utils.dayToWeek(getDayOfYearFromDate(list[i])) }
-                ls[index].weight =
-                    DcFormat.tf.format((ls[index].weight + list[i].wt_kg) / 2).toFloat()
-            }
-        }
-        return ls
-    }
+//    fun wtKgWeekOrderList(list: List<BmiInfo>): List<WtWeek> {
+//        val ls = mutableListOf<WtWeek>()
+//        for (i in 0 until list.size) {
+//            if (ls.filter {
+//                    it.week == Utils.dayToWeek(getDayOfYearFromDate(list[i]))
+//                }.isEmpty()) {
+//                ls.add(
+//                    WtWeek(
+//                        Utils.dayToWeek(getDayOfYearFromDate(list[i])),
+//                        list[i].wt_kg.toFloat()
+//                    )
+//                )
+//            } else {
+//                val index =
+//                    ls.indexOfFirst { it.week == Utils.dayToWeek(getDayOfYearFromDate(list[i])) }
+//                ls[index].weight =
+//                    DcFormat.tf.format((ls[index].weight + list[i].wt_kg) / 2).toFloat()
+//            }
+//        }
+//        return ls
+//    }
 
-    fun wtLbWeekOrderList(list: List<BmiInfo>): List<WtWeek> {
-        val ls = mutableListOf<WtWeek>()
-        for (i in 0 until list.size) {
-            if (ls.filter {
-                    it.week == Utils.dayToWeek(getDayOfYearFromDate(list[i]))
-                }.isEmpty()) {
-                ls.add(
-                    WtWeek(
-                        Utils.dayToWeek(getDayOfYearFromDate(list[i])),
-                        list[i].wt_lb.toFloat()
-                    )
-                )
-            } else {
-                val index =
-                    ls.indexOfFirst { it.week == Utils.dayToWeek(getDayOfYearFromDate(list[i])) }
-                ls[index].weight =
-                    DcFormat.tf.format((ls[index].weight + list[i].wt_lb) / 2).toFloat()
-            }
-        }
-        return ls
-    }
+//    fun wtLbWeekOrderList(list: List<BmiInfo>): List<WtWeek> {
+//        val ls = mutableListOf<WtWeek>()
+//        for (i in 0 until list.size) {
+//            if (ls.filter {
+//                    it.week == Utils.dayToWeek(getDayOfYearFromDate(list[i]))
+//                }.isEmpty()) {
+//                ls.add(
+//                    WtWeek(
+//                        Utils.dayToWeek(getDayOfYearFromDate(list[i])),
+//                        list[i].wt_lb.toFloat()
+//                    )
+//                )
+//            } else {
+//                val index =
+//                    ls.indexOfFirst { it.week == Utils.dayToWeek(getDayOfYearFromDate(list[i])) }
+//                ls[index].weight =
+//                    DcFormat.tf.format((ls[index].weight + list[i].wt_lb) / 2).toFloat()
+//            }
+//        }
+//        return ls
+//    }
 
 
     fun weekOrderdList(list: List<BmiInfo>): List<DWeek> {
@@ -690,9 +695,12 @@ class StatisticFragment : Fragment() {
                 ls.add(DWeek(Utils.dayToWeek(getDayOfYearFromDate(list[i])), list[i].bmi))
             } else {
                 val index =
-                    ls.indexOfFirst { it.week == Utils.dayToWeek(getDayOfYearFromDate(list[i])) }
+                    ls.indexOfFirst { it.week == Utils.dayToWeekTest(getDayOfYearFromDate(list[i])) }
                 ls[index].bmi = DcFormat.tf.format((ls[index].bmi + list[i].bmi) / 2).toFloat()
             }
+        }
+        ls.forEach {
+            Log.d(TAG,"daytoweekTest:${it.week}")
         }
         return ls
     }
@@ -702,65 +710,64 @@ class StatisticFragment : Fragment() {
         //获取当前的月份和天数
         val day = l1[1].split(",")[0]
         val month = Utils.monthToNumber(l1[0])
-        Log.d(TAG, "day is :${Utils.getDayOfYear(day.toInt(), month)}")
-        return Utils.getDayOfYear(day.toInt(), month)
+        return Utils.getDayOfYear(day.toInt(), month,bmiInfo.year)
     }
 
-    fun monthOrderList(list: List<BmiInfo>): List<DYear> {
-        val ls = mutableListOf<DYear>()
-        for (i in 0 until list.size) {
-            val month = Utils.dayToMonth(getDayOfYearFromDate(list[i]))
-            if (ls.filter {
-                    it.month == month
-                }.isEmpty()) {
-                ls.add(DYear(month, list[i].bmi))
-            } else {
-                val index = ls.indexOfFirst { it.month == month }
-                ls[index].bmi = DcFormat.tf.format((ls[index].bmi + list[i].bmi) / 2).toFloat()
-            }
-        }
-        return ls
-    }
+//    fun monthOrderList(list: List<BmiInfo>): List<DYear> {
+//        val ls = mutableListOf<DYear>()
+//        for (i in 0 until list.size) {
+//            val month = Utils.dayToMonth(getDayOfYearFromDate(list[i]))
+//            if (ls.filter {
+//                    it.month == month
+//                }.isEmpty()) {
+//                ls.add(DYear(month, list[i].bmi))
+//            } else {
+//                val index = ls.indexOfFirst { it.month == month }
+//                ls[index].bmi = DcFormat.tf.format((ls[index].bmi + list[i].bmi) / 2).toFloat()
+//            }
+//        }
+//        return ls
+//    }
 
-    fun wtKgMonthOrderList(list: List<BmiInfo>): List<WtYear> {
-        val ls = mutableListOf<WtYear>()
-        for (i in 0 until list.size) {
-            val month = Utils.dayToMonth(getDayOfYearFromDate(list[i]))
-            if (ls.filter {
-                    it.month == month
-                }.isEmpty()) {
-                ls.add(WtYear(month, list[i].wt_kg.toFloat()))
-            } else {
-                val index = ls.indexOfFirst { it.month == month }
-                ls[index].weight =
-                    DcFormat.tf.format((ls[index].weight + list[i].wt_kg) / 2).toFloat()
-            }
-        }
-        return ls
-    }
-
-    fun wtLbMonthOrderList(list: List<BmiInfo>): List<WtYear> {
-        val ls = mutableListOf<WtYear>()
-        for (i in 0 until list.size) {
-            val month = Utils.dayToMonth(getDayOfYearFromDate(list[i]))
-            if (ls.filter {
-                    it.month == month
-                }.isEmpty()) {
-                ls.add(WtYear(month, list[i].wt_lb.toFloat()))
-            } else {
-                val index = ls.indexOfFirst { it.month == month }
-                ls[index].weight =
-                    DcFormat.tf.format((ls[index].weight + list[i].wt_lb) / 2).toFloat()
-            }
-        }
-        return ls
-    }
+//    fun wtKgMonthOrderList(list: List<BmiInfo>): List<WtYear> {
+//        val ls = mutableListOf<WtYear>()
+//        for (i in 0 until list.size) {
+//            val month = Utils.dayToMonth(getDayOfYearFromDate(list[i]))
+//            if (ls.filter {
+//                    it.month == month
+//                }.isEmpty()) {
+//                ls.add(WtYear(month, list[i].wt_kg.toFloat()))
+//            } else {
+//                val index = ls.indexOfFirst { it.month == month }
+//                ls[index].weight =
+//                    DcFormat.tf.format((ls[index].weight + list[i].wt_kg) / 2).toFloat()
+//            }
+//        }
+//        return ls
+//    }
+//
+//    fun wtLbMonthOrderList(list: List<BmiInfo>): List<WtYear> {
+//        val ls = mutableListOf<WtYear>()
+//        for (i in 0 until list.size) {
+//            val month = Utils.dayToMonth(getDayOfYearFromDate(list[i]))
+//            if (ls.filter {
+//                    it.month == month
+//                }.isEmpty()) {
+//                ls.add(WtYear(month, list[i].wt_lb.toFloat()))
+//            } else {
+//                val index = ls.indexOfFirst { it.month == month }
+//                ls[index].weight =
+//                    DcFormat.tf.format((ls[index].weight + list[i].wt_lb) / 2).toFloat()
+//            }
+//        }
+//        return ls
+//    }
 
 
     fun chartStyle(bmiList: List<Entry>) {
 
         val lineDataSet = LineDataSet(bmiList, null)
-
+        //填充数据线到x轴之间的区域
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
             val fillGradient = GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
@@ -778,6 +785,7 @@ class StatisticFragment : Fragment() {
             //setDrawValues(false)
             valueFormatter = object : ValueFormatter() {
                 override fun getPointLabel(entry: Entry?): String {
+                    //获取图表一的数据集
                     val lastIndex = binding.staLinechart1.data.getDataSetByIndex(0)
                         .entryCount
 
@@ -800,7 +808,6 @@ class StatisticFragment : Fragment() {
                     R.font.montserrat_extrabold
                 )
             }
-
             //取消高亮点线绘制
             //isHighlightEnabled = false
             setDrawFilled(true)
@@ -817,6 +824,7 @@ class StatisticFragment : Fragment() {
         binding.staLinechart1.data = lineData
 
         binding.staLinechart1.moveViewToX(bmiList[bmiList.size - 1].x)
+
         if (bmiList[bmiList.size - 1].x < 7) {
 
             binding.staLinechart1.xAxis.setLabelCount(bmiList.size, false)

@@ -5,7 +5,9 @@ import android.util.Log
 import bmicalculator.bmi.calculator.weightlosstracker.R
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.DMonth
 import java.time.LocalDate
+import java.time.temporal.WeekFields
 import java.util.Calendar
+import java.util.Locale
 import kotlin.math.pow
 
 object Utils {
@@ -98,17 +100,17 @@ object Utils {
         return monthnum
     }
 
-    fun getDayOfYear(dayOfMonth:Int,month:Int):Int{
-        val currentDate= LocalDate.now()
+    fun getDayOfYear(dayOfMonth:Int,month:Int,year:Int):Int{
         val calendar=Calendar.getInstance()
-        calendar.set(Calendar.YEAR,currentDate.year)
+        calendar.set(Calendar.YEAR,year)
         calendar.set(Calendar.MONTH,month-1)
         calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth)
         return calendar.get(Calendar.DAY_OF_YEAR)
     }
 
-    fun getDayOfMonth(dayOFYear:Int):DMonth{
+    fun getDayOfMonth(dayOFYear:Int,year: Int):DMonth{
         val calendar=Calendar.getInstance()
+        calendar.set(Calendar.YEAR,year)
         calendar.set(Calendar.DAY_OF_YEAR,dayOFYear)
         val dayOfMonth=calendar.get(Calendar.DAY_OF_MONTH)
         val month=calendar.get(Calendar.MONTH)+1
@@ -122,6 +124,21 @@ object Utils {
         return calendar.get(Calendar.WEEK_OF_YEAR)
     }
 
+    fun dayToWeekNew(dayOfYear:Int):Int{
+        val calendar=Calendar.getInstance()
+        calendar.minimalDaysInFirstWeek=4
+        calendar.set(Calendar.DAY_OF_YEAR,dayOfYear)
+        return calendar.get(Calendar.WEEK_OF_YEAR)
+    }
+
+//    fun dayToWeekTest(dayOfYear:Int):Int{
+//        val currentYear=LocalDate.now().year
+//        val dMonth= getDayOfMonth(dayOfYear)
+//        val date=LocalDate.of(currentYear,dMonth.month,dMonth.day)
+//        val weekFields=WeekFields.of(Locale.getDefault())
+//        val weekNumber=date.get(weekFields.weekOfWeekBasedYear())
+//        return weekNumber
+//    }
     fun dayToMonth(dayOfYear: Int): Int {
         val calendar=Calendar.getInstance()
         calendar.set(Calendar.YEAR,LocalDate.now().year)
@@ -129,6 +146,21 @@ object Utils {
         return calendar.get(Calendar.MONTH)+1
     }
 
+    fun determineDayOfWeekAndWeekOfMonth(date: LocalDate):Boolean{
+        val calendar=Calendar.getInstance()
+        calendar.set(Calendar.YEAR,date.year)
+        calendar.set(Calendar.MONTH,date.monthValue)
+        calendar.set(Calendar.DAY_OF_MONTH,date.dayOfMonth)
+        val dayOfWeek=calendar.get(Calendar.DAY_OF_WEEK)
+        val weekOfMonth=calendar.get(Calendar.WEEK_OF_MONTH)
+        val dayOfMonth=calendar.get(Calendar.DAY_OF_MONTH)
+
+        if (dayOfWeek==Calendar.MONDAY&&weekOfMonth==1&&dayOfMonth<=7){
+            return true
+        }else{
+            return false
+        }
+    }
 
     fun phaseToNum(context: Context,phase:String):Int{
         when(phase){
@@ -168,5 +200,24 @@ object Utils {
                 throw Exception("numToPhase occur error")
             }
         }
+    }
+
+    fun numToMonth(num: Int): String {
+        val monthnum = when (num) {
+             1-> "Jan"
+             2-> "Feb"
+             3-> "Mar"
+             4-> "Apr"
+             5-> "May"
+             6-> "June"
+             7-> "July"
+             8-> "Aug"
+             9-> "Sep"
+             10-> "Oct"
+             11-> "Nov"
+             12-> "Dec"
+            else -> "null"
+        }
+        return monthnum
     }
 }
