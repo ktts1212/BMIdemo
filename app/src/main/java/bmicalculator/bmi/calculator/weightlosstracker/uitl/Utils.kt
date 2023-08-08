@@ -3,11 +3,13 @@ package bmicalculator.bmi.calculator.weightlosstracker.uitl
 import android.content.Context
 import android.util.Log
 import bmicalculator.bmi.calculator.weightlosstracker.R
-import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.DMonth
+import java.time.Instant
 import java.time.LocalDate
-import java.time.temporal.WeekFields
+import java.time.LocalDateTime
+import java.time.Period
+import java.time.ZoneId
 import java.util.Calendar
-import java.util.Locale
+import java.util.Date
 import kotlin.math.pow
 
 object Utils {
@@ -41,6 +43,11 @@ object Utils {
     fun px2dip(context: Context,pxValue:Float):Int{
         val scale=context.resources.displayMetrics.density
         return (pxValue/scale+0.5f).toInt()
+    }
+
+    fun sp2px(context: Context,pxValue: Float):Int{
+        val scale=context.resources.displayMetrics.scaledDensity
+        return (pxValue*scale+0.5f).toInt()
     }
 
     fun minWtftintokg(f:Int,i:Int): Double {
@@ -108,14 +115,14 @@ object Utils {
         return calendar.get(Calendar.DAY_OF_YEAR)
     }
 
-    fun getDayOfMonth(dayOFYear:Int,year: Int):DMonth{
-        val calendar=Calendar.getInstance()
-        calendar.set(Calendar.YEAR,year)
-        calendar.set(Calendar.DAY_OF_YEAR,dayOFYear)
-        val dayOfMonth=calendar.get(Calendar.DAY_OF_MONTH)
-        val month=calendar.get(Calendar.MONTH)+1
-        return DMonth(dayOfMonth,month)
-    }
+//    fun getDayOfMonth(dayOFYear:Int,year: Int): TimeBMi {
+//        val calendar=Calendar.getInstance()
+//        calendar.set(Calendar.YEAR,year)
+//        calendar.set(Calendar.DAY_OF_YEAR,dayOFYear)
+//        val dayOfMonth=calendar.get(Calendar.DAY_OF_MONTH)
+//        val month=calendar.get(Calendar.MONTH)+1
+//        return TimeBMi(dayOfMonth,month)
+//    }
 
     fun dayToWeek(dayOfYear:Int):Int{
         val calendar=Calendar.getInstance()
@@ -160,6 +167,34 @@ object Utils {
         }else{
             return false
         }
+    }
+
+    fun isInFirstWeekOfMonth(date:LocalDate):Boolean{
+        return date.dayOfMonth<=7
+    }
+
+    fun getMondayOnWeek(timeStamp:Long):Long{
+        val cal=Calendar.getInstance()
+        cal.time= Date(timeStamp)
+        cal.firstDayOfWeek=Calendar.MONDAY
+        cal.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY)
+        return cal.time.time
+    }
+
+    fun getFirstDayOnMonth(timeStamp: Long):Long{
+        val cal=Calendar.getInstance()
+        cal.time=Date(timeStamp)
+        cal.set(Calendar.DAY_OF_MONTH,1)
+        return cal.time.time
+    }
+
+    fun monthsBewteen(timeStamp1: Long,timeStamp2: Long):Long{
+        val instant1= Instant.ofEpochSecond(timeStamp1/1000)
+        val instant2=Instant.ofEpochSecond(timeStamp2/1000)
+
+        val date1=LocalDateTime.ofInstant(instant1, ZoneId.systemDefault()).toLocalDate()
+        val date2=LocalDateTime.ofInstant(instant2, ZoneId.systemDefault()).toLocalDate()
+        return Math.abs(Period.between(date1,date2).toTotalMonths())
     }
 
     fun phaseToNum(context: Context,phase:String):Int{

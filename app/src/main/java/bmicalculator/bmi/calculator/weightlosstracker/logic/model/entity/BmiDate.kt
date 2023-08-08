@@ -1,7 +1,7 @@
 package bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity
 
-class DWeek(
-    var week:Int,
+class BmiDate(
+    var timeStamp:Long,
     var bmi:Float
 ) {
 }

@@ -53,19 +53,20 @@
 
     <ImageView
         android:id="@+id/big_circle"
-        android:layout_centerInParent="true"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:backgroundTint="@color/white"
-        android:background="@drawable/shape_circle2"
-        android:layout_below="@id/view_space"/>
-
-    <ImageView
         android:layout_width="12dp"
         android:layout_height="12dp"
         android:layout_below="@id/view_space"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="2dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shape_circle2"
+        android:backgroundTint="@color/white" />
+
+    <ImageView
+        android:id="@+id/small_circle"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_below="@id/view_space"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="1dp"
         android:background="@drawable/shape_circle1"
         android:backgroundTint="@color/purple_200" />
 

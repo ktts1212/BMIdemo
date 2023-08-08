@@ -1,29 +1,22 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.calculator
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
-import android.widget.AutoCompleteTextView
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,10 +32,8 @@ import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.DatePi
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.SettingFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.TimePickerFragment
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.CenterItemUtils
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.DcFormat
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.LanguageHelper
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.textfield.TextInputLayout
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
 import java.text.DateFormatSymbols
 import java.text.DecimalFormat
@@ -93,6 +84,31 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.allInfo.observe(requireActivity()) {
+            if (!it.isNullOrEmpty()) {
+                if (isAdded){
+                    val constraintSet= ConstraintSet()
+                    val constraintLayout=binding.childLayout
+                    constraintSet.clone(constraintLayout)
+                    constraintSet.connect(R.id.btn_calculate,
+                        ConstraintSet.TOP, R.id.gender_card_male, ConstraintSet.BOTTOM,
+                        Utils.dip2px(requireContext(),22.5f))
+                    constraintSet.applyTo(constraintLayout)
+                }
+            } else {
+                if (isAdded){
+                    val constraintSet= ConstraintSet()
+                    val constraintLayout=binding.childLayout
+                    constraintSet.clone(constraintLayout)
+                    constraintSet.connect(R.id.btn_calculate,
+                        ConstraintSet.TOP, R.id.gender_card_male, ConstraintSet.BOTTOM,
+                        Utils.dip2px(requireContext(),63.5f))
+                    constraintSet.applyTo(constraintLayout)
+                }
+            }
+        }
+
 
         //标题用户点击
         binding.calUser.setOnClickListener {
@@ -1141,7 +1157,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         }
     }
 
-
+    private lateinit var adapter: AgeSelectorAdapter
     fun ageinit() {
         binding.ageRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -1165,12 +1181,15 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
             }
         })
-        //滑动之后100ms后移动到中心位置
-        binding.ageRecyclerView.postDelayed({
-            binding.ageRecyclerView.scrollToPosition(childViewHalfCount + 25)
-            //scrollToCenter(28)
-        }, 100L)
-
+        if (isAdded){
+            binding.ageRecyclerView.scrollToPosition(childViewHalfCount + 24)
+            //滑动之后100ms后移动到中心位置
+            binding.ageRecyclerView.postDelayed({
+                if (::adapter.isInitialized){
+                    scrollToCenter(26)
+                }
+            }, 100L)
+        }
     }
 
     fun initData() {
@@ -1191,7 +1210,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
     private val centerViewItems = ArrayList<CenterItemUtils.CenterViewItem>()
     private var isTouch = false
-    private lateinit var adapter: AgeSelectorAdapter
+
 
     @SuppressLint("ClickableViewAccessibility")
     fun findView() {
@@ -1255,7 +1274,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
     private val decelerateInterpolator = DecelerateInterpolator()
     fun scrollToCenter(position: Int) {
 
-        var pos = if (position < childViewHalfCount) childViewHalfCount
+        val pos = if (position < childViewHalfCount) childViewHalfCount
         else if (position >= childViewHalfCount && position < adapter.itemCount - childViewHalfCount - 1)
             position
         else adapter.itemCount - childViewHalfCount - 1

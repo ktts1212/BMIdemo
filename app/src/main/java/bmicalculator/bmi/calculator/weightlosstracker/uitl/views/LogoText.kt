@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
 
 class LogoText(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
@@ -18,10 +19,12 @@ class LogoText(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        paint.textSize=220f
-        canvas?.drawText("BMI",150f,150f,paint)
+        paint.textSize=Utils.dip2px(context,71f).toFloat()
+        canvas?.drawText("BMI",Utils.dip2px(context,50f).toFloat(),
+            Utils.dip2px(context,50f).toFloat(),paint)
         paint.textAlign=Paint.Align.LEFT
-        paint.textSize=150f
-        canvas?.drawText("Calculator",150f,300f,paint)
+        paint.textSize=Utils.dip2px(context,50f).toFloat()
+        canvas?.drawText("Calculator",Utils.dip2px(context,50f).toFloat(),
+            Utils.dip2px(context,100f).toFloat(),paint)
     }
 }

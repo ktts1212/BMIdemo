@@ -14,7 +14,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -25,7 +24,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import bmicalculator.bmi.calculator.weightlosstracker.MainActivity
 import bmicalculator.bmi.calculator.weightlosstracker.R
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.FragmentCalculatorResultBinding
 import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
@@ -37,16 +35,13 @@ import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorVi
 import bmicalculator.bmi.calculator.weightlosstracker.ui.statistic.StatisticFragment
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.ChildBmiDialData
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.DcFormat
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.UserStatus
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Arrays
-import kotlin.math.max
 import kotlin.random.Random
 
 private const val TAG = "Calres"
@@ -124,22 +119,20 @@ class CalculatorResultFragment : DialogFragment() {
             }
         }
 
-        if (UserStatus.ishasRecord) {
-            binding.bmiTypeTip.visibility = View.VISIBLE
-            binding.bmiCalType.visibility = View.GONE
-            binding.bmiAdLayout.visibility = View.VISIBLE
-
-        } else {
-            binding.bmiTypeTip.visibility = View.GONE
-            binding.bmiCalType.visibility = View.VISIBLE
-            binding.bmiAdLayout.visibility = View.GONE
+        viewModel.allInfo.observe(requireActivity()){
+            if (!it.isNullOrEmpty()){
+                binding.bmiTypeTip.visibility = View.VISIBLE
+                binding.bmiCalType.visibility = View.GONE
+                binding.bmiAdLayout.visibility = View.VISIBLE
+            }else{
+                binding.bmiTypeTip.visibility = View.GONE
+                binding.bmiCalType.visibility = View.VISIBLE
+                binding.bmiAdLayout.visibility = View.GONE
+            }
         }
 
-
-
-
         binding.bmiCalTypeCard.setOnClickListener {
-            if (UserStatus.ishasRecord) {
+            if (viewModel.allInfo.value!=null) {
                 val dialog = BmiCalTypeTableFragment()
                 dialog.show(childFragmentManager, "TypeTable")
             }

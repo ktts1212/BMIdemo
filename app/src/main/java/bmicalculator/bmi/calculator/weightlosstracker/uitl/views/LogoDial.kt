@@ -9,6 +9,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
+import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
 
 class LogoDial(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
@@ -25,7 +26,10 @@ class LogoDial(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         rectF = RectF(0f, 0f, width.toFloat(), height.toFloat())
-        rectF1 = RectF(80f, 80f, width.toFloat()-80f, height.toFloat()-80f)
+        rectF1 = RectF(Utils.dip2px(context,23.3f).toFloat(),
+            Utils.dip2px(context,23.3f).toFloat(),
+            width.toFloat()-Utils.dip2px(context,23.3f).toFloat(),
+            height.toFloat()-Utils.dip2px(context,23.3f).toFloat())
     }
 
     override fun onDraw(canvas: Canvas?) {

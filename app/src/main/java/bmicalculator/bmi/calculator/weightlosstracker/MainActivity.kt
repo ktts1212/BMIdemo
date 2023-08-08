@@ -1,24 +1,16 @@
 package bmicalculator.bmi.calculator.weightlosstracker
 
 import android.content.Context
-import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import android.os.LocaleList
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import android.view.View.OnClickListener
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.ActivityMainBinding
 import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
@@ -29,8 +21,6 @@ import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorVi
 import bmicalculator.bmi.calculator.weightlosstracker.ui.statistic.StatisticFragment
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.ContextWrapper
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.LanguageHelper
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.UserStatus
-import java.util.Locale
 
 private const val TAG = "MainActivity"
 
@@ -81,22 +71,10 @@ class MainActivity : AppCompatActivity() {
         //根据查询到的信息来判断是否是新老用户
         viewModel.allInfo.observe(this) {
             if (!it.isNullOrEmpty()) {
-                binding.bottomNavigationView.post {
-                    val height = binding.bottomNavigationView.height
-                    val params =
-                        binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
-                    params.bottomMargin = height
-                    binding.fragmentContainer.layoutParams = params
-                }
                 binding.bottomNavigationView.visibility = View.VISIBLE
-                UserStatus.ishasRecord = true
+
             } else {
                 binding.bottomNavigationView.visibility = View.GONE
-                val params =
-                    binding.fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
-                params.bottomMargin = 0
-                binding.fragmentContainer.layoutParams = params
-                UserStatus.ishasRecord = false
             }
         }
 

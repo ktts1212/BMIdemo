@@ -33,7 +33,7 @@ class BmiDial(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
-        mArcRadius = Math.min(w, h) / 2 - 40
+        mArcRadius = Math.min(w, h) / 2 - Utils.dip2px(context,13.3f)
         mSmallArcRadius = mArcRadius / 2
         mScaleRadius = mArcRadius + Utils.dip2px(context, 8f)
     }
@@ -86,32 +86,31 @@ class BmiDial(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         //绘制刻度
         mScalePaint.color = Color.BLACK
         mScalePaint.typeface = ResourcesCompat.getFont(context, R.font.montserrat_extrabold)
-        mScalePaint.textSize = 40f
-//        for (i in 0..mPointCount){
-        //将角度转化为弧度
-//        val location=(190)*Math.PI/180
-//        val stopX=(centerX+mScaleRadius*Math.cos(location)).toFloat()
-//        val stopY=(centerY+mScaleRadius*Math.sin(location)).toFloat()
-//            canvas.drawLine(centerX.toFloat(),centerY.toFloat(),stopX,stopY,mScalePaint)
-//
-//            val text=i.toString()
+        mScalePaint.textSize = Utils.sp2px(context,10f).toFloat()
 
-        canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(1.4f)).toFloat(), -10f, mScalePaint)
-//        }
+
+        canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(1.4f)).toFloat(),
+            Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
+
         numtext = "18.5"
-        canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(2.9f)).toFloat(), -10f, mScalePaint)
+        canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(2.9f)).toFloat(),
+            Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
 
         numtext = "25"
-        canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(9.4f)).toFloat(), -10f, mScalePaint)
+        canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(9.4f)).toFloat(),
+            Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
 
         numtext = "30"
-        canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(14.4f)).toFloat(), -10f, mScalePaint)
+        canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(14.4f)).toFloat(),
+            Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
 
         numtext = "35"
-        canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(19.4f)).toFloat(), -10f, mScalePaint)
+        canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(19.4f)).toFloat(),
+            Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
 
         numtext = "40"
-        canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(24.4f)).toFloat(), -10f, mScalePaint)
+        canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(24.4f)).toFloat(),
+            Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
 
         numtext = "17"
     }
