@@ -743,11 +743,25 @@ class StatisticFragment : Fragment() {
 
         binding.staLinechart1.data = lineData
 
-        binding.staLinechart1.moveViewToX(bmiList[bmiList.size - 1].x)
 
-        binding.staLinechart1.setVisibleXRange(7f, 7f)
-        binding.staLinechart1.xAxis.setLabelCount(7, false)
 
+        if (binding.staTabHeader.getTabAt(0)!!.isSelected==true){
+            binding.staLinechart1.xAxis.axisMaximum=bmiList[bmiList.size-1].x+7f
+            binding.staLinechart1.xAxis.axisMinimum=bmiList[0].x-7f
+            binding.staLinechart1.setVisibleXRange(7f, 7f)
+            binding.staLinechart1.xAxis.setLabelCount(7, false)
+        }else if (binding.staTabHeader.getTabAt(1)!!.isSelected==true){
+            binding.staLinechart1.xAxis.axisMaximum=bmiList[bmiList.size-1].x+7f
+            binding.staLinechart1.xAxis.axisMinimum=bmiList[0].x-7f
+            binding.staLinechart1.setVisibleXRange(7f, 7f)
+            binding.staLinechart1.xAxis.setLabelCount(7, false)
+        }else if (binding.staTabHeader.getTabAt(2)!!.isSelected==true){
+            binding.staLinechart1.xAxis.axisMaximum=bmiList[bmiList.size-1].x+7f
+            binding.staLinechart1.xAxis.axisMinimum=bmiList[0].x-7f
+            binding.staLinechart1.setVisibleXRange(7f, 7f)
+            binding.staLinechart1.xAxis.setLabelCount(7, false)
+        }
+        binding.staLinechart1.moveViewToX(bmiList[bmiList.size - 1].x-4f)
         binding.staLinechart1.xAxis.granularity = 1f
         binding.staLinechart1.axisLeft.spaceTop = 25f
         binding.staLinechart1.setExtraOffsets(0f,0f,35f,0f)
@@ -802,9 +816,23 @@ class StatisticFragment : Fragment() {
         val lineData = LineData(lineDataSet)
 
         binding.staLinechart2.data = lineData
-        binding.staLinechart2.moveViewToX(wtList[wtList.size - 1].x)
-        binding.staLinechart2.setVisibleXRange(7f, 7f)
-        binding.staLinechart2.xAxis.setLabelCount(7, false)
+        if (binding.staTabHeader.getTabAt(0)!!.isSelected==true){
+            binding.staLinechart2.xAxis.axisMaximum=wtList[wtList.size-1].x+7f
+            binding.staLinechart2.xAxis.axisMinimum=wtList[0].x-7f
+            binding.staLinechart2.setVisibleXRange(7f, 7f)
+            binding.staLinechart2.xAxis.setLabelCount(7, false)
+        }else if (binding.staTabHeader.getTabAt(1)!!.isSelected==true){
+            binding.staLinechart2.xAxis.axisMaximum=wtList[wtList.size-1].x+7f
+            binding.staLinechart2.xAxis.axisMinimum=wtList[0].x-7f
+            binding.staLinechart2.setVisibleXRange(7f, 7f)
+            binding.staLinechart2.xAxis.setLabelCount(7, false)
+        }else if (binding.staTabHeader.getTabAt(2)!!.isSelected==true) {
+            binding.staLinechart2.xAxis.axisMaximum = wtList[wtList.size - 1].x + 7f
+            binding.staLinechart2.xAxis.axisMinimum=wtList[0].x-7f
+            binding.staLinechart2.setVisibleXRange(7f, 7f)
+            binding.staLinechart2.xAxis.setLabelCount(7, false)
+        }
+        binding.staLinechart2.moveViewToX(wtList[wtList.size - 1].x-4f)
         binding.staLinechart2.xAxis.granularity = 1f
         binding.staLinechart2.axisLeft.spaceTop = 25f
         binding.staLinechart2.setExtraOffsets(0f,0f,35f,0f)

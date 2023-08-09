@@ -122,6 +122,7 @@ class BmiFragment : Fragment() {
 
             allInfo.sortByDescending { it.timestape }
             val newRecord = allInfo.maxBy { it.timestape }
+            viewModel.bmiNewRecord.value=newRecord
             Log.d(TAG, newRecord.toString())
             if (newRecord.age > 20) {
                 binding.typeTableChildDial.visibility = View.GONE

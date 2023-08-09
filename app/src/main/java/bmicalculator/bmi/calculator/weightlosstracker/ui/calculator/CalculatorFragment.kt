@@ -336,7 +336,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     }
 
                     if (binding.htTab.getTabAt(0)?.isSelected == true) {
-                         if (t.toDouble() > 11) {
+                        if (t.toDouble() > 11) {
                             Toast.makeText(
                                 requireContext(),
                                 "Please input a valid height to calculate your BMI accurately",
@@ -1121,7 +1121,10 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
         Log.d(TAG, "current: ${current.hour}:${current.minute}:${current.second}")
         val phase: String = when (current.hour) {
-            in 23 downTo 7 -> {
+            23 -> {
+                getString(R.string.night)
+            }
+            in 0..7->{
                 getString(R.string.night)
             }
 
@@ -1194,6 +1197,85 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             }
         }
 
+        viewModel.bmiNewRecord.observe(requireActivity()) { newRecord ->
+            if (newRecord != null) {
+                Log.d(TAG, "newRecord:${newRecord}")
+                if (newRecord.wtHtType == "lbftin") {
+                    binding.htCardFtin1.visibility = View.VISIBLE
+                    binding.htCardFtin2.visibility = View.VISIBLE
+                    binding.htCardCm.visibility = View.INVISIBLE
+                    binding.wtTab.getTabAt(0)?.select()
+                    binding.wtInput.setText(newRecord.wt_lb.toString())
+                    binding.htTab.getTabAt(0)?.select()
+                    binding.htInputFtin1.setText("${newRecord.ht_ft}'")
+                    binding.htInputFtin2.setText("${newRecord.ht_in}''")
+                } else if (newRecord.wtHtType == "kgftin") {
+                    binding.htCardFtin1.visibility = View.VISIBLE
+                    binding.htCardFtin2.visibility = View.VISIBLE
+                    binding.htCardCm.visibility = View.INVISIBLE
+                    binding.wtTab.getTabAt(1)?.select()
+                    binding.wtInput.setText(newRecord.wt_kg.toString())
+                    binding.htTab.getTabAt(0)?.select()
+                    binding.htInputFtin1.setText("${newRecord.ht_ft}'")
+                    binding.htInputFtin2.setText("${newRecord.ht_in}''")
+                } else if (newRecord.wtHtType == "lbcm") {
+                    binding.htCardFtin1.visibility = View.INVISIBLE
+                    binding.htCardFtin2.visibility = View.INVISIBLE
+                    binding.htCardCm.visibility = View.VISIBLE
+                    binding.wtTab.getTabAt(0)?.select()
+                    binding.wtInput.setText(newRecord.wt_lb.toString())
+                    binding.htTab.getTabAt(1)?.select()
+                    binding.htInputCm.setText(newRecord.ht_cm.toString())
+                } else {
+                    binding.htCardFtin1.visibility = View.INVISIBLE
+                    binding.htCardFtin2.visibility = View.INVISIBLE
+                    binding.htCardCm.visibility = View.VISIBLE
+                    binding.wtTab.getTabAt(1)?.select()
+                    binding.wtInput.setText(newRecord.wt_kg.toString())
+                    binding.htTab.getTabAt(1)?.select()
+                    binding.htInputCm.setText(newRecord.ht_cm.toString())
+                }
+                if (isAdded) {
+                    binding.timeInputPhase.setText(
+                        Utils.numToPhase(
+                            requireContext(),
+                            newRecord.phase
+                        )
+                    )
+                    binding.timeInputDate.setText(newRecord.date)
+                    binding.ageRecyclerView.scrollToPosition(childViewHalfCount + newRecord.age - 1)
+                    //滑动之后100ms后移动到中心位置
+                    binding.ageRecyclerView.postDelayed({
+                        if (::adapter.isInitialized) {
+                            scrollToCenter(newRecord.age + 1)
+                        }
+                    }, 100L)
+                }
+                if (newRecord.gender == '0') {
+                    binding.genderSelectedMale.isSelected = true
+                    binding.genderSelectedFemale.also { relativeLayout ->
+                        relativeLayout.isSelected = false
+                        relativeLayout.alpha = 0.5f
+                    }
+                    binding.genderSelectedFemalePic.visibility = View.INVISIBLE
+                    binding.genderSelectedMale.alpha = 1f
+                    binding.genderSelectedMalePic.visibility = View.VISIBLE
+                    viewModel.selectedGender.value='0'
+                } else {
+                    binding.genderSelectedFemale.isSelected = true
+                    binding.genderSelectedMale.also { relativeLayout ->
+                        relativeLayout.isSelected = false
+                        relativeLayout.alpha = 0.5f
+                    }
+                    binding.genderSelectedMalePic.visibility = View.INVISIBLE
+                    binding.genderSelectedFemale.alpha = 1f
+                    binding.genderSelectedFemalePic.visibility = View.VISIBLE
+                    viewModel.selectedGender.value='1'
+                }
+
+            }
+        }
+
         binding.btnCalculate.setOnClickListener {
 
             if (binding.wtTab.getTabAt(0)!!.isSelected) {
@@ -1233,25 +1315,25 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
             if (binding.htTab.getTabAt(0)!!.isSelected) {
                 val str = binding.htInputFtin1.text.toString()
-                val str2=binding.htInputFtin2.text.toString()
-                if (str.isNotEmpty()&&str.isNotEmpty()) {
+                val str2 = binding.htInputFtin2.text.toString()
+                if (str.isNotEmpty() && str.isNotEmpty()) {
                     viewModel.sethtft(
                         if (str.contains("'")) str.dropLast(1).toInt()
-                    else str.toInt()
+                        else str.toInt()
 
                     )
 
                     viewModel.sethtin(
                         if (str2.contains("''")) str2.dropLast(2).toInt()
-                    else str2.toInt()
+                        else str2.toInt()
                     )
                 } else {
-                   if (str.isEmpty()){
-                       viewModel.sethtft(5)
-                       viewModel.sethtin(str2.toInt())
-                   }
+                    if (str.isEmpty()) {
+                        viewModel.sethtft(5)
+                        viewModel.sethtin(str2.toInt())
+                    }
 
-                    if (str2.isEmpty()){
+                    if (str2.isEmpty()) {
                         viewModel.sethtin(7)
                         viewModel.sethtft(str.toInt())
                     }
@@ -1275,7 +1357,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 }
             }
 
-            if (viewModel.selectedGender.value != null) {
+            if (binding.genderSelectedMale.isSelected || binding.genderSelectedFemale.isSelected) {
 
                 if (binding.wtTab.getTabAt(0)!!.isSelected &&
                     binding.htTab.getTabAt(0)!!.isSelected
@@ -1303,9 +1385,10 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     binding.htTab.getTabAt(0)!!.isSelected
                 ) {
                     val bmiVal =
-                        viewModel.wt_kg.value!! / (viewModel.ht_ft.value!! * 0.3048 + viewModel.ht_in.value!! * 0.0254).pow(
-                            2.0
-                        )
+                        viewModel.wt_kg.value!! /
+                                (viewModel.ht_ft.value!! * 0.3048 + viewModel.ht_in.value!! * 0.0254).pow(
+                                    2.0
+                                )
                     viewModel.setBmival(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
                     viewModel.wttype = "kg"
                     viewModel.httype = "ftin"

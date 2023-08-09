@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import bmicalculator.bmi.calculator.weightlosstracker.R
@@ -69,10 +70,7 @@ class CalculatorResultFragment : DialogFragment() {
             window.statusBarColor = Color.WHITE
         }
         //设置状态栏字体颜色
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            (activity as AppCompatActivity).window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
+        WindowCompat.setDecorFitsSystemWindows((activity as AppCompatActivity).window,true)
         return binding.root
     }
 
@@ -891,15 +889,7 @@ class CalculatorResultFragment : DialogFragment() {
                 System.currentTimeMillis()
             )
             viewModel.insertInfo(bmiInfo)
-
-            Log.d(TAG,"bmiInfo:${bmiInfo}")
-
-            val prefs = (activity as AppCompatActivity).getSharedPreferences(
-                "data", Context.MODE_PRIVATE
-            )
-            val editor = prefs.edit()
-            editor.putBoolean("hasdata", true)
-            editor.apply()
+            viewModel.bmiNewRecord.value=bmiInfo
             val navView =
                 (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
             navView.selectedItemId = R.id.menu_statistics
@@ -985,12 +975,6 @@ class CalculatorResultFragment : DialogFragment() {
             binding.bmiAd3Tv3.setText(getString(adInfo.appScore))
             binding.bmiAd3Tv2.setText(getString(adInfo.applink))
         } else {
-//            binding.bmiAd1Tv2.visibility = View.VISIBLE
-//            binding.bmiAd2Tv2.visibility = View.VISIBLE
-//            binding.bmiAd3Tv2.visibility = View.VISIBLE
-//            binding.bmiAd1Tv2.visibility = View.GONE
-//            binding.bmiAd2Tv2.visibility = View.GONE
-//            binding.bmiAd3Tv2.visibility = View.GONE
             val nums = if (viewModel.selectedGender.value!!.equals('0'))
                 mutableListOf(2, 3, 6, 7, 8) else mutableListOf(1, 3, 6, 7, 8)
             var randomIndex = Random.nextInt(nums.size)

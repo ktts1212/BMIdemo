@@ -35,7 +35,7 @@ class CustomXAxisRenderer(val tabPosition:Int,val startDate:String,val context: 
         val startMonth=dateTime.monthValue
         val startDay=dateTime.dayOfMonth
         //获取x轴的值
-        val xValue=formattedLabel?.toDouble()?.toInt()
+        val xValue=formattedLabel?.replace(",","")?.toDouble()?.toInt()
 
         if (xValue==0){
             super.drawLabel(c, "", x, y, anchor, angleDegrees)
@@ -106,14 +106,12 @@ class CustomXAxisRenderer(val tabPosition:Int,val startDate:String,val context: 
             }
         }else {
             mXaisLabelPaint.typeface = typeFace2
-            if (newDate.year == currentYear) {
-                val month = Utils.numToMonth(newDate.monthValue)
-                c?.drawText(month, x - Utils.dip2px(context,13f), y - Utils.dip2px(context,168f), mXaisLabelPaint)
+            if (newDate.monthValue == 1) {
+                val year = newDate.year
+                c?.drawText(year.toString(), x - Utils.dip2px(context,13f), y - Utils.dip2px(context,168f), mXaisLabelPaint)
                 mXaisLabelPaint.typeface = typeFace
                 c?.drawText(newDate.monthValue.toString(), x-Utils.dip2px(context,3f),y+Utils.dip2px(context,10f), mXaisLabelPaint)
             } else {
-                val month = "${newDate.year} ${Utils.numToMonth(newDate.monthValue)}"
-                c?.drawText(month, x-Utils.dip2px(context,26.5f), y - Utils.dip2px(context,168f), mXaisLabelPaint)
                 mXaisLabelPaint.typeface = typeFace
                 c?.drawText(newDate.monthValue.toString(), x-Utils.dip2px(context,3f),y+Utils.dip2px(context,10f), mXaisLabelPaint)
             }
