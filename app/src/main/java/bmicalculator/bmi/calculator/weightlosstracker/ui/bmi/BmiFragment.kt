@@ -16,6 +16,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -28,10 +29,12 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatab
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFactory
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.bmi.child.RecordHistoryFragment
+import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.ChildBmiDialData
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.SweepAngel
 import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.lang.Exception
 
 private const val TAG = "BmiFragment"
@@ -65,6 +68,37 @@ class BmiFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.bmiLo.setOnClickListener {
+            Toast.makeText(requireContext(),"you clicked me ",Toast.LENGTH_SHORT).show()
+            val navView=
+                (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+            navView.selectedItemId=R.id.menu_calculator
+            val fragmentManager=(activity as AppCompatActivity).supportFragmentManager
+            val transition=fragmentManager.beginTransaction()
+            transition.replace(R.id.fragment_container, CalculatorFragment())
+            transition.commit()
+        }
+
+        binding.toolbarBmi.setOnClickListener {
+            val navView=
+                (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+            navView.selectedItemId=R.id.menu_calculator
+            val fragmentManager=(activity as AppCompatActivity).supportFragmentManager
+            val transition=fragmentManager.beginTransaction()
+            transition.replace(R.id.fragment_container, CalculatorFragment())
+            transition.commit()
+        }
+
+        binding.bmiSvChild.setOnClickListener {
+            val navView=
+                (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+            navView.selectedItemId=R.id.menu_calculator
+            val fragmentManager=(activity as AppCompatActivity).supportFragmentManager
+            val transition=fragmentManager.beginTransaction()
+            transition.replace(R.id.fragment_container, CalculatorFragment())
+            transition.commit()
+        }
 
         binding.bmiArrow.alpha = 0.75f
         binding.bmiArrow.pivotX = Utils.dip2px(

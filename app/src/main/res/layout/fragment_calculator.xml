@@ -2,21 +2,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/f_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/f_layout"
     android:background="#F5F5F5"
     tools:context=".ui.calculator.CalculatorFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_cal"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="58dp"
         android:background="#F5F5F5"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:popupTheme="@style/Theme.AppCompat.Light">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,12 +24,12 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:textAlignment="viewStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:fontFamily="@font/montserrat_extrabold"
                 android:text="@string/calculator"
+                android:textAlignment="viewStart"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -54,16 +54,16 @@
         android:id="@+id/cal_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="58dp"
         android:background="#F5F5F5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_cal">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
             android:id="@+id/child_layout"
-            android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/wt_display"
@@ -130,6 +130,7 @@
                 app:layout_constraintTop_toBottomOf="@id/wt_card"
                 app:tabBackground="@drawable/tab_selector"
                 app:tabIndicatorHeight="0dp"
+                app:tabTextAppearance="@style/MyTabTextAppearance"
                 app:tabTextColor="@color/black">
 
                 <com.google.android.material.tabs.TabItem
@@ -162,11 +163,11 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/ht_card_cm"
-                android:layout_width="170dp"
-                android:layout_height="70dp"
+                android:layout_width="160dp"
+                android:layout_height="68dp"
                 android:layout_below="@id/ht_display"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="18dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
                 android:visibility="invisible"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="15dp"
@@ -186,6 +187,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:fontFamily="@font/montserrat_extrabold"
+                        android:imeOptions="actionDone"
                         android:inputType="numberDecimal"
                         android:text="@string/default_170_0"
                         android:textAlignment="center"
@@ -219,6 +221,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:fontFamily="@font/montserrat_extrabold"
+                        android:imeOptions="actionDone"
                         android:inputType="numberDecimal"
                         android:text="@string/default_5"
                         android:textAlignment="center"
@@ -253,6 +256,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:fontFamily="@font/montserrat_extrabold"
+                        android:imeOptions="actionDone"
                         android:inputType="numberDecimal"
                         android:text="@string/default_7"
                         android:textAlignment="center"
@@ -275,6 +279,7 @@
                 app:layout_constraintTop_toBottomOf="@id/ht_card_cm"
                 app:tabBackground="@drawable/tab_selector"
                 app:tabIndicatorHeight="0dp"
+                app:tabTextAppearance="@style/MyTabTextAppearance"
                 app:tabTextColor="@color/black">
 
 
@@ -322,14 +327,14 @@
                     android:id="@+id/time_input_date"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:autoSizeMaxTextSize="20sp"
+                    android:autoSizeTextType="uniform"
                     android:background="@color/white"
                     android:fontFamily="@font/montserrat_extrabold"
                     android:gravity="center"
                     android:inputType="numberDecimal"
                     android:text="@string/date"
                     android:textColor="@color/black"
-                    android:autoSizeMaxTextSize="20sp"
-                    android:autoSizeTextType="uniform"
                     android:textSize="20sp" />
 
 
@@ -351,15 +356,14 @@
                     android:id="@+id/time_input_phase"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:autoSizeMaxTextSize="20sp"
+                    android:autoSizeTextType="uniform"
                     android:background="@color/white"
                     android:fontFamily="@font/montserrat_extrabold"
                     android:gravity="center"
                     android:inputType="numberDecimal"
                     android:text="@string/phase"
-                    android:autoSizeMaxTextSize="20sp"
-                    android:autoSizeTextType="uniform"
-                    android:textColor="@color/black"
-                    />
+                    android:textColor="@color/black" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -429,8 +433,8 @@
                         android:id="@+id/gender_selected_male_pic"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
-                        android:layout_alignParentEnd="true"
                         android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginTop="6dp"
                         android:layout_marginEnd="6dp"
                         android:src="@drawable/gender_selected"
@@ -448,11 +452,11 @@
                         android:id="@+id/gender_male_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/gender_male_pic"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
                         android:text="@string/male"
                         android:textColor="@color/black"
-                        android:layout_below="@id/gender_male_pic"
                         android:textSize="14sp" />
 
                 </RelativeLayout>
@@ -482,8 +486,8 @@
                         android:id="@+id/gender_selected_female_pic"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
-                        android:layout_alignParentEnd="true"
                         android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginTop="6dp"
                         android:layout_marginEnd="6dp"
                         android:src="@drawable/gender_selected"
@@ -501,10 +505,10 @@
                         android:id="@+id/gender_female_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/gender_female_pic"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
                         android:text="@string/female"
-                        android:layout_below="@id/gender_female_pic"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -523,10 +527,12 @@
                 android:background="@drawable/btn_selector"
                 android:fontFamily="@font/montserrat_extrabold"
                 android:gravity="center"
-                android:letterSpacing="-0.05"
+                android:letterSpacing="0"
                 android:text="@string/calculate"
+                android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:textSize="35sp"
+                android:textFontWeight="800"
+                android:textSize="20sp"
                 android:visibility="visible"
                 app:backgroundTint="#ff0099cc"
                 app:layout_constraintBottom_toBottomOf="parent"

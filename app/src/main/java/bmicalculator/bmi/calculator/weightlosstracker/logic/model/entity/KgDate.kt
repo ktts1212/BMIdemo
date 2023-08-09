@@ -1,7 +1,7 @@
 package bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity
 
-data class DayData(
-    var date:Int,
-    var bmi: Float?
-        ){
+class KgDate(
+    var timeStamp:Long,
+    var kg:Float
+) {
 }

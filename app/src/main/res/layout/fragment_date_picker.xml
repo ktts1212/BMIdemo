@@ -18,40 +18,42 @@
             <TextView
                 android:id="@+id/date_display"
                 android:layout_width="wrap_content"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/montserrat_extrabold"
                 android:gravity="center_vertical"
                 android:text="@string/date"
                 android:textColor="@color/black"
-                android:textSize="30sp" />
+                android:textSize="20sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
 
                 android:layout_width="match_parent"
-                android:layout_height="230dp">
+                android:layout_height="225dp">
 
                 <com.github.gzuliyujiang.wheelview.widget.WheelView
                     android:id="@+id/wheel_picker_date_month_wheel"
                     style="@style/WheelDefault"
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="50dp"
+                    android:layout_width="50dp"
+                    android:layout_height="225dp"
+                    android:layout_marginStart="87.5dp"
                     android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:wheel_indicatorColor="#4169E1"
+                    app:wheel_itemSpace="50dp"
                     app:wheel_itemTextColor="@color/black"
                     app:wheel_itemTextColorSelected="@color/black"
-                    app:wheel_itemTextSize="23sp"
-                    app:wheel_itemTextSizeSelected="23sp"
+                    app:wheel_itemTextSize="14sp"
+                    app:wheel_itemTextSizeSelected="14sp"
                     app:wheel_visibleItemCount="7" />
 
                 <com.github.gzuliyujiang.wheelview.widget.NumberWheelView
                     android:id="@+id/wheel_picker_date_day_wheel"
                     style="@style/WheelDefault"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="225dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:visibility="visible"
@@ -59,29 +61,29 @@
                     app:layout_constraintStart_toEndOf="@id/wheel_picker_date_month_wheel"
                     app:layout_constraintTop_toTopOf="parent"
                     app:wheel_indicatorColor="#4169E1"
-                    app:wheel_itemSpace="60dp"
+                    app:wheel_itemSpace="50dp"
                     app:wheel_itemTextColor="@color/black"
                     app:wheel_itemTextColorSelected="@color/black"
-                    app:wheel_itemTextSize="23sp"
-                    app:wheel_itemTextSizeSelected="23sp"
+                    app:wheel_itemTextSize="14sp"
+                    app:wheel_itemTextSizeSelected="14sp"
                     app:wheel_visibleItemCount="7" />
 
 
                 <com.github.gzuliyujiang.wheelview.widget.NumberWheelView
                     android:id="@+id/wheel_picker_date_year_wheel"
                     style="@style/WheelDefault"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="50dp"
+                    android:layout_width="50dp"
+                    android:layout_height="225dp"
+                    android:layout_marginEnd="87.5dp"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:wheel_indicatorColor="#4169E1"
-                    app:wheel_itemSpace="60dp"
+                    app:wheel_itemSpace="50dp"
                     app:wheel_itemTextColor="@color/black"
                     app:wheel_itemTextColorSelected="@color/black"
-                    app:wheel_itemTextSize="23sp"
-                    app:wheel_itemTextSizeSelected="23sp"
+                    app:wheel_itemTextSize="14sp"
+                    app:wheel_itemTextSizeSelected="14sp"
                     app:wheel_visibleItemCount="7" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -93,14 +95,15 @@
                 <TextView
                     android:id="@+id/btn_cancel"
                     android:layout_width="160dp"
-                    android:layout_height="70dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="7dp"
                     android:background="@drawable/shape_btn_cancel"
                     android:fontFamily="@font/montserrat_extrabold"
                     android:gravity="center"
                     android:letterSpacing="-0.05"
                     android:text="@string/cancel"
+                    android:textAllCaps="true"
                     android:textColor="@color/black"
                     android:textSize="18dp"
                     app:backgroundTint="#F5F5F5"
@@ -110,14 +113,15 @@
                 <TextView
                     android:id="@+id/btn_done"
                     android:layout_width="160dp"
-                    android:layout_height="70dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="7dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/shape_btn_done"
                     android:fontFamily="@font/montserrat_extrabold"
                     android:gravity="center"
                     android:letterSpacing="-0.05"
                     android:text="@string/done"
+                    android:textAllCaps="true"
                     android:textColor="@color/white"
                     android:textSize="18dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -129,7 +133,6 @@
         </LinearLayout>
 
     </ScrollView>
-
 
 
 </LinearLayout>

@@ -8,7 +8,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/entry_card"
-        android:layout_width="42dp"
+        android:layout_width="65dp"
         android:layout_height="26dp"
         android:backgroundTint="#00000000"
         app:cardCornerRadius="5dp">
@@ -21,21 +21,22 @@
 
 
             <ImageView
-                android:id="@+id/entry_bg1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:id="@+id/entry2_bg1"
+                android:layout_width="65dp"
+                android:layout_height="23dp"
+                android:layout_alignParentTop="true"
                 android:background="#00000000"
-                android:src="@drawable/entry_bg1" />
+                android:src="@drawable/entry2_bg1" />
 
             <ImageView
                 android:id="@+id/entry_bg2"
                 android:layout_width="7dp"
                 android:layout_height="4dp"
-                android:layout_below="@id/entry_bg1"
+                android:layout_below="@id/entry2_bg1"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="-3dp"
+                android:layout_marginTop="-1dp"
                 android:background="#00000000"
-                android:src="@drawable/entry_bg2" />
+                android:src="@drawable/entry2_bg2" />
 
             <TextView
                 android:id="@+id/tvContent"
@@ -44,7 +45,7 @@
                 android:layout_marginBottom="1dp"
                 android:fontFamily="@font/montserrat_extrabold"
                 android:gravity="center"
-                android:text="65.0"
+                android:text="65.0 kg"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
         </RelativeLayout>
@@ -67,12 +68,13 @@
         android:layout_below="@id/view_space"
         android:layout_marginStart="16dp"
         android:layout_marginTop="1dp"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/shape_circle1"
-        android:backgroundTint="@color/purple_200" />
+        android:backgroundTint="@color/white" />
 
     <View
         android:id="@+id/view_space"
-        android:layout_width="41dp"
+        android:layout_width="65dp"
         android:layout_height="5dp"
         android:layout_below="@id/entry_card"
         android:alpha="0"

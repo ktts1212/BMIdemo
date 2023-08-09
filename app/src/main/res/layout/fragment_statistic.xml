@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.statistic.StatisticFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -15,16 +15,16 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/Theme.AppCompat.Light" >
+        app:popupTheme="@style/Theme.AppCompat.Light">
 
         <TextView
+            android:id="@+id/menu_statistics"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/menu_statistics"
-            android:textColor="@color/black"
-            android:textSize="20sp"
             android:fontFamily="@font/montserrat_extrabold"
-            android:text="@string/statistics"/>
+            android:text="@string/statistics"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -39,150 +39,150 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.tabs.TabLayout
+                android:id="@+id/sta_tab_header"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:id="@+id/sta_tab_header"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/shape_tablayout"
+                android:clickable="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabBackground="@drawable/tab_selector_sta"
                 app:tabIndicatorHeight="0dp"
                 app:tabSelectedTextColor="@color/black"
-                app:tabTextColor="#808080"
-                android:clickable="false"
                 app:tabTextAppearance="@style/MyTabTextAppearance"
-                app:tabBackground="@drawable/tab_selector_sta"
-                android:background="@drawable/shape_tablayout"
-                android:layout_marginEnd="15dp">
+                app:tabTextColor="#808080">
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:clickable="false"
                     android:minHeight="48dp"
-                    android:text="@string/day"/>
+                    android:text="@string/day" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:clickable="false"
                     android:minHeight="48dp"
-                    android:text="@string/week"/>
+                    android:text="@string/week" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:clickable="false"
                     android:minHeight="48dp"
-                    android:text="@string/month"/>
+                    android:text="@string/month" />
 
             </com.google.android.material.tabs.TabLayout>
 
 
             <TextView
+                android:id="@+id/sta_disp1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/sta_disp1"
-                android:text="@string/bmi"
-                android:layout_marginTop="111dp"
-                android:textColor="@color/black"
-                android:textSize="18sp"
                 android:layout_marginStart="15dp"
+                android:layout_marginTop="111dp"
                 android:fontFamily="@font/montserrat_extrabold"
+                android:text="@string/bmi"
+                android:textColor="@color/black"
+                android:textFontWeight="800"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textFontWeight="800"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/sta_disp2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/update"
-                android:textSize="16sp"
-                android:id="@+id/sta_disp2"
-                android:fontFamily="@font/montserrat_regular"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="113dp"
                 android:layout_marginEnd="15dp"
-                android:textColor="#3659CF"/>
+                android:fontFamily="@font/montserrat_regular"
+                android:text="@string/update"
+                android:textColor="#3659CF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <RelativeLayout
                 android:id="@+id/sta_chart_view1"
                 android:layout_width="match_parent"
                 android:layout_height="218dp"
-                app:layout_constraintTop_toBottomOf="@id/sta_disp1"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
 
+                android:layout_marginEnd="15dp"
                 android:background="@drawable/shape_chart_bg"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sta_disp1">
 
                 <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/sta_linechart1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/shape_chart_bg"
-                    android:id="@+id/sta_linechart1"/>
+                    android:background="@drawable/shape_chart_bg" />
 
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/sta_wtdisp1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/sta_wtdisp1"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/montserrat_extrabold"
                 android:text="@string/weight"
                 android:textColor="@color/black"
-                android:fontFamily="@font/montserrat_extrabold"
+                android:textFontWeight="800"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="15dp"
-                app:layout_constraintTop_toBottomOf="@+id/sta_chart_view1"
-                android:layout_marginTop="20dp"
-                android:textFontWeight="800"/>
+                app:layout_constraintTop_toBottomOf="@+id/sta_chart_view1" />
 
             <TextView
+                android:id="@+id/sta_wtdisp2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/update"
-                android:id="@+id/sta_wtdisp2"
-                android:textSize="16sp"
-                android:fontFamily="@font/montserrat_regular"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="15dp"
                 android:layout_marginTop="22dp"
-                app:layout_constraintTop_toBottomOf="@id/sta_chart_view1"
-                android:textColor="#3659CF"/>
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="@string/update"
+                android:textColor="#3659CF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sta_chart_view1" />
 
             <RelativeLayout
                 android:id="@+id/sta_chart_view2"
                 android:layout_width="match_parent"
                 android:layout_height="218dp"
-                app:layout_constraintTop_toBottomOf="@id/sta_wtdisp1"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/shape_chart_bg2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp">
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/shape_chart_bg2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sta_wtdisp1">
 
                 <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/sta_linechart2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/shape_chart_bg2"
-                    android:id="@+id/sta_linechart2"/>
+                    android:background="@drawable/shape_chart_bg2" />
 
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                app:layout_constraintTop_toBottomOf="@id/sta_chart_view2"
-                android:background="#F5F5F5"/>
+                android:background="#F5F5F5"
+                app:layout_constraintTop_toBottomOf="@id/sta_chart_view2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

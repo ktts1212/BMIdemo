@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:id="@+id/bmi_lo"
+    android:clickable="true"
+    android:splitMotionEvents="false"
     tools:context=".ui.bmi.BmiFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -12,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/white"
+        android:clickable="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -57,16 +61,20 @@
         android:textColor="@color/black"
         android:textFontWeight="400"
         android:textSize="14sp"
+        android:clickable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_bmi" />
 
     <ScrollView
+        android:id="@+id/bmi_sv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bmi_date">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bmi_sv_child"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
