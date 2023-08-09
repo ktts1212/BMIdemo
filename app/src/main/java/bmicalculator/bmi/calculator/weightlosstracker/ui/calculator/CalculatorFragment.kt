@@ -1236,11 +1236,11 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 val str2=binding.htInputFtin2.text.toString()
                 if (str.isNotEmpty()&&str.isNotEmpty()) {
                     viewModel.sethtft(
-                        str.toInt()
+                        str.dropLast(1).toInt()
                     )
 
                     viewModel.sethtin(
-                        str2.toInt()
+                        str2.dropLast(2).toInt()
                     )
                 } else {
                    if (str.isEmpty()){
