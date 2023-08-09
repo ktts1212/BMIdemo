@@ -1236,11 +1236,14 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 val str2=binding.htInputFtin2.text.toString()
                 if (str.isNotEmpty()&&str.isNotEmpty()) {
                     viewModel.sethtft(
-                        str.dropLast(1).toInt()
+                        if (str.contains("'")) str.dropLast(1).toInt()
+                    else str.toInt()
+
                     )
 
                     viewModel.sethtin(
-                        str2.dropLast(2).toInt()
+                        if (str2.contains("''")) str2.dropLast(2).toInt()
+                    else str2.toInt()
                     )
                 } else {
                    if (str.isEmpty()){
