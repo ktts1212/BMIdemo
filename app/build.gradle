@@ -52,6 +52,14 @@ android {
 
 dependencies {
 
+
+    // 基础依赖包，必须要依赖
+    implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
+// kotlin扩展（可选）
+    implementation 'com.geyifeng.immersionbar:immersionbar-ktx:3.2.2'
+// fragment快速实现（可选）已废弃
+    implementation 'com.geyifeng.immersionbar:immersionbar-components:3.2.2'
+
     implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation "androidx.viewpager2:viewpager2:1.0.0"

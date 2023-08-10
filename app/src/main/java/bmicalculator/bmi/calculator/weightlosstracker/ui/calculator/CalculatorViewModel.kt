@@ -7,10 +7,8 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.Event
-import kotlinx.coroutines.Dispatchers
+import bmicalculator.bmi.calculator.weightlosstracker.util.Event
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
 class CalculatorViewModel(private val repository: Repository) : ViewModel() {

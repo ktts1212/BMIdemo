@@ -23,11 +23,11 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.History
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.KgDate
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.CustomMarkerView
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.CustomMarkerView2
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.CustomXAxisRenderer
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.DcFormat
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import bmicalculator.bmi.calculator.weightlosstracker.util.CustomMarkerView
+import bmicalculator.bmi.calculator.weightlosstracker.util.CustomMarkerView2
+import bmicalculator.bmi.calculator.weightlosstracker.util.CustomXAxisRenderer
+import bmicalculator.bmi.calculator.weightlosstracker.util.DcFormat
+import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -35,12 +35,11 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
+import com.gyf.immersionbar.ktx.immersionBar
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.concurrent.TimeUnit
@@ -838,4 +837,12 @@ class StatisticFragment : Fragment() {
         binding.staLinechart2.setExtraOffsets(0f,0f,35f,0f)
     }
 
+    override fun onResume() {
+        super.onResume()
+        immersionBar {
+            statusBarColor(R.color.bg1)
+            titleBar(view)
+            statusBarDarkFont(true)
+        }
+    }
 }

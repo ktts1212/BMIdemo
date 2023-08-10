@@ -5,14 +5,14 @@
     android:id="@+id/f_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
+    android:background="@color/bg1"
     tools:context=".ui.calculator.CalculatorFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_cal"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:background="#F5F5F5"
+        android:background="@color/bg1"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="58dp"
-        android:background="#F5F5F5"
+        android:background="@color/bg1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_cal">
@@ -125,6 +125,7 @@
                 android:layout_alignEnd="@id/wt_card"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
+                android:backgroundTint="#F1F1F1"
                 android:background="@drawable/shape_tablayout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/wt_card"
@@ -274,6 +275,7 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
+                android:backgroundTint="#F1F1F1"
                 android:background="@drawable/shape_tablayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ht_card_cm"
@@ -534,7 +536,7 @@
                 android:textFontWeight="800"
                 android:textSize="20sp"
                 android:visibility="visible"
-                app:backgroundTint="#ff0099cc"
+                app:backgroundTint="#3659CF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/gender_card_male" />

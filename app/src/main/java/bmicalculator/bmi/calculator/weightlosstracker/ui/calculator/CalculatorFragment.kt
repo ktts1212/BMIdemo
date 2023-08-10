@@ -15,7 +15,6 @@ import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintSet
@@ -33,10 +32,11 @@ import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.Calcul
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.DatePickerFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.SettingFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.TimePickerFragment
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.CenterItemUtils
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.LanguageHelper
+import bmicalculator.bmi.calculator.weightlosstracker.util.CenterItemUtils
+import bmicalculator.bmi.calculator.weightlosstracker.util.LanguageHelper
 import com.google.android.material.tabs.TabLayout
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
+import com.gyf.immersionbar.ktx.immersionBar
 import java.text.DateFormatSymbols
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -68,6 +68,19 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
     private var childViewHalfCount: Int = 0
 
+    private var isInitBar = false
+
+    private lateinit var currentDialogFragmentTag:String
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+//        val childFragments=childFragmentManager.fragments
+//        val transaction=childFragmentManager.beginTransaction()
+//        for (fragment in childFragments){
+//
+//        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,12 +95,22 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         //设置toolbar的显示
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbarCal)
+
         return binding.root
     }
 
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+//        if (savedInstanceState!=null){
+//            Log.d("qqqqqq","not null")
+//            var dialogFragment=childFragmentManager.getFragment(savedInstanceState,
+//                "calChildFragment") as DialogFragment
+//            Log.d("qqqqqq",dialogFragment.toString())
+//            dialogFragment=SettingFragment()
+//            dialogFragment.show(childFragmentManager,"SettingFragment")
+//        }
 
         viewModel.allInfo.observe(requireActivity()) { info ->
             if (!info.isNullOrEmpty()) {
@@ -122,6 +145,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         binding.calUser.setOnClickListener {
             val dialog = SettingFragment()
             dialog.show(childFragmentManager, "SettingFragment")
+            currentDialogFragmentTag="SettingFragment"
         }
 
         val formatEnglish = NumberFormat.getNumberInstance(Locale.ENGLISH)
@@ -1124,7 +1148,8 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             23 -> {
                 getString(R.string.night)
             }
-            in 0..7->{
+
+            in 0..7 -> {
                 getString(R.string.night)
             }
 
@@ -1260,7 +1285,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     binding.genderSelectedFemalePic.visibility = View.INVISIBLE
                     binding.genderSelectedMale.alpha = 1f
                     binding.genderSelectedMalePic.visibility = View.VISIBLE
-                    viewModel.selectedGender.value='0'
+                    viewModel.selectedGender.value = '0'
                 } else {
                     binding.genderSelectedFemale.isSelected = true
                     binding.genderSelectedMale.also { relativeLayout ->
@@ -1270,7 +1295,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     binding.genderSelectedMalePic.visibility = View.INVISIBLE
                     binding.genderSelectedFemale.alpha = 1f
                     binding.genderSelectedFemalePic.visibility = View.VISIBLE
-                    viewModel.selectedGender.value='1'
+                    viewModel.selectedGender.value = '1'
                 }
 
             }
@@ -1367,6 +1392,17 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     viewModel.setBmival(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
                     viewModel.wttype = "lb"
                     viewModel.httype = "ftin"
+                    viewModel.setwtkg(
+                        df.format(viewModel.wt_lb.value!! * Multi_1)
+                            .replace(",", ".")
+                            .toDouble()
+                    )
+                    viewModel.sethtcm(
+                        tf.format(
+                            viewModel.ht_in.value!! * Multi_tin +
+                                    viewModel.ht_ft.value!! * Multi_haft
+                        ).replace(",", ".").toDouble()
+                    )
                 }
 
                 if (binding.wtTab.getTabAt(0)!!.isSelected &&
@@ -1379,6 +1415,19 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     viewModel.setBmival(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
                     viewModel.wttype = "lb"
                     viewModel.httype = "cm"
+                    viewModel.setwtkg(
+                        df.format(viewModel.wt_lb.value!! * Multi_1)
+                            .replace(",", ".")
+                            .toDouble()
+                    )
+                    viewModel.sethtft(
+                        ff.format((viewModel.ht_cm.value!! / Multi_haft).toInt()).replace(",", ".")
+                            .toInt()
+                    )
+                    viewModel.sethtin(
+                        ff.format((viewModel.ht_cm.value!! - viewModel.ht_ft.value!! * Multi_haft) / Multi_tin)
+                            .toInt()
+                    )
                 }
 
                 if (binding.wtTab.getTabAt(1)!!.isSelected &&
@@ -1392,6 +1441,17 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     viewModel.setBmival(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
                     viewModel.wttype = "kg"
                     viewModel.httype = "ftin"
+                    viewModel.setwtlb(
+                        df.format(viewModel.wt_kg.value!! / Multi_1)
+                            .replace(",", ".")
+                            .toDouble()
+                    )
+                    viewModel.sethtcm(
+                        tf.format(
+                            viewModel.ht_in.value!! * Multi_tin +
+                                    viewModel.ht_ft.value!! * Multi_haft
+                        ).replace(",", ".").toDouble()
+                    )
                 }
 
                 if (binding.wtTab.getTabAt(1)!!.isSelected &&
@@ -1401,16 +1461,34 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     viewModel.setBmival(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
                     viewModel.wttype = "kg"
                     viewModel.httype = "cm"
+                    viewModel.setwtlb(
+                        df.format(viewModel.wt_kg.value!! / Multi_1)
+                            .replace(",", ".")
+                            .toDouble()
+                    )
+                    viewModel.sethtft(
+                        ff.format((viewModel.ht_cm.value!! / Multi_haft).toInt()).replace(",", ".")
+                            .toInt()
+                    )
+                    viewModel.sethtin(
+                        ff.format((viewModel.ht_cm.value!! - viewModel.ht_ft.value!! * Multi_haft) / Multi_tin)
+                            .toInt()
+                    )
                 }
 
                 val dialog = CalculatorResultFragment()
                 dialog.show(childFragmentManager, "CalculatorResult")
-
+                currentDialogFragmentTag="CalculatorResult"
             } else {
                 Toast.makeText(requireContext(), "please select your gender", Toast.LENGTH_SHORT)
                     .show()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initBar()
     }
 
     private lateinit var adapter: AgeSelectorAdapter
@@ -1554,6 +1632,27 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         Log.d(TAG, "当前选中:${ageList[pos]}")
     }
 
+    fun initBar() {
+        immersionBar {
+            statusBarColor(R.color.bg1)
+            statusBarDarkFont(true)
+            titleBar(view)
+        }
+    }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            initBar()
+        }
+    }
+
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        val dialogFragment=childFragmentManager.findFragmentByTag(currentDialogFragmentTag)
+//        if (dialogFragment!=null){
+//            childFragmentManager.putFragment(outState,"calChildFragment",dialogFragment)
+//        }
+//    }
 }
 

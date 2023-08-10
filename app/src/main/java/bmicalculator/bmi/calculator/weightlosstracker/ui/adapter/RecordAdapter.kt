@@ -1,7 +1,6 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,16 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import bmicalculator.bmi.calculator.weightlosstracker.R
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.bmi.child.RecordFragment
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
 
 class RecordAdapter(
     private val context: Context, val bmiInfoList: ArrayList<BmiInfo>,

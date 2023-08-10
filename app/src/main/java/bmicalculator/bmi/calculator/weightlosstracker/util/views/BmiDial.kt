@@ -1,19 +1,16 @@
-package bmicalculator.bmi.calculator.weightlosstracker.uitl.views
+package bmicalculator.bmi.calculator.weightlosstracker.util.views
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
-import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import bmicalculator.bmi.calculator.weightlosstracker.R
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
 
 
 class BmiDial(context: Context?, attrs: AttributeSet?) : View(context, attrs) {

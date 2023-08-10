@@ -3,7 +3,6 @@ package bmicalculator.bmi.calculator.weightlosstracker.ui.bmi.child
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -25,8 +24,9 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.History
 import bmicalculator.bmi.calculator.weightlosstracker.ui.adapter.RecordAdapter
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.gyf.immersionbar.ktx.immersionBar
 import kotlin.Exception
 
 private const val TAG = "RecordHistory"
@@ -46,15 +46,6 @@ class RecordHistoryFragment : DialogFragment() {
     ): View? {
         binding = FragmentRecordHistoryBinding.inflate(layoutInflater, container, false)
 
-        val window = dialog?.window
-        if (window != null) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = Color.WHITE
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            (activity as AppCompatActivity).window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
         val dao = AppDataBase.getDatabase(requireContext().applicationContext).bmiInfoDao()
         val repository = Repository(dao)
         val factory = ViewModelFactory(repository)
@@ -124,6 +115,11 @@ class RecordHistoryFragment : DialogFragment() {
         params?.gravity = Gravity.BOTTOM
         params?.dimAmount = 0.0f
         dialog?.window?.attributes = params as WindowManager.LayoutParams
+        immersionBar {
+            statusBarColor(R.color.bg1)
+            statusBarDarkFont(true)
+            titleBar(view)
+        }
     }
 
     fun orderList(list: List<BmiInfo>): List<BmiInfo> {

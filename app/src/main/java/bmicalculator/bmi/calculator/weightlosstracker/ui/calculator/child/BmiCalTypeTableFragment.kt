@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +23,7 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFactory
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.ChildBmiDialData
+import bmicalculator.bmi.calculator.weightlosstracker.util.ChildBmiDialData
 
 class BmiCalTypeTableFragment : DialogFragment() {
 

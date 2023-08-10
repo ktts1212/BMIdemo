@@ -1,21 +1,16 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.bmi
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
-import android.os.Binder
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -31,11 +26,11 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.bmi.child.RecordHistoryFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.ChildBmiDialData
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.SweepAngel
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import bmicalculator.bmi.calculator.weightlosstracker.util.ChildBmiDialData
+import bmicalculator.bmi.calculator.weightlosstracker.util.SweepAngel
+import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.lang.Exception
+import com.gyf.immersionbar.ktx.immersionBar
 
 private const val TAG = "BmiFragment"
 
@@ -165,6 +160,26 @@ class BmiFragment : Fragment() {
             dialog.show(childFragmentManager, "RecordHistory")
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initBar()
+    }
+
+    fun initBar(){
+        immersionBar {
+            titleBar(view)
+            statusBarColor(R.color.white)
+            transparentStatusBar()
+            statusBarDarkFont(true)
+        }
+    }
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden){
+            initBar()
+        }
     }
 
     fun getBmiType(bmiType: String) {

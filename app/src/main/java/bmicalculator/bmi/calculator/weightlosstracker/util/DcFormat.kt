@@ -1,4 +1,4 @@
-package bmicalculator.bmi.calculator.weightlosstracker.uitl
+package bmicalculator.bmi.calculator.weightlosstracker.util
 
 import java.text.DecimalFormat
 import java.text.NumberFormat

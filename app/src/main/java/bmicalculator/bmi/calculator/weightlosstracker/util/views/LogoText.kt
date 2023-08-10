@@ -1,4 +1,4 @@
-package bmicalculator.bmi.calculator.weightlosstracker.uitl.views
+package bmicalculator.bmi.calculator.weightlosstracker.util.views
 
 import android.content.Context
 import android.graphics.Canvas
@@ -7,7 +7,7 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
 
 class LogoText(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 

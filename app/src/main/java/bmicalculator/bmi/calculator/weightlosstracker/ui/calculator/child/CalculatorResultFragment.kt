@@ -1,7 +1,6 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -11,7 +10,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import bmicalculator.bmi.calculator.weightlosstracker.R
@@ -34,13 +31,14 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.AdInfo
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
 import bmicalculator.bmi.calculator.weightlosstracker.ui.statistic.StatisticFragment
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.ChildBmiDialData
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.DcFormat
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import bmicalculator.bmi.calculator.weightlosstracker.util.ChildBmiDialData
+import bmicalculator.bmi.calculator.weightlosstracker.util.DcFormat
+import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.gyf.immersionbar.ktx.immersionBar
 import java.time.LocalTime
 import java.util.Arrays
 import kotlin.random.Random
@@ -63,14 +61,6 @@ class CalculatorResultFragment : DialogFragment() {
         val factory = ViewModelFactory(repository)
         viewModel =
             ViewModelProvider(requireActivity(), factory).get(CalculatorViewModel::class.java)
-
-        val window = dialog?.window
-        if (window != null) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = Color.WHITE
-        }
-        //设置状态栏字体颜色
-        WindowCompat.setDecorFitsSystemWindows((activity as AppCompatActivity).window,true)
         return binding.root
     }
 
@@ -912,6 +902,11 @@ class CalculatorResultFragment : DialogFragment() {
         params?.dimAmount = 0.0f
         dialog?.window?.attributes = params as WindowManager.LayoutParams
         (activity as AppCompatActivity).supportActionBar?.hide()
+        immersionBar {
+            transparentStatusBar()
+            statusBarDarkFont(true)
+            titleBar(view)
+        }
     }
 
     override fun onDismiss(dialog: DialogInterface) {

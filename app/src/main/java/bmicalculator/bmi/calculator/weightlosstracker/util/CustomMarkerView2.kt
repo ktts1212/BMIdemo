@@ -1,11 +1,8 @@
-package bmicalculator.bmi.calculator.weightlosstracker.uitl
+package bmicalculator.bmi.calculator.weightlosstracker.util
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import bmicalculator.bmi.calculator.weightlosstracker.R
 import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.data.Entry

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#ff0099cc">
 
-    <bmicalculator.bmi.calculator.weightlosstracker.uitl.views.LogoDial
+    <bmicalculator.bmi.calculator.weightlosstracker.util.views.LogoDial
         android:id="@+id/logo_gial"
         android:layout_width="140dp"
         android:layout_height="140dp"
@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <bmicalculator.bmi.calculator.weightlosstracker.uitl.views.LogoArrow
+    <bmicalculator.bmi.calculator.weightlosstracker.util.views.LogoArrow
         android:id="@+id/logo_arrow"
         android:layout_width="20dp"
         android:layout_height="40dp"
@@ -24,7 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <bmicalculator.bmi.calculator.weightlosstracker.uitl.views.LogoText
+    <bmicalculator.bmi.calculator.weightlosstracker.util.views.LogoText
         android:id="@+id/logo_text"
         android:layout_width="350dp"
         android:layout_height="200dp"

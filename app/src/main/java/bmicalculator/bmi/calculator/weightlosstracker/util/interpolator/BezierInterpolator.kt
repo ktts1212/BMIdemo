@@ -1,4 +1,4 @@
-package bmicalculator.bmi.calculator.weightlosstracker.uitl.interpolator
+package bmicalculator.bmi.calculator.weightlosstracker.util.interpolator
 
 import android.animation.TimeInterpolator
 

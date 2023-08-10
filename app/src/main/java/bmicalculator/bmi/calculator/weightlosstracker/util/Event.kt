@@ -1,4 +1,4 @@
-package bmicalculator.bmi.calculator.weightlosstracker.uitl
+package bmicalculator.bmi.calculator.weightlosstracker.util
 
 open class Event<out T>(private val content: T) {
 

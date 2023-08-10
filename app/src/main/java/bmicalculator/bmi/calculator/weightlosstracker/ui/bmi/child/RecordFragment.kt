@@ -6,14 +6,12 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.DialogFragment
@@ -25,10 +23,11 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatab
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFactory
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.ChildBmiDialData
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.DcFormat
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.SweepAngel
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import bmicalculator.bmi.calculator.weightlosstracker.util.ChildBmiDialData
+import bmicalculator.bmi.calculator.weightlosstracker.util.DcFormat
+import bmicalculator.bmi.calculator.weightlosstracker.util.SweepAngel
+import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
+import com.gyf.immersionbar.ktx.immersionBar
 
 private const val TAG="RecordFragment"
 class RecordFragment : DialogFragment() {
@@ -54,16 +53,6 @@ class RecordFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val window = dialog?.window
-        if (window != null) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = Color.WHITE
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            (activity as AppCompatActivity).window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
-
         val dao = AppDataBase.getDatabase(requireContext().applicationContext).bmiInfoDao()
         val repository = Repository(dao)
         val factory = ViewModelFactory(repository)
@@ -149,6 +138,11 @@ class RecordFragment : DialogFragment() {
         params?.gravity = Gravity.BOTTOM
         params?.dimAmount = 0.0f
         dialog?.window?.attributes = params as WindowManager.LayoutParams
+        immersionBar {
+            transparentStatusBar()
+            statusBarDarkFont(true)
+            titleBar(view)
+        }
     }
 
     @SuppressLint("SetTextI18n")

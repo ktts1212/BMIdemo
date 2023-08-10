@@ -1,10 +1,9 @@
-package bmicalculator.bmi.calculator.weightlosstracker.uitl
+package bmicalculator.bmi.calculator.weightlosstracker.util
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.util.Log
 import androidx.core.content.res.ResourcesCompat
 import bmicalculator.bmi.calculator.weightlosstracker.R
 import com.github.mikephil.charting.components.XAxis

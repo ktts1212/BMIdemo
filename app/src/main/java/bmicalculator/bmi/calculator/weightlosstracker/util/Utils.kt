@@ -1,7 +1,6 @@
-package bmicalculator.bmi.calculator.weightlosstracker.uitl
+package bmicalculator.bmi.calculator.weightlosstracker.util
 
 import android.content.Context
-import android.util.Log
 import bmicalculator.bmi.calculator.weightlosstracker.R
 import java.time.Instant
 import java.time.LocalDate
@@ -82,11 +81,6 @@ object Utils {
         return Max* (t * 0.01).pow(2.0) /0.453
     }
 
-    fun isInCurrentMonth(year:Int,month:Int):Boolean{
-        val currentCalendar=Calendar.getInstance()
-        return currentCalendar.get(Calendar.YEAR)==year&&
-                currentCalendar.get(Calendar.MONTH)+1==month
-    }
 
     fun monthToNumber(month: String): Int {
         val monthnum = when (month) {
@@ -115,37 +109,6 @@ object Utils {
         return calendar.get(Calendar.DAY_OF_YEAR)
     }
 
-//    fun getDayOfMonth(dayOFYear:Int,year: Int): TimeBMi {
-//        val calendar=Calendar.getInstance()
-//        calendar.set(Calendar.YEAR,year)
-//        calendar.set(Calendar.DAY_OF_YEAR,dayOFYear)
-//        val dayOfMonth=calendar.get(Calendar.DAY_OF_MONTH)
-//        val month=calendar.get(Calendar.MONTH)+1
-//        return TimeBMi(dayOfMonth,month)
-//    }
-
-    fun dayToWeek(dayOfYear:Int):Int{
-        val calendar=Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_YEAR,dayOfYear)
-        Log.d("waaa","第${dayOfYear}天 is 第 ${calendar.get(Calendar.WEEK_OF_YEAR)}周")
-        return calendar.get(Calendar.WEEK_OF_YEAR)
-    }
-
-    fun dayToWeekNew(dayOfYear:Int):Int{
-        val calendar=Calendar.getInstance()
-        calendar.minimalDaysInFirstWeek=4
-        calendar.set(Calendar.DAY_OF_YEAR,dayOfYear)
-        return calendar.get(Calendar.WEEK_OF_YEAR)
-    }
-
-//    fun dayToWeekTest(dayOfYear:Int):Int{
-//        val currentYear=LocalDate.now().year
-//        val dMonth= getDayOfMonth(dayOfYear)
-//        val date=LocalDate.of(currentYear,dMonth.month,dMonth.day)
-//        val weekFields=WeekFields.of(Locale.getDefault())
-//        val weekNumber=date.get(weekFields.weekOfWeekBasedYear())
-//        return weekNumber
-//    }
     fun dayToMonth(dayOfYear: Int): Int {
         val calendar=Calendar.getInstance()
         calendar.set(Calendar.YEAR,LocalDate.now().year)

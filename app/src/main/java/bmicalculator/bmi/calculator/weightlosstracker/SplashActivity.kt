@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.ActivitySplashBinding
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.interpolator.BezierInterpolator
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.Utils
+import bmicalculator.bmi.calculator.weightlosstracker.util.interpolator.BezierInterpolator
+import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
 import java.util.Timer
 import kotlin.concurrent.schedule
 

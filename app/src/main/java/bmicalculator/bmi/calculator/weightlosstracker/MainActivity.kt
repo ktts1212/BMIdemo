@@ -2,11 +2,9 @@ package bmicalculator.bmi.calculator.weightlosstracker
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.ActivityMainBinding
@@ -17,8 +15,8 @@ import bmicalculator.bmi.calculator.weightlosstracker.ui.bmi.BmiFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
 import bmicalculator.bmi.calculator.weightlosstracker.ui.statistic.StatisticFragment
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.ContextWrapper
-import bmicalculator.bmi.calculator.weightlosstracker.uitl.LanguageHelper
+import bmicalculator.bmi.calculator.weightlosstracker.util.ContextWrapper
+import bmicalculator.bmi.calculator.weightlosstracker.util.LanguageHelper
 
 private const val TAG = "MainActivity"
 
@@ -31,26 +29,29 @@ class MainActivity : AppCompatActivity() {
 
     private var firstStart=0
 
+    private lateinit var currentFragmentTag:String
+
+    private lateinit var mCurrentFragment:Fragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val fragments=supportFragmentManager.fragments
-        val ft=supportFragmentManager.beginTransaction()
-        for(fragment in fragments){
-            if (fragment!=null){
-                ft.remove(fragment)
-            }
-        }
-        ft.commit()
+//        //删除fragment堆栈中的所有fragment
+//        val fragments=supportFragmentManager.fragments
+//        val ft=supportFragmentManager.beginTransaction()
+//        for(fragment in fragments){
+//            if (fragment!=null){
+//                ft.remove(fragment)
+//            }
+//        }
+//        ft.commit()
 
-
-        if (supportFragmentManager.findFragmentByTag("statistic")!=null){
-            Log.d(TAG,"存在")
-            val fT=supportFragmentManager.beginTransaction()
-            fT.remove(supportFragmentManager.findFragmentByTag("statistic")!!)
-            fT.commit()
+        if (savedInstanceState!=null){
+            currentFragmentTag= savedInstanceState.getString("currentFragmentTag").toString()
+        }else{
+            currentFragmentTag="calculator"
         }
 
         val dao = AppDataBase.getDatabase(application).bmiInfoDao()
@@ -69,58 +70,63 @@ class MainActivity : AppCompatActivity() {
         viewModel.allInfo.observe(this) {
             if (!it.isNullOrEmpty()) {
                 binding.bottomNavigationView.visibility = View.VISIBLE
-                if (firstStart==0){
-                    binding.bottomNavigationView.selectedItemId=R.id.menu_bmi
-                    val fragmentManager=supportFragmentManager
-                    val transition=fragmentManager.beginTransaction()
-                    transition.replace(R.id.fragment_container, BmiFragment())
-                    transition.commit()
-                    firstStart=1
-                }
             } else {
                 binding.bottomNavigationView.visibility = View.GONE
             }
         }
 
-        //更改状态栏字体颜色
+//        if (firstStart==0){
+//            binding.bottomNavigationView.selectedItemId=R.id.menu_bmi
+//            val fragmentManager=supportFragmentManager
+//            val transition=fragmentManager.beginTransaction()
+//            transition.replace(R.id.fragment_container, BmiFragment())
+//            transition.commit()
+//            currentFragmentTag="statistic"
+//            firstStart=1
+//        }
 
-        WindowCompat.setDecorFitsSystemWindows(window,true)
 
-        //fragment切换
-        val fragmentManager = supportFragmentManager
-        var mCurrentFragment: Fragment = CalculatorFragment()
-        val transaction = fragmentManager.beginTransaction()
-        transaction.add(R.id.fragment_container, mCurrentFragment, "calculator")
+
+        getFgByTag(currentFragmentTag)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.fragment_container, mCurrentFragment, currentFragmentTag)
         transaction.show(mCurrentFragment).commit()
 
         binding.bottomNavigationView.setOnItemSelectedListener {
-
-            val transaction = fragmentManager.beginTransaction()
+            val transaction = supportFragmentManager.beginTransaction()
             transaction.hide(mCurrentFragment)
             when (it.itemId) {
                 R.id.menu_calculator -> {
-                    mCurrentFragment = fragmentManager.findFragmentByTag("calculator")
+                    mCurrentFragment = supportFragmentManager.findFragmentByTag("calculator")
                         ?: CalculatorFragment().also {fg->
                             transaction.add(R.id.fragment_container, fg, "calculator")
                         }
+                    currentFragmentTag="calculator"
+                    transaction.show(mCurrentFragment).commit()
                 }
 
 
                 R.id.menu_bmi -> {
-                    mCurrentFragment = fragmentManager.findFragmentByTag("bmi")
+
+                    mCurrentFragment = supportFragmentManager.findFragmentByTag("bmi")
                         ?: BmiFragment().also { fg ->
                             transaction.add(R.id.fragment_container, fg, "bmi")
                         }
+                    currentFragmentTag="bmi"
+                    transaction.show(mCurrentFragment).commit()
                 }
 
                 R.id.menu_statistics -> {
-                    mCurrentFragment = fragmentManager.findFragmentByTag("statistic")
+
+                    mCurrentFragment = supportFragmentManager.findFragmentByTag("statistic")
                         ?: StatisticFragment().also {fg->
                             transaction.add(R.id.fragment_container, fg, "statistic")
                         }
+                    currentFragmentTag="statistic"
+                    transaction.show(mCurrentFragment).commit()
                 }
             }
-            transaction.show(mCurrentFragment).commit()
+
             true
         }
 
@@ -131,5 +137,43 @@ class MainActivity : AppCompatActivity() {
             ContextWrapper.wrap(newBase,LanguageHelper.getLocale(newBase))
         }
         super.attachBaseContext(newBase)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("currentFragmentTag",currentFragmentTag)
+    }
+
+    fun reGetFragment(tag:String){
+        val transaction=supportFragmentManager.beginTransaction()
+        when(tag){
+            "statistic"-> {
+                mCurrentFragment=StatisticFragment()
+            }
+            "bmi"-> {
+                mCurrentFragment=BmiFragment()
+
+            }
+            "calculator"-> {
+                mCurrentFragment=CalculatorFragment()
+            }
+        }
+        transaction.add(R.id.fragment_container,mCurrentFragment,tag)
+        transaction.show(mCurrentFragment).commit()
+    }
+
+    fun getFgByTag(tag:String){
+        when(tag){
+            "statistic"-> {
+                mCurrentFragment=StatisticFragment()
+            }
+            "bmi"-> {
+                mCurrentFragment=BmiFragment()
+
+            }
+            "calculator"-> {
+                mCurrentFragment=CalculatorFragment()
+            }
+        }
     }
 }
