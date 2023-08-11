@@ -77,7 +77,7 @@ class StatisticFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val dao = AppDataBase.getDatabase(requireContext().applicationContext).bmiInfoDao()
-        val factory = ViewModelFactory(Repository(dao))
+        val factory = ViewModelFactory(Repository(dao),requireActivity())
 
         viewModel = ViewModelProvider(requireActivity(), factory).get(
             CalculatorViewModel::class.java

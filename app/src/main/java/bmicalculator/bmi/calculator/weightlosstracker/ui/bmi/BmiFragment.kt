@@ -1,6 +1,7 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.bmi
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
@@ -53,10 +54,16 @@ class BmiFragment : Fragment() {
         setHasOptionsMenu(true)
         val dao = AppDataBase.getDatabase(requireContext().applicationContext).bmiInfoDao()
         val repository = Repository(dao)
-        val factory = ViewModelFactory(repository)
+        val factory = ViewModelFactory(repository, requireActivity())
         viewModel =
-            ViewModelProvider(requireActivity(), factory).get(CalculatorViewModel::class.java)
-
+            ViewModelProvider(requireActivity(), factory)[CalculatorViewModel::class.java]
+        val hasData=(activity as AppCompatActivity).getSharedPreferences("hasData",
+        Context.MODE_PRIVATE).getBoolean("hasData",false)
+        if (hasData) {
+            val navView =
+                (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+            navView.selectedItemId = R.id.menu_bmi
+        }
         return binding.root
     }
 
@@ -65,34 +72,41 @@ class BmiFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.bmiLo.setOnClickListener {
-            Toast.makeText(requireContext(),"you clicked me ",Toast.LENGTH_SHORT).show()
-            val navView=
+            val navView =
                 (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
-            navView.selectedItemId=R.id.menu_calculator
-            val fragmentManager=(activity as AppCompatActivity).supportFragmentManager
-            val transition=fragmentManager.beginTransaction()
+            navView.selectedItemId = R.id.menu_calculator
+            val fragmentManager = (activity as AppCompatActivity).supportFragmentManager
+            val transition = fragmentManager.beginTransaction()
             transition.replace(R.id.fragment_container, CalculatorFragment())
             transition.commit()
         }
 
         binding.toolbarBmi.setOnClickListener {
-            val navView=
+            val navView =
                 (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
-            navView.selectedItemId=R.id.menu_calculator
-            val fragmentManager=(activity as AppCompatActivity).supportFragmentManager
-            val transition=fragmentManager.beginTransaction()
+            navView.selectedItemId = R.id.menu_calculator
+            val fragmentManager = (activity as AppCompatActivity).supportFragmentManager
+            val transition = fragmentManager.beginTransaction()
             transition.replace(R.id.fragment_container, CalculatorFragment())
             transition.commit()
         }
 
         binding.bmiSvChild.setOnClickListener {
-            val navView=
+            val navView =
                 (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
-            navView.selectedItemId=R.id.menu_calculator
-            val fragmentManager=(activity as AppCompatActivity).supportFragmentManager
-            val transition=fragmentManager.beginTransaction()
+            navView.selectedItemId = R.id.menu_calculator
+            val fragmentManager = (activity as AppCompatActivity).supportFragmentManager
+            val transition = fragmentManager.beginTransaction()
             transition.replace(R.id.fragment_container, CalculatorFragment())
             transition.commit()
+        }
+
+
+        if (viewModel.getNavId()!=null){
+            Log.d("wwwwwwwpp","${viewModel.getNavId()}")
+            val navView =
+                (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+            navView.selectedItemId =viewModel.getNavId()!!
         }
 
         binding.bmiArrow.alpha = 0.75f
@@ -105,27 +119,28 @@ class BmiFragment : Fragment() {
         ).toFloat()
 
 
-        viewModel.allInfo.observe(requireActivity()) {
-            for (i in 0 until it.size) {
-                allInfo.add(it[i])
+        viewModel.allInfo.observe(requireActivity()) { bmiInfo ->
+            for (element in bmiInfo) {
+                allInfo.add(element)
             }
 
-            if (isAdded){
-                binding.bmiLabel.setText(String.format(getString(R.string.bmi_tip_description),"..."))
+            if (isAdded) {
+                binding.bmiLabel.text =
+                    String.format(getString(R.string.bmi_tip_description), "...")
             }
 
 
             allInfo.sortByDescending { it.timestape }
             val newRecord = allInfo.maxBy { it.timestape }
-            viewModel.bmiNewRecord.value=newRecord
+            viewModel.bmiNewRecord.value = newRecord
             Log.d(TAG, newRecord.toString())
             if (newRecord.age > 20) {
                 binding.typeTableChildDial.visibility = View.GONE
                 binding.typeTableDial.visibility = View.VISIBLE
                 binding.bmiArrow.rotation = SweepAngel.sweepAngle(newRecord.bmi)
-                binding.bmiDate.setText(newRecord.date)
-                binding.bmiValue.setText(newRecord.bmi.toString())
-                if (isAdded){
+                binding.bmiDate.text = newRecord.date
+                binding.bmiValue.text = newRecord.bmi.toString()
+                if (isAdded) {
                     getBmiType(newRecord.bmiType!!)
                     getWtHtType(newRecord)
                 }
@@ -133,8 +148,8 @@ class BmiFragment : Fragment() {
             } else {
                 binding.typeTableChildDial.visibility = View.VISIBLE
                 binding.typeTableDial.visibility = View.GONE
-                binding.bmiValue.setText(newRecord.bmi.toString())
-                binding.bmiDate.setText(newRecord.date)
+                binding.bmiValue.text = newRecord.bmi.toString()
+                binding.bmiDate.text = newRecord.date
                 ChildBmiDialData.setData(newRecord.age, newRecord.gender)
                 binding.typeTableChildDial.getData(
                     ChildBmiDialData.cScaleList,
@@ -167,7 +182,7 @@ class BmiFragment : Fragment() {
         initBar()
     }
 
-    fun initBar(){
+    private fun initBar() {
         immersionBar {
             titleBar(view)
             statusBarColor(R.color.white)
@@ -175,18 +190,20 @@ class BmiFragment : Fragment() {
             statusBarDarkFont(true)
         }
     }
+
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        if (!hidden){
+        if (!hidden) {
             initBar()
         }
     }
 
-    fun getBmiType(bmiType: String) {
+    private fun getBmiType(bmiType: String) {
         when (bmiType) {
             "vsuw" -> {
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.bmi_very_severely_underweight))
+                    binding.bmiCalTypeTextNew.text =
+                        getString(R.string.bmi_very_severely_underweight)
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -230,7 +247,7 @@ class BmiFragment : Fragment() {
 
             "suw" -> {
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.bmi_severely_underweight))
+                    binding.bmiCalTypeTextNew.text = getString(R.string.bmi_severely_underweight)
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -275,7 +292,7 @@ class BmiFragment : Fragment() {
 
             "uw" -> {
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.bmi_underweight))
+                    binding.bmiCalTypeTextNew.text = getString(R.string.bmi_underweight)
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -321,7 +338,7 @@ class BmiFragment : Fragment() {
             "nm" -> {
 
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.normal_leg))
+                    binding.bmiCalTypeTextNew.text = getString(R.string.normal_leg)
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -366,7 +383,7 @@ class BmiFragment : Fragment() {
 
             "ow" -> {
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.bmi_overweight))
+                    binding.bmiCalTypeTextNew.text = getString(R.string.bmi_overweight)
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -411,7 +428,7 @@ class BmiFragment : Fragment() {
 
             "oc1" -> {
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.bmi_range_obese_class1))
+                    binding.bmiCalTypeTextNew.text = getString(R.string.bmi_range_obese_class1)
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -455,7 +472,7 @@ class BmiFragment : Fragment() {
 
             "oc2" -> {
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.bmi_range_obese_class2))
+                    binding.bmiCalTypeTextNew.text = getString(R.string.bmi_range_obese_class2)
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -499,7 +516,7 @@ class BmiFragment : Fragment() {
 
             "oc3" -> {
                 if (isAdded) {
-                    binding.bmiCalTypeTextNew.setText(getString(R.string.bmi_range_obese_class3))
+                    binding.bmiCalTypeTextNew.text = getString(R.string.bmi_range_obese_class3)
                     binding.bmiCalTypeDisplayNew.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -545,39 +562,53 @@ class BmiFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     fun getWtHtType(newRecord: BmiInfo) {
+        if (isAdded){
+            val gender = if (newRecord.gender == '0') getString(R.string.male) else getString(
+                R.string.female
+            )
 
-        val gender = if (newRecord.gender == '0') getString(R.string.male) else getString(
-            R.string.female
-        )
+            when (newRecord.wtHtType) {
+                "lbftin" -> {
+                    binding.bmiCalInfoNew.text = String.format(
+                        getString(R.string.bmi_input_data),
+                        "${newRecord.wt_lb} lb",
+                        "${newRecord.ht_ft} ft ${newRecord.ht_in} in",
+                        gender,
+                        "${newRecord.age}"
+                    )
+                }
 
-        when (newRecord.wtHtType) {
-            "lbftin" -> {
-                binding.bmiCalInfoNew.setText(
-                    String.format(getString(R.string.bmi_input_data),"${newRecord.wt_lb} lb"
-                    ,"${newRecord.ht_ft} ft ${newRecord.ht_in} in",gender,"${newRecord.age}")
-                )
-            }
+                "lbcm" -> {
+                    binding.bmiCalInfoNew.text = String.format(
+                        getString(R.string.bmi_input_data),
+                        "${newRecord.wt_lb} lb",
+                        "${newRecord.ht_cm} cm",
+                        gender,
+                        "${newRecord.age}"
+                    )
+                }
 
-            "lbcm" -> {
-                binding.bmiCalInfoNew.setText(
-                    String.format(getString(R.string.bmi_input_data),"${newRecord.wt_lb} lb"
-                        ,"${newRecord.ht_cm} cm",gender,"${newRecord.age}")
-                )
-            }
+                "kgftin" -> {
+                    binding.bmiCalInfoNew.text = String.format(
+                        getString(R.string.bmi_input_data),
+                        "${newRecord.wt_kg} kg",
+                        "${newRecord.ht_ft} ft ${newRecord.ht_in} in",
+                        gender,
+                        "${newRecord.age}"
+                    )
+                }
 
-            "kgftin" -> {
-                binding.bmiCalInfoNew.setText(
-                        String.format(getString(R.string.bmi_input_data),"${newRecord.wt_kg} kg"
-                            ,"${newRecord.ht_ft} ft ${newRecord.ht_in} in",gender,"${newRecord.age}")
-                )
-            }
-
-            "kgcm" -> {
-                binding.bmiCalInfoNew.setText(
-                    String.format(getString(R.string.bmi_input_data),"${newRecord.wt_kg} kg"
-                        ,"${newRecord.ht_cm} cm",gender,"${newRecord.age}")
-                )
+                "kgcm" -> {
+                    binding.bmiCalInfoNew.text = String.format(
+                        getString(R.string.bmi_input_data),
+                        "${newRecord.wt_kg} kg",
+                        "${newRecord.ht_cm} cm",
+                        gender,
+                        "${newRecord.age}"
+                    )
+                }
             }
         }
+
     }
 }

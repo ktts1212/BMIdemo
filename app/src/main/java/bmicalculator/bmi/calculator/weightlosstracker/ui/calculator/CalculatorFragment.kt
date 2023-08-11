@@ -27,6 +27,7 @@ import bmicalculator.bmi.calculator.weightlosstracker.databinding.FragmentCalcul
 import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFactory
+import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.adapter.AgeSelectorAdapter
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.CalculatorResultFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.DatePickerFragment
@@ -68,18 +69,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
     private var childViewHalfCount: Int = 0
 
-    private var isInitBar = false
-
     private lateinit var currentDialogFragmentTag:String
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        val childFragments=childFragmentManager.fragments
-//        val transaction=childFragmentManager.beginTransaction()
-//        for (fragment in childFragments){
-//
-//        }
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
@@ -89,7 +79,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         binding = FragmentCalculatorBinding.inflate(layoutInflater, container, false)
         val dao = AppDataBase.getDatabase(requireContext().applicationContext).bmiInfoDao()
         val repository = Repository(dao)
-        val factory = ViewModelFactory(repository)
+        val factory = ViewModelFactory(repository,requireActivity())
         viewModel =
             ViewModelProvider(requireActivity(), factory)[CalculatorViewModel::class.java]
         //设置toolbar的显示
@@ -102,15 +92,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        if (savedInstanceState!=null){
-//            Log.d("qqqqqq","not null")
-//            var dialogFragment=childFragmentManager.getFragment(savedInstanceState,
-//                "calChildFragment") as DialogFragment
-//            Log.d("qqqqqq",dialogFragment.toString())
-//            dialogFragment=SettingFragment()
-//            dialogFragment.show(childFragmentManager,"SettingFragment")
-//        }
 
         viewModel.allInfo.observe(requireActivity()) { info ->
             if (!info.isNullOrEmpty()) {
@@ -1225,49 +1206,52 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         viewModel.bmiNewRecord.observe(requireActivity()) { newRecord ->
             if (newRecord != null) {
                 Log.d(TAG, "newRecord:${newRecord}")
-                if (newRecord.wtHtType == "lbftin") {
-                    binding.htCardFtin1.visibility = View.VISIBLE
-                    binding.htCardFtin2.visibility = View.VISIBLE
-                    binding.htCardCm.visibility = View.INVISIBLE
-                    binding.wtTab.getTabAt(0)?.select()
-                    binding.wtInput.setText(newRecord.wt_lb.toString())
-                    binding.htTab.getTabAt(0)?.select()
-                    binding.htInputFtin1.setText("${newRecord.ht_ft}'")
-                    binding.htInputFtin2.setText("${newRecord.ht_in}''")
-                } else if (newRecord.wtHtType == "kgftin") {
-                    binding.htCardFtin1.visibility = View.VISIBLE
-                    binding.htCardFtin2.visibility = View.VISIBLE
-                    binding.htCardCm.visibility = View.INVISIBLE
-                    binding.wtTab.getTabAt(1)?.select()
-                    binding.wtInput.setText(newRecord.wt_kg.toString())
-                    binding.htTab.getTabAt(0)?.select()
-                    binding.htInputFtin1.setText("${newRecord.ht_ft}'")
-                    binding.htInputFtin2.setText("${newRecord.ht_in}''")
-                } else if (newRecord.wtHtType == "lbcm") {
-                    binding.htCardFtin1.visibility = View.INVISIBLE
-                    binding.htCardFtin2.visibility = View.INVISIBLE
-                    binding.htCardCm.visibility = View.VISIBLE
-                    binding.wtTab.getTabAt(0)?.select()
-                    binding.wtInput.setText(newRecord.wt_lb.toString())
-                    binding.htTab.getTabAt(1)?.select()
-                    binding.htInputCm.setText(newRecord.ht_cm.toString())
-                } else {
-                    binding.htCardFtin1.visibility = View.INVISIBLE
-                    binding.htCardFtin2.visibility = View.INVISIBLE
-                    binding.htCardCm.visibility = View.VISIBLE
-                    binding.wtTab.getTabAt(1)?.select()
-                    binding.wtInput.setText(newRecord.wt_kg.toString())
-                    binding.htTab.getTabAt(1)?.select()
-                    binding.htInputCm.setText(newRecord.ht_cm.toString())
+                when (newRecord.wtHtType) {
+                    "lbftin" -> {
+                        binding.htCardFtin1.visibility = View.VISIBLE
+                        binding.htCardFtin2.visibility = View.VISIBLE
+                        binding.htCardCm.visibility = View.INVISIBLE
+                        binding.wtTab.getTabAt(0)?.select()
+                        binding.wtInput.setText(newRecord.wt_lb.toString())
+                        binding.htTab.getTabAt(0)?.select()
+                        binding.htInputFtin1.setText("${newRecord.ht_ft}'")
+                        binding.htInputFtin2.setText("${newRecord.ht_in}''")
+                    }
+                    "kgftin" -> {
+                        binding.htCardFtin1.visibility = View.VISIBLE
+                        binding.htCardFtin2.visibility = View.VISIBLE
+                        binding.htCardCm.visibility = View.INVISIBLE
+                        binding.wtTab.getTabAt(1)?.select()
+                        binding.wtInput.setText(newRecord.wt_kg.toString())
+                        binding.htTab.getTabAt(0)?.select()
+                        binding.htInputFtin1.setText("${newRecord.ht_ft}'")
+                        binding.htInputFtin2.setText("${newRecord.ht_in}''")
+                    }
+                    "lbcm" -> {
+                        binding.htCardFtin1.visibility = View.INVISIBLE
+                        binding.htCardFtin2.visibility = View.INVISIBLE
+                        binding.htCardCm.visibility = View.VISIBLE
+                        binding.wtTab.getTabAt(0)?.select()
+                        binding.wtInput.setText(newRecord.wt_lb.toString())
+                        binding.htTab.getTabAt(1)?.select()
+                        binding.htInputCm.setText(newRecord.ht_cm.toString())
+                    }
+                    else -> {
+                        binding.htCardFtin1.visibility = View.INVISIBLE
+                        binding.htCardFtin2.visibility = View.INVISIBLE
+                        binding.htCardCm.visibility = View.VISIBLE
+                        binding.wtTab.getTabAt(1)?.select()
+                        binding.wtInput.setText(newRecord.wt_kg.toString())
+                        binding.htTab.getTabAt(1)?.select()
+                        binding.htInputCm.setText(newRecord.ht_cm.toString())
+                    }
                 }
                 if (isAdded) {
-                    binding.timeInputPhase.setText(
-                        Utils.numToPhase(
-                            requireContext(),
-                            newRecord.phase
-                        )
+                    binding.timeInputPhase.text = Utils.numToPhase(
+                        requireContext(),
+                        newRecord.phase
                     )
-                    binding.timeInputDate.setText(newRecord.date)
+                    binding.timeInputDate.text = newRecord.date
                     binding.ageRecyclerView.scrollToPosition(childViewHalfCount + newRecord.age - 1)
                     //滑动之后100ms后移动到中心位置
                     binding.ageRecyclerView.postDelayed({
@@ -1475,10 +1459,25 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                             .toInt()
                     )
                 }
-
+                val bInfo=BmiInfo(
+                    viewModel.wt_lb.value!!.toDouble(),
+                    viewModel.wt_kg.value!!.toDouble(),
+                    viewModel.ht_ft.value!!.toInt(), viewModel.ht_in.value!!.toInt(),
+                    viewModel.ht_cm.value!!.toDouble(),
+                    viewModel.selectedDate.value, viewModel.selectedPhase.value!!,
+                    viewModel.selectedAge.value!!.toInt(),
+                    viewModel.selectedGender.value!!.toChar(),
+                    viewModel.bmival.value!!,
+                    -1,
+                                -1,
+                    viewModel.bmitype,
+                    viewModel.wttype + viewModel.httype,
+                    0
+                )
+                viewModel.saveData(bInfo)
                 val dialog = CalculatorResultFragment()
                 dialog.show(childFragmentManager, "CalculatorResult")
-                currentDialogFragmentTag="CalculatorResult"
+
             } else {
                 Toast.makeText(requireContext(), "please select your gender", Toast.LENGTH_SHORT)
                     .show()
@@ -1544,7 +1543,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
     private val centerViewItems = ArrayList<CenterItemUtils.CenterViewItem>()
     private var isTouch = false
-
 
     @SuppressLint("ClickableViewAccessibility")
     fun findView() {
@@ -1632,7 +1630,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         Log.d(TAG, "当前选中:${ageList[pos]}")
     }
 
-    fun initBar() {
+    private fun initBar() {
         immersionBar {
             statusBarColor(R.color.bg1)
             statusBarDarkFont(true)
@@ -1646,13 +1644,5 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             initBar()
         }
     }
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        val dialogFragment=childFragmentManager.findFragmentByTag(currentDialogFragmentTag)
-//        if (dialogFragment!=null){
-//            childFragmentManager.putFragment(outState,"calChildFragment",dialogFragment)
-//        }
-//    }
 }
 

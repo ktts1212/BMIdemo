@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/shape_dialogfragment_selector"
     tools:context=".ui.calculator.child.BmiCalTypeTableFragment">
 
@@ -11,8 +11,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -22,42 +22,43 @@
                 android:id="@+id/type_table_tip_text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/montserrat_extrabold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="20dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/montserrat_extrabold"
+                android:text="@string/bmi_adult_tip"
+                android:textColor="@color/black"
                 android:textFontWeight="800"
-                android:text="BMI for adults"/>
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/type_table_tip_text2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:alpha="0.6"
-                app:layout_constraintTop_toBottomOf="@id/type_table_tip_text1"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="5dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:alpha="0.6"
+                android:text="null"
+                android:textColor="@color/black"
                 android:textFontWeight="400"
-                android:text="null"/>
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/type_table_tip_text1" />
+
             <View
                 android:id="@+id/type_table_space"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                app:layout_constraintTop_toBottomOf="@id/type_table_tip_text2"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/type_table_tip_text2" />
 
 
             <bmicalculator.bmi.calculator.weightlosstracker.util.views.ChildBmiDial
                 android:id="@+id/type_table_child_dial"
                 android:layout_width="320dp"
-                android:visibility="gone"
                 android:layout_height="320dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/type_table_space" />
@@ -75,13 +76,14 @@
                 android:id="@+id/bmi_type_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                android:gravity="center_horizontal"
                 android:layout_marginTop="-140dp"
+                android:gravity="center_horizontal"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/type_table_dial">
 
-                <include layout="@layout/bmi_cal_type_table"
-                    android:id="@+id/type_table" />
+                <include
+                    android:id="@+id/type_table"
+                    layout="@layout/bmi_cal_type_table" />
 
             </RelativeLayout>
 
@@ -89,23 +91,29 @@
                 android:id="@+id/type_table_btn"
                 android:layout_width="315dp"
                 android:layout_height="55dp"
-                app:layout_constraintTop_toBottomOf="@id/bmi_type_layout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginTop="23dp"
                 android:backgroundTint="#3659CF"
                 android:fontFamily="@font/montserrat_extrabold"
                 android:gravity="center"
-                android:text="GOT IT"
+                android:text="@string/got_it"
                 android:textColor="@color/white"
                 android:textFontWeight="800"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bmi_type_layout" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:backgroundTint="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/type_table_btn" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,10 @@
 package bmicalculator.bmi.calculator.weightlosstracker
 
 import android.app.Application
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.DatePickerFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.TimePickerFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.statistic.StatisticFragment
@@ -9,6 +13,7 @@ import me.jessyan.autosize.AutoSizeConfig
 import me.jessyan.autosize.external.ExternalAdaptInfo
 
 class BaseApplication:Application() {
+
     override fun onCreate() {
         super.onCreate()
         //多线程适配
@@ -21,8 +26,8 @@ class BaseApplication:Application() {
     fun customAdapterForExternal(){
         AutoSizeConfig.getInstance().externalAdaptManager
             .addExternalAdaptInfoOfActivity(DatePickerFragment::class.java,
-                ExternalAdaptInfo(true,390f))
+                ExternalAdaptInfo(true,400f))
             .addExternalAdaptInfoOfActivity(TimePickerFragment::class.java,
-            ExternalAdaptInfo(true,390f))
+            ExternalAdaptInfo(true,400f))
     }
 }

@@ -20,8 +20,6 @@ import com.github.gzuliyujiang.wheelview.contract.OnWheelChangedListener
 import com.github.gzuliyujiang.wheelview.widget.WheelView
 import java.time.LocalDateTime
 
-private const val TAG = "TimePickerFragment"
-
 class TimePickerFragment : DialogFragment() {
 
     private lateinit var binding: FragmentTimePickerBinding
@@ -33,15 +31,17 @@ class TimePickerFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val phases = mutableListOf<String>(getString(R.string.morning),
-            getString(R.string.afternoon), getString(R.string.evening),getString(R.string.night))
+        val phases = mutableListOf(
+            getString(R.string.morning),
+            getString(R.string.afternoon), getString(R.string.evening), getString(R.string.night)
+        )
         val current = LocalDateTime.now()
         binding = FragmentTimePickerBinding.inflate(layoutInflater, container, false)
-        binding.wheelPickerTimePhase.setData(phases)
-        binding.wheelPickerTimePhase.setDefaultValue(hourtophase(current))
+        binding.wheelPickerTimePhase.data = phases
+        binding.wheelPickerTimePhase.setDefaultValue(hourToPhase(current))
         binding.wheelPickerTimePhase.typeface =
             ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
-        mode = ViewModelProvider(requireActivity()).get(CalculatorViewModel::class.java)
+        mode = ViewModelProvider(requireActivity())[CalculatorViewModel::class.java]
         return binding.root
     }
 
@@ -76,7 +76,11 @@ class TimePickerFragment : DialogFragment() {
         }
 
         binding.btnDonePhase.setOnClickListener {
-            mode.setPhase(Utils.phaseToNum(requireContext(),binding.wheelPickerTimePhase.getCurrentItem()))
+            mode.setPhase(
+                Utils.phaseToNum(
+                    requireContext(), binding.wheelPickerTimePhase.getCurrentItem()
+                )
+            )
             onDestroyView()
         }
     }
@@ -92,13 +96,13 @@ class TimePickerFragment : DialogFragment() {
         dialog?.window?.attributes = params as WindowManager.LayoutParams
     }
 
-    fun hourtophase(current: LocalDateTime): String {
+    private fun hourToPhase(current: LocalDateTime): String {
 
-        val phase: String = if (current.hour >= 23 && current.hour < 8) {
+        val phase: String = if ((current.hour >= 23) || (current.hour < 8)) {
             getString(R.string.night)
-        } else if (current.hour >= 8 && current.hour < 14) {
+        } else if (current.hour in 8..13) {
             getString(R.string.morning)
-        } else if (current.hour >= 14 && current.hour < 19) {
+        } else if (current.hour in 14..18) {
             getString(R.string.afternoon)
         } else {
             getString(R.string.evening)

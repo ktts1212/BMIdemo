@@ -55,7 +55,7 @@ class RecordFragment : DialogFragment() {
     ): View? {
         val dao = AppDataBase.getDatabase(requireContext().applicationContext).bmiInfoDao()
         val repository = Repository(dao)
-        val factory = ViewModelFactory(repository)
+        val factory = ViewModelFactory(repository,requireActivity())
         viewModel =
             ViewModelProvider(requireActivity(), factory).get(CalculatorViewModel::class.java)
         binding = FragmentRecordBinding.inflate(layoutInflater, container, false)

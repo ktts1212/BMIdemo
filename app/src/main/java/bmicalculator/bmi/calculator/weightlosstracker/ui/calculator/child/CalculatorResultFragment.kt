@@ -1,6 +1,7 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -10,6 +11,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -40,10 +42,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gyf.immersionbar.ktx.immersionBar
 import java.time.LocalTime
-import java.util.Arrays
 import kotlin.random.Random
-
-private const val TAG = "Calres"
 
 class CalculatorResultFragment : DialogFragment() {
 
@@ -51,16 +50,21 @@ class CalculatorResultFragment : DialogFragment() {
 
     private lateinit var viewModel: CalculatorViewModel
 
+    private var hasData:Boolean=false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCalculatorResultBinding.inflate(layoutInflater, container, false)
         val dao = AppDataBase.getDatabase(requireContext().applicationContext).bmiInfoDao()
         val repository = Repository(dao)
-        val factory = ViewModelFactory(repository)
+        val factory = ViewModelFactory(repository, requireActivity())
         viewModel =
-            ViewModelProvider(requireActivity(), factory).get(CalculatorViewModel::class.java)
+            ViewModelProvider(requireActivity(), factory)[CalculatorViewModel::class.java]
+        hasData =
+            (activity as AppCompatActivity).getSharedPreferences("hasData", Context.MODE_PRIVATE)
+                .getBoolean("hasData", false)
         return binding.root
     }
 
@@ -75,7 +79,9 @@ class CalculatorResultFragment : DialogFragment() {
             )
         }
 
-        binding.bmiTip.setText(String.format(getString(R.string.bmi_tip_description), "..."))
+
+        binding.bmiTip.text = String.format(getString(R.string.bmi_tip_description), "...")
+
 
         viewModel.bmival.observe(requireActivity()) {
             binding.bmiNum.text =
@@ -96,23 +102,23 @@ class CalculatorResultFragment : DialogFragment() {
                 setTitle(getString(R.string.tiktok_delete_confirm))
                 setMessage(getString(R.string.delete_history_record_content))
                 setCancelable(false)
-                setPositiveButton(getString(R.string.delete)) { dialog, which ->
+                setPositiveButton(getString(R.string.delete)) { _, _ ->
                     onDestroyView()
                 }
 
-                setNegativeButton(getString(R.string.action_cancel)) { dialog, which ->
+                setNegativeButton(getString(R.string.action_cancel)) { _, _ ->
 
                 }
                 show()
             }
         }
 
-        viewModel.allInfo.observe(requireActivity()){
-            if (!it.isNullOrEmpty()){
+        viewModel.allInfo.observe(requireActivity()) {
+            if (!it.isNullOrEmpty()) {
                 binding.bmiTypeTip.visibility = View.VISIBLE
                 binding.bmiCalType.visibility = View.GONE
                 binding.bmiAdLayout.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.bmiTypeTip.visibility = View.GONE
                 binding.bmiCalType.visibility = View.VISIBLE
                 binding.bmiAdLayout.visibility = View.GONE
@@ -120,7 +126,7 @@ class CalculatorResultFragment : DialogFragment() {
         }
 
         binding.bmiCalTypeCard.setOnClickListener {
-            if (viewModel.allInfo.value!=null) {
+            if (hasData) {
                 val dialog = BmiCalTypeTableFragment()
                 dialog.show(childFragmentManager, "TypeTable")
             }
@@ -128,12 +134,12 @@ class CalculatorResultFragment : DialogFragment() {
 
         binding.bmiArrow.alpha = 0.75f
 
-        //根据bmival判断
-        val bval = viewModel.bmival.value
+        //根据bmiVal判断
+        val bVal = viewModel.bmival.value
 
 
-        //设置textdisplay
-        val sgender = if (viewModel.selectedGender.value!!.equals('0')) "Male"
+        //设置textDisplay
+        val sGender = if (viewModel.selectedGender.value!! == '0') "Male"
         else "Female"
         val selectType = viewModel.wttype + viewModel.httype
 
@@ -144,76 +150,85 @@ class CalculatorResultFragment : DialogFragment() {
 
         Utils.initData(viewModel.selectedAge.value!!)
 
-        var genderString = if (sgender == "Male") getString(R.string.male)
+        val genderString = if (sGender == "Male") getString(R.string.male)
         else getString(R.string.female)
-        var minwt: Double = 0.0
-        var maxwt: Double = 0.0
-        val bmicalinfo = if (selectType == "lbftin") {
-            minwt = Utils.minWtftintolb(viewModel.ht_ft.value!!, viewModel.ht_in.value!!)
-            maxwt = Utils.maxWtftintolb(viewModel.ht_ft.value!!, viewModel.ht_in.value!!)
-            String.format(
-                getString(R.string.bmi_input_data), "${viewModel.wt_lb.value} lb",
-                "${viewModel.ht_ft.value} ft ${viewModel.ht_in.value} in",
-                genderString, "${viewModel.selectedAge.value}"
-            )
-        } else if (selectType == "lbcm") {
-            minwt = Utils.minCmtolb(viewModel.ht_cm.value!!)
-            maxwt = Utils.maxCmtolb(viewModel.ht_cm.value!!)
-            String.format(
-                getString(R.string.bmi_input_data), "${viewModel.wt_lb.value} lb",
-                "${viewModel.ht_cm.value} cm",
-                genderString, "${viewModel.selectedAge.value}"
-            )
-        } else if (selectType == "kgftin") {
-            minwt = Utils.minWtftintokg(viewModel.ht_ft.value!!, viewModel.ht_in.value!!)
-            maxwt = Utils.maxWtftintokg(viewModel.ht_ft.value!!, viewModel.ht_in.value!!)
-            String.format(
-                getString(R.string.bmi_input_data), "${viewModel.wt_kg.value} kg",
-                "${viewModel.ht_ft.value} ft ${viewModel.ht_in.value} in",
-                genderString, "${viewModel.selectedAge.value}"
-            )
-        } else {
-            minwt = Utils.minCmtokg(viewModel.ht_cm.value!!)
-            maxwt = Utils.maxCmtokg(viewModel.ht_cm.value!!)
-            String.format(
-                getString(R.string.bmi_input_data), "${viewModel.wt_kg.value} kg",
-                "${viewModel.ht_cm.value} cm",
-                genderString, "${viewModel.selectedAge.value}"
-            )
+        val minWt: Double
+        val maxWt: Double
+        val bmiCalInfo = when (selectType) {
+            "lbftin" -> {
+                minWt = Utils.minWtftintolb(viewModel.ht_ft.value!!, viewModel.ht_in.value!!)
+                maxWt = Utils.maxWtftintolb(viewModel.ht_ft.value!!, viewModel.ht_in.value!!)
+                String.format(
+                    getString(R.string.bmi_input_data), "${viewModel.wt_lb.value} lb",
+                    "${viewModel.ht_ft.value} ft ${viewModel.ht_in.value} in",
+                    genderString, "${viewModel.selectedAge.value}"
+                )
+            }
+
+            "lbcm" -> {
+                minWt = Utils.minCmtolb(viewModel.ht_cm.value!!)
+                maxWt = Utils.maxCmtolb(viewModel.ht_cm.value!!)
+                String.format(
+                    getString(R.string.bmi_input_data), "${viewModel.wt_lb.value} lb",
+                    "${viewModel.ht_cm.value} cm",
+                    genderString, "${viewModel.selectedAge.value}"
+                )
+            }
+
+            "kgftin" -> {
+                minWt = Utils.minWtftintokg(viewModel.ht_ft.value!!, viewModel.ht_in.value!!)
+                maxWt = Utils.maxWtftintokg(viewModel.ht_ft.value!!, viewModel.ht_in.value!!)
+                String.format(
+                    getString(R.string.bmi_input_data), "${viewModel.wt_kg.value} kg",
+                    "${viewModel.ht_ft.value} ft ${viewModel.ht_in.value} in",
+                    genderString, "${viewModel.selectedAge.value}"
+                )
+            }
+
+            else -> {
+                minWt = Utils.minCmtokg(viewModel.ht_cm.value!!)
+                maxWt = Utils.maxCmtokg(viewModel.ht_cm.value!!)
+                String.format(
+                    getString(R.string.bmi_input_data), "${viewModel.wt_kg.value} kg",
+                    "${viewModel.ht_cm.value} cm",
+                    genderString, "${viewModel.selectedAge.value}"
+                )
+            }
         }
 
-        binding.bmiCalInfo.setText(bmicalinfo)
+        binding.bmiCalInfo.text = bmiCalInfo
 
-        var wtrange =
-            "${DcFormat.tf.format(minwt)} ${viewModel.wttype} - ${DcFormat.tf.format(maxwt)} ${viewModel.wttype}"
+        val wtRange =
+            "${DcFormat.tf.format(minWt)} ${viewModel.wttype} - " +
+                    "${DcFormat.tf.format(maxWt)} ${viewModel.wttype}"
 
-        var wtchazhi = if (viewModel.selectedAge.value!! > 20) {
+        val wtChaZhi = if (viewModel.selectedAge.value!! > 20) {
             if (viewModel.wttype == "kg") {
-                if (bval!! < 18.5) {
-                    minwt - viewModel.wt_kg.value!!
+                if (bVal!! < 18.5) {
+                    minWt - viewModel.wt_kg.value!!
                 } else {
-                    viewModel.wt_kg.value!! - maxwt
+                    viewModel.wt_kg.value!! - maxWt
                 }
             } else {
-                if (bval!! < 18.5) {
-                    minwt - viewModel.wt_lb.value!!
+                if (bVal!! < 18.5) {
+                    minWt - viewModel.wt_lb.value!!
                 } else {
-                    viewModel.wt_lb.value!! - maxwt
+                    viewModel.wt_lb.value!! - maxWt
                 }
             }
         } else {
 
             if (viewModel.wttype == "kg") {
-                if (bval!! < ChildBmiDialData.cScaleList[0].toFloat()) {
-                    minwt - viewModel.wt_kg.value!!
+                if (bVal!! < ChildBmiDialData.cScaleList[0].toFloat()) {
+                    minWt - viewModel.wt_kg.value!!
                 } else {
-                    viewModel.wt_kg.value!! - maxwt
+                    viewModel.wt_kg.value!! - maxWt
                 }
             } else {
-                if (bval!! < ChildBmiDialData.cScaleList[0].toFloat()) {
-                    minwt - viewModel.wt_lb.value!!
+                if (bVal!! < ChildBmiDialData.cScaleList[0].toFloat()) {
+                    minWt - viewModel.wt_lb.value!!
                 } else {
-                    viewModel.wt_lb.value!! - maxwt
+                    viewModel.wt_lb.value!! - maxWt
                 }
             }
         }
@@ -224,7 +239,7 @@ class CalculatorResultFragment : DialogFragment() {
             binding.bmiDial.visibility = View.VISIBLE
             binding.bmiArrow.rotation = sweepAngle(viewModel.bmival.value!!.toFloat())
 
-            if (bval < 16) {
+            if (bVal < 16) {
                 viewModel.bmitype = "vsuw"
                 binding.bmiCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(
@@ -232,7 +247,7 @@ class CalculatorResultFragment : DialogFragment() {
                         R.color.vsuw
                     )
                 )
-                binding.bmiCalTypeText.setText(getString(R.string.bmi_very_severely_underweight))
+                binding.bmiCalTypeText.text = getString(R.string.bmi_very_severely_underweight)
                 binding.newac.bmiVerysevereLayout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -262,17 +277,16 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
-                binding.bmiCalSuggest.setText(
+                binding.bmiCalSuggest.text =
                     getString(R.string.bmi_range_very_severely_underweight_description) + "\n\n" +
                             String.format(
                                 getString(R.string.bmi_result_suggest_start),
                                 if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
                                 else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
                             )
-                )
-                binding.wtRange.setText(wtrange)
-                binding.wtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
-            } else if (bval >= 16 && bval < 17) {
+                binding.wtRange.text = wtRange
+                binding.wtChazhi.text = "(+${DcFormat.tf.format(wtChaZhi)} ${viewModel.wttype})"
+            } else if (bVal >= 16 && bVal < 17) {
                 viewModel.bmitype = "suw"
                 binding.bmiCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(
@@ -280,7 +294,7 @@ class CalculatorResultFragment : DialogFragment() {
                         R.color.suw
                     )
                 )
-                binding.bmiCalTypeText.setText(getString(R.string.bmi_severely_underweight))
+                binding.bmiCalTypeText.text = getString(R.string.bmi_severely_underweight)
                 binding.newac.bmiSevereLayout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -310,18 +324,16 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
-                binding.bmiCalSuggest.setText(
-
+                binding.bmiCalSuggest.text =
                     getString(R.string.bmi_range_severely_underweight_description) + "\n\n" +
                             String.format(
                                 getString(R.string.bmi_result_suggest_start),
                                 if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
                                 else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
                             )
-                )
-                binding.wtRange.setText(wtrange)
-                binding.wtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
-            } else if (bval >= 17 && bval < 18.5) {
+                binding.wtRange.text = wtRange
+                binding.wtChazhi.text = "(+${DcFormat.tf.format(wtChaZhi)} ${viewModel.wttype})"
+            } else if (bVal >= 17 && bVal < 18.5) {
                 viewModel.bmitype = "uw"
                 binding.bmiCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(
@@ -329,7 +341,7 @@ class CalculatorResultFragment : DialogFragment() {
                         R.color.uw
                     )
                 )
-                binding.bmiCalTypeText.setText(getString(R.string.bmi_underweight))
+                binding.bmiCalTypeText.text = getString(R.string.bmi_underweight)
                 binding.newac.bmiUweightLayout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -359,17 +371,16 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
-                binding.bmiCalSuggest.setText(
+                binding.bmiCalSuggest.text =
                     getString(R.string.bmi_range_underweight_adult_description) + "\n\n" +
                             String.format(
                                 getString(R.string.bmi_result_suggest_start),
                                 if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
                                 else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
                             )
-                )
-                binding.wtRange.setText(wtrange)
-                binding.wtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
-            } else if (bval >= 18.5 && bval < 25) {
+                binding.wtRange.text = wtRange
+                binding.wtChazhi.text = "(+${DcFormat.tf.format(wtChaZhi)} ${viewModel.wttype})"
+            } else if (bVal >= 18.5 && bVal < 25) {
                 viewModel.bmitype = "nm"
                 binding.bmiCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(
@@ -377,7 +388,7 @@ class CalculatorResultFragment : DialogFragment() {
                         R.color.normal
                     )
                 )
-                binding.bmiCalTypeText.setText(getString(R.string.normal_leg))
+                binding.bmiCalTypeText.text = getString(R.string.normal_leg)
                 binding.newac.bmiNormalLayout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -408,7 +419,7 @@ class CalculatorResultFragment : DialogFragment() {
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
                 binding.bmiCalSuggest.setText(R.string.bmi_range_normal_adult_description)
-            } else if (bval >= 25 && bval < 30) {
+            } else if (bVal >= 25 && bVal < 30) {
                 viewModel.bmitype = "ow"
                 binding.bmiCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(
@@ -416,7 +427,7 @@ class CalculatorResultFragment : DialogFragment() {
                         R.color.ow
                     )
                 )
-                binding.bmiCalTypeText.setText(getString(R.string.bmi_overweight))
+                binding.bmiCalTypeText.text = getString(R.string.bmi_overweight)
                 binding.newac.bmiOverweightLayout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -446,17 +457,16 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
-                binding.bmiCalSuggest.setText(
+                binding.bmiCalSuggest.text =
                     getString(R.string.bmi_range_overweight_adult_description) + "\n\n" +
                             String.format(
                                 getString(R.string.bmi_result_suggest_start),
                                 if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
                                 else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
                             )
-                )
-                binding.wtRange.setText(wtrange)
-                binding.wtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
-            } else if (bval >= 30 && bval < 35) {
+                binding.wtRange.text = wtRange
+                binding.wtChazhi.text = "(-${DcFormat.tf.format(wtChaZhi)} ${viewModel.wttype})"
+            } else if (bVal >= 30 && bVal < 35) {
                 viewModel.bmitype = "oc1"
                 binding.bmiCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(
@@ -464,7 +474,7 @@ class CalculatorResultFragment : DialogFragment() {
                         R.color.oc1
                     )
                 )
-                binding.bmiCalTypeText.setText(getString(R.string.bmi_range_obese_class1))
+                binding.bmiCalTypeText.text = getString(R.string.bmi_range_obese_class1)
                 binding.newac.bmiOb1Layout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -494,17 +504,16 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
-                binding.bmiCalSuggest.setText(
+                binding.bmiCalSuggest.text =
                     getString(R.string.bmi_range_obeseClassI_adult_description) + "\n\n" +
                             String.format(
                                 getString(R.string.bmi_result_suggest_start),
                                 if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
                                 else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
                             )
-                )
-                binding.wtRange.setText(wtrange)
-                binding.wtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
-            } else if (bval >= 35 && bval < 40) {
+                binding.wtRange.text = wtRange
+                binding.wtChazhi.text = "(-${DcFormat.tf.format(wtChaZhi)} ${viewModel.wttype})"
+            } else if (bVal >= 35 && bVal < 40) {
                 viewModel.bmitype = "oc2"
                 binding.bmiCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(
@@ -512,7 +521,7 @@ class CalculatorResultFragment : DialogFragment() {
                         R.color.oc2
                     )
                 )
-                binding.bmiCalTypeText.setText(getString(R.string.bmi_range_obese_class2))
+                binding.bmiCalTypeText.text = getString(R.string.bmi_range_obese_class2)
                 binding.newac.bmiOb2Layout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -542,16 +551,15 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
-                binding.bmiCalSuggest.setText(
+                binding.bmiCalSuggest.text =
                     getString(R.string.bmi_range_obeseClassII_description) + "\n\n" +
                             String.format(
                                 getString(R.string.bmi_result_suggest_start),
                                 if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
                                 else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
                             )
-                )
-                binding.wtRange.setText(wtrange)
-                binding.wtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
+                binding.wtRange.text = wtRange
+                binding.wtChazhi.text = "(-${DcFormat.tf.format(wtChaZhi)} ${viewModel.wttype})"
             } else {
                 viewModel.bmitype = "oc3"
                 binding.bmiCalTypeDisplay.setBackgroundColor(
@@ -560,7 +568,7 @@ class CalculatorResultFragment : DialogFragment() {
                         R.color.oc3
                     )
                 )
-                binding.bmiCalTypeText.setText(getString(R.string.bmi_range_obese_class3))
+                binding.bmiCalTypeText.text = getString(R.string.bmi_range_obese_class3)
                 binding.newac.bmiOb3Layout.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -590,16 +598,15 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
-                binding.bmiCalSuggest.setText(
+                binding.bmiCalSuggest.text =
                     getString(R.string.bmi_range_obeseClassIII_description) + "\n\n" +
                             String.format(
                                 getString(R.string.bmi_result_suggest_start),
                                 if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
                                 else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
                             )
-                )
-                binding.wtRange.setText(wtrange)
-                binding.wtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
+                binding.wtRange.text = wtRange
+                binding.wtChazhi.text = "(-${DcFormat.tf.format(wtChaZhi)} ${viewModel.wttype})"
             }
         } else {
             binding.bmiDial.visibility = View.GONE
@@ -617,7 +624,7 @@ class CalculatorResultFragment : DialogFragment() {
             binding.newac.bmiOverweightText2.setText("${list[2]} - ${list[3]}")
             binding.newac.bmiOb1Text2.setText("${list[3]} - ${list[4]}")
 
-            if (bval < ChildBmiDialData.cScaleList[1].toFloat()) {
+            if (bVal < ChildBmiDialData.cScaleList[1].toFloat()) {
                 viewModel.bmitype = "uw"
                 binding.bmiCalTypeDisplay.setBackgroundColor(
                     ContextCompat.getColor(
@@ -655,17 +662,17 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
-                binding.bmiCalSuggest.setText(
+                binding.bmiCalSuggest.text =
                     getString(R.string.bmi_range_underweight_child_description) + "\n\n" +
-                            String.format(getString(R.string.bmi_result_suggest_start),
+                            String.format(
+                                getString(R.string.bmi_result_suggest_start),
                                 if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
                                 else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
                             )
-                )
-                binding.wtRange.setText(wtrange)
-                binding.wtChazhi.setText("(+${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
-            } else if (bval < ChildBmiDialData.cScaleList[2].toFloat() &&
-                bval >= ChildBmiDialData.cScaleList[1].toFloat()
+                binding.wtRange.text = wtRange
+                binding.wtChazhi.text = "(+${DcFormat.tf.format(wtChaZhi)} ${viewModel.wttype})"
+            } else if (bVal < ChildBmiDialData.cScaleList[2].toFloat() &&
+                bVal >= ChildBmiDialData.cScaleList[1].toFloat()
             ) {
                 viewModel.bmitype = "nm"
                 binding.bmiCalTypeDisplay.setBackgroundColor(
@@ -704,12 +711,10 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
-                binding.bmiCalSuggest.setText(
-                    getString(R.string.bmi_range_normal_child_description)
-                )
+                binding.bmiCalSuggest.text = getString(R.string.bmi_range_normal_child_description)
 
-            } else if (bval < ChildBmiDialData.cScaleList[3].toFloat() &&
-                bval >= ChildBmiDialData.cScaleList[2].toFloat()
+            } else if (bVal < ChildBmiDialData.cScaleList[3].toFloat() &&
+                bVal >= ChildBmiDialData.cScaleList[2].toFloat()
             ) {
                 viewModel.bmitype = "ow"
                 binding.bmiCalTypeDisplay.setBackgroundColor(
@@ -748,15 +753,15 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
-                binding.bmiCalSuggest.setText(
+                binding.bmiCalSuggest.text =
                     getString(R.string.bmi_range_overweight_child_description) + "\n\n" +
-                            String.format(getString(R.string.bmi_result_suggest_start),
+                            String.format(
+                                getString(R.string.bmi_result_suggest_start),
                                 if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
                                 else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
                             )
-                )
-                binding.wtRange.setText(wtrange)
-                binding.wtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
+                binding.wtRange.text = wtRange
+                binding.wtChazhi.text = "(-${DcFormat.tf.format(wtChaZhi)} ${viewModel.wttype})"
             } else {
 
                 viewModel.bmitype = "oc1"
@@ -796,19 +801,19 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
-                binding.bmiCalSuggest.setText(
+                binding.bmiCalSuggest.text =
                     getString(R.string.bmi_range_obeseClassI_child_description) + "\n\n" +
-                            String.format(getString(R.string.bmi_result_suggest_start),
+                            String.format(
+                                getString(R.string.bmi_result_suggest_start),
                                 if (viewModel.httype == "cm") viewModel.ht_cm.value.toString() + "cm"
                                 else viewModel.ht_ft.value.toString() + "ft ${viewModel.ht_in.value}in"
                             )
-                )
-                binding.wtRange.setText(wtrange)
-                binding.wtChazhi.setText("(-${DcFormat.tf.format(wtchazhi)} ${viewModel.wttype})")
+                binding.wtRange.text = wtRange
+                binding.wtChazhi.text = "(-${DcFormat.tf.format(wtChaZhi)} ${viewModel.wttype})"
             }
         }
 
-        adshow(bval)
+        adShow(bVal)
 
         binding.bmiAd1.setOnClickListener {
             try {
@@ -879,7 +884,7 @@ class CalculatorResultFragment : DialogFragment() {
                 System.currentTimeMillis()
             )
             viewModel.insertInfo(bmiInfo)
-            viewModel.bmiNewRecord.value=bmiInfo
+            viewModel.bmiNewRecord.value = bmiInfo
             val navView =
                 (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
             navView.selectedItemId = R.id.menu_statistics
@@ -895,7 +900,6 @@ class CalculatorResultFragment : DialogFragment() {
     override fun onResume() {
         super.onResume()
         val params = dialog?.window?.attributes
-        val displayMetrics = resources.displayMetrics
         params?.width = WindowManager.LayoutParams.MATCH_PARENT
         params?.height = WindowManager.LayoutParams.MATCH_PARENT
         params?.gravity = Gravity.BOTTOM
@@ -914,105 +918,107 @@ class CalculatorResultFragment : DialogFragment() {
         (activity as AppCompatActivity).supportActionBar?.show()
     }
 
-    fun sweepAngle(num: Float): Float {
-        val bmival = if (num > 40.3) 40.3f else if (num < 15.6) 15.6f else num
-        return DcFormat.tf.format((bmival - 15.6) / 24.8 * 180 + 90).replace(",",".").toFloat()
+    private fun sweepAngle(num: Float): Float {
+        val bmiVal = if (num > 40.3) 40.3f else if (num < 15.6) 15.6f else num
+        return DcFormat.tf.format((bmiVal - 15.6) / 24.8 * 180 + 90)
+            .replace(",", ".").toFloat()
     }
 
-    fun childSweepAngle(num: Float): Float {
-        val maxb = ChildBmiDialData.cScaleList[4].toFloat()
-        val minb = ChildBmiDialData.cScaleList[0].toFloat()
-        val bmival = if (num > maxb) maxb else if (num < minb) minb else num
-        return DcFormat.tf.format((bmival - minb) / (maxb - minb) * 180 + 90).replace(",",".").toFloat()
+    private fun childSweepAngle(num: Float): Float {
+        val maxB = ChildBmiDialData.cScaleList[4].toFloat()
+        val minB = ChildBmiDialData.cScaleList[0].toFloat()
+        val bmiVal = if (num > maxB) maxB else if (num < minB) minB else num
+        return DcFormat.tf.format((bmiVal - minB) / (maxB - minB) * 180 + 90).replace(",", ".")
+            .toFloat()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    fun adshow(bmival: Float) {
-        if ((viewModel.selectedAge.value!! > 20 && bmival < 18.5) ||
-            (viewModel.selectedAge.value!! <= 20 && bmival < ChildBmiDialData.cScaleList[1].toDouble())
+    fun adShow(bmiVal: Float) {
+        if ((viewModel.selectedAge.value!! > 20 && bmiVal < 18.5) ||
+            (viewModel.selectedAge.value!! <= 20 && bmiVal < ChildBmiDialData.cScaleList[1].toDouble())
         ) {
 //            binding.bmiAd1Tv2.visibility = View.GONE
 //            binding.bmiAd2Tv2.visibility = View.GONE
 //            binding.bmiAd3Tv2.visibility = View.GONE
             val num1 = Random.nextInt(6, 9)
-            var adInfo = choosead(num1)
+            var adInfo = chooseAd(num1)
 
             Glide.with(this)
                 .load(adInfo.image)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(15)))
                 .into(binding.bmiAd1Iv1)
-            binding.bmiAd1Tv2.setText(getString(adInfo.applink))
-            binding.bmiAd1Tv1.setText(getString(adInfo.appName))
-            binding.bmiAd1Tv3.setText(getString(adInfo.appScore))
+            binding.bmiAd1Tv2.text = getString(adInfo.appLink)
+            binding.bmiAd1Tv1.text = getString(adInfo.appName)
+            binding.bmiAd1Tv3.text = getString(adInfo.appScore)
 
             var num2: Int
             do {
                 num2 = Random.nextInt(6, 9)
             } while (num2 == num1)
-            adInfo = choosead(num2)
+            adInfo = chooseAd(num2)
             Glide.with(this)
                 .load(adInfo.image)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(15)))
                 .into(binding.bmiAd2Iv1)
-            binding.bmiAd2Tv1.setText(getString(adInfo.appName))
-            binding.bmiAd2Tv3.setText(getString(adInfo.appScore))
-            binding.bmiAd2Tv2.setText(getString(adInfo.applink))
+            binding.bmiAd2Tv1.text = getString(adInfo.appName)
+            binding.bmiAd2Tv3.text = getString(adInfo.appScore)
+            binding.bmiAd2Tv2.text = getString(adInfo.appLink)
 
             val numList = listOf(5, 9, 10)
             val randomIndex = Random.nextInt(numList.size)
             val num3 = numList[randomIndex]
-            adInfo = choosead(num3)
+            adInfo = chooseAd(num3)
             Glide.with(this)
                 .load(adInfo.image)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(15)))
                 .into(binding.bmiAd3Iv1)
-            binding.bmiAd3Tv1.setText(getString(adInfo.appName))
-            binding.bmiAd3Tv3.setText(getString(adInfo.appScore))
-            binding.bmiAd3Tv2.setText(getString(adInfo.applink))
+            binding.bmiAd3Tv1.text = getString(adInfo.appName)
+            binding.bmiAd3Tv3.text = getString(adInfo.appScore)
+            binding.bmiAd3Tv2.text = getString(adInfo.appLink)
         } else {
-            val nums = if (viewModel.selectedGender.value!!.equals('0'))
+            val numbers = if (viewModel.selectedGender.value!! == '0')
                 mutableListOf(2, 3, 6, 7, 8) else mutableListOf(1, 3, 6, 7, 8)
-            var randomIndex = Random.nextInt(nums.size)
-            val num1 = nums[randomIndex]
-            var adInfo = choosead(num1)
+            var randomIndex = Random.nextInt(numbers.size)
+            val num1 = numbers[randomIndex]
+            var adInfo = chooseAd(num1)
 
             Glide.with(this)
                 .load(adInfo.image)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(15)))
                 .into(binding.bmiAd1Iv1)
 
-            binding.bmiAd1Tv1.setText(getString(adInfo.appName))
-            binding.bmiAd1Tv2.setText(getString(adInfo.applink))
-            binding.bmiAd1Tv3.setText(getString(adInfo.appScore))
-            nums.removeAt(randomIndex)
+            binding.bmiAd1Tv1.text = getString(adInfo.appName)
+            binding.bmiAd1Tv2.text = getString(adInfo.appLink)
+            binding.bmiAd1Tv3.text = getString(adInfo.appScore)
+            numbers.removeAt(randomIndex)
 
-            randomIndex = Random.nextInt(nums.size)
-            val num2 = nums[randomIndex]
-            adInfo = choosead(num2)
+            randomIndex = Random.nextInt(numbers.size)
+            val num2 = numbers[randomIndex]
+            adInfo = chooseAd(num2)
             Glide.with(this)
                 .load(adInfo.image)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(15)))
                 .into(binding.bmiAd2Iv1)
-            binding.bmiAd2Tv1.setText(getString(adInfo.appName))
-            binding.bmiAd2Tv2.setText(getString(adInfo.applink))
-            binding.bmiAd2Tv3.setText(getString(adInfo.appScore))
+            binding.bmiAd2Tv1.text = getString(adInfo.appName)
+            binding.bmiAd2Tv2.text = getString(adInfo.appLink)
+            binding.bmiAd2Tv3.text = getString(adInfo.appScore)
 
-            nums.clear()
-            nums.addAll(Arrays.asList(4, 5, 9, 10))
-            randomIndex = Random.nextInt(nums.size)
-            val num3 = nums[randomIndex]
-            adInfo = choosead(num3)
+            numbers.clear()
+            numbers.addAll(listOf(4, 5, 9, 10))
+            randomIndex = Random.nextInt(numbers.size)
+            val num3 = numbers[randomIndex]
+            adInfo = chooseAd(num3)
             Glide.with(this)
                 .load(adInfo.image)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(15)))
                 .into(binding.bmiAd3Iv1)
-            binding.bmiAd3Tv1.setText(getString(adInfo.appName))
-            binding.bmiAd3Tv3.setText(getString(adInfo.appScore))
-            binding.bmiAd3Tv2.setText(getString(adInfo.applink))
+            binding.bmiAd3Tv1.text = getString(adInfo.appName)
+            binding.bmiAd3Tv3.text = getString(adInfo.appScore)
+            binding.bmiAd3Tv2.text = getString(adInfo.appLink)
         }
     }
 
-    fun choosead(num: Int): AdInfo {
+    private fun chooseAd(num: Int): AdInfo {
         when (num) {
             1 -> {
                 return AdInfo(

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.graphics.Color
-import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +16,6 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import bmicalculator.bmi.calculator.weightlosstracker.R
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.FragmentDatePickerBinding
@@ -35,11 +33,11 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
     private var isValid = true
 
-    private var toasttimes = 0
+    private var toastTimes = 0
 
     private lateinit var model: CalculatorViewModel
 
-    val months = mutableListOf<String>(
+    private val months = mutableListOf(
         "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"
     )
 
@@ -48,10 +46,10 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         savedInstanceState: Bundle?
     ): View? {
 
-        model = ViewModelProvider(requireActivity()).get(CalculatorViewModel::class.java)
+        model = ViewModelProvider(requireActivity())[CalculatorViewModel::class.java]
         binding = FragmentDatePickerBinding.inflate(layoutInflater, container, false)
         binding.wheelPickerDateYearWheel.setRange(2000, 2035, 1)
-        binding.wheelPickerDateMonthWheel.setData(months)
+        binding.wheelPickerDateMonthWheel.data = months
         binding.wheelPickerDateYearWheel.typeface =
             ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
         binding.wheelPickerDateMonthWheel.typeface =
@@ -85,11 +83,11 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
             }
 
             override fun onWheelSelected(view: WheelView?, position: Int) {
-                val monthselected: String = binding.wheelPickerDateMonthWheel.getCurrentItem()
-                Log.d(TAG, monthselected)
+                val monthSelected: String = binding.wheelPickerDateMonthWheel.getCurrentItem()
+                Log.d(TAG, monthSelected)
                 Log.d(TAG, "Current Year:${view!!.getCurrentItem<Int>()}")
-                val monthnum = MonthtoNumber(monthselected)
-                val daysInMonth = YearMonth.of(view.getCurrentItem(), monthnum).lengthOfMonth()
+                val monthNum = monthToNumber(monthSelected)
+                val daysInMonth = YearMonth.of(view.getCurrentItem(), monthNum).lengthOfMonth()
                 binding.wheelPickerDateDayWheel.setRange(1, daysInMonth, 1)
 
 
@@ -99,26 +97,26 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
                 val month = currentDate.monthValue
                 if ((year < binding.wheelPickerDateYearWheel.getCurrentItem<Int>()) ||
                     (year == binding.wheelPickerDateYearWheel.getCurrentItem<Int>() &&
-                            month < MonthtoNumber(binding.wheelPickerDateMonthWheel.getCurrentItem())
+                            month < monthToNumber(binding.wheelPickerDateMonthWheel.getCurrentItem())
                             ) || (year == binding.wheelPickerDateYearWheel.getCurrentItem<Int>() &&
-                            month == MonthtoNumber(binding.wheelPickerDateMonthWheel.getCurrentItem())
+                            month == monthToNumber(binding.wheelPickerDateMonthWheel.getCurrentItem())
                             && day < binding.wheelPickerDateDayWheel.getCurrentItem<Int>())
                 ) {
                     binding.btnDone.setBackgroundResource(R.drawable.shape_btn_done_invalid)
                     binding.btnDone.setTextColor(Color.parseColor("#000000"))
                     isValid = false
-                    if (!isValid && toasttimes == 0) {
+                    if (toastTimes == 0) {
                         Toast.makeText(
                             requireContext(), getString(R.string.select_right_date_toast),
                             Toast.LENGTH_SHORT
                         ).show()
-                        toasttimes = 1
+                        toastTimes = 1
                     }
                 } else {
                     binding.btnDone.setBackgroundResource(R.drawable.shape_btn_done)
                     binding.btnDone.setTextColor(Color.parseColor("#FFFFFF"))
                     isValid = true
-                    toasttimes = 0
+                    toastTimes = 0
                 }
             }
 
@@ -136,9 +134,9 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
             }
 
             override fun onWheelSelected(view: WheelView?, position: Int) {
-                val yearselected: Int = binding.wheelPickerDateYearWheel.getCurrentItem()
-                val monthnum = MonthtoNumber(view!!.getCurrentItem())
-                val daysInMonth = YearMonth.of(yearselected, monthnum).lengthOfMonth()
+                val yearSelected: Int = binding.wheelPickerDateYearWheel.getCurrentItem()
+                val monthNum = monthToNumber(view!!.getCurrentItem())
+                val daysInMonth = YearMonth.of(yearSelected, monthNum).lengthOfMonth()
                 binding.wheelPickerDateDayWheel.setRange(1, daysInMonth, 1)
                 val currentDate = LocalDate.now()
                 val day = currentDate.dayOfMonth
@@ -146,26 +144,26 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
                 val month = currentDate.monthValue
                 if ((year < binding.wheelPickerDateYearWheel.getCurrentItem<Int>()) ||
                     (year == binding.wheelPickerDateYearWheel.getCurrentItem<Int>() &&
-                            month < MonthtoNumber(binding.wheelPickerDateMonthWheel.getCurrentItem())
+                            month < monthToNumber(binding.wheelPickerDateMonthWheel.getCurrentItem())
                             ) || (year == binding.wheelPickerDateYearWheel.getCurrentItem<Int>() &&
-                            month == MonthtoNumber(binding.wheelPickerDateMonthWheel.getCurrentItem())
+                            month == monthToNumber(binding.wheelPickerDateMonthWheel.getCurrentItem())
                             && day < binding.wheelPickerDateDayWheel.getCurrentItem<Int>())
                 ) {
                     binding.btnDone.setBackgroundResource(R.drawable.shape_btn_done_invalid)
                     binding.btnDone.setTextColor(Color.parseColor("#000000"))
                     isValid = false
-                    if (!isValid && toasttimes == 0) {
+                    if (toastTimes == 0) {
                         Toast.makeText(
                             requireContext(), getString(R.string.select_right_date_toast),
                             Toast.LENGTH_SHORT
                         ).show()
-                        toasttimes = 1
+                        toastTimes = 1
                     }
                 } else {
                     binding.btnDone.setBackgroundResource(R.drawable.shape_btn_done)
                     binding.btnDone.setTextColor(Color.parseColor("#FFFFFF"))
                     isValid = true
-                    toasttimes = 0
+                    toastTimes = 0
                 }
             }
 
@@ -188,26 +186,26 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
                 val month = currentDate.monthValue
                 if ((year < binding.wheelPickerDateYearWheel.getCurrentItem<Int>()) ||
                     (year == binding.wheelPickerDateYearWheel.getCurrentItem<Int>() &&
-                            month < MonthtoNumber(binding.wheelPickerDateMonthWheel.getCurrentItem())
+                            month < monthToNumber(binding.wheelPickerDateMonthWheel.getCurrentItem())
                             ) || (year == binding.wheelPickerDateYearWheel.getCurrentItem<Int>() &&
-                            month == MonthtoNumber(binding.wheelPickerDateMonthWheel.getCurrentItem())
+                            month == monthToNumber(binding.wheelPickerDateMonthWheel.getCurrentItem())
                             && day < binding.wheelPickerDateDayWheel.getCurrentItem<Int>())
                 ) {
                     binding.btnDone.setBackgroundResource(R.drawable.shape_btn_done_invalid)
                     binding.btnDone.setTextColor(Color.parseColor("#000000"))
                     isValid = false
-                    if (!isValid && toasttimes == 0) {
+                    if (toastTimes == 0) {
                         Toast.makeText(
                             requireContext(), getString(R.string.select_right_date_toast),
                             Toast.LENGTH_SHORT
                         ).show()
-                        toasttimes = 1
+                        toastTimes = 1
                     }
                 } else {
                     binding.btnDone.setBackgroundResource(R.drawable.shape_btn_done)
                     binding.btnDone.setTextColor(Color.parseColor("#FFFFFF"))
                     isValid = true
-                    toasttimes = 0
+                    toastTimes = 0
                 }
             }
 
@@ -227,10 +225,10 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
 
             if (isValid) {
-                val dateselected = binding.wheelPickerDateMonthWheel.getCurrentItem<String>() +
+                val dateSelected = binding.wheelPickerDateMonthWheel.getCurrentItem<String>() +
                         " ${binding.wheelPickerDateDayWheel.getCurrentItem<Int>()}" +
                         ",${binding.wheelPickerDateYearWheel.getCurrentItem<Int>()}"
-                model.setDate(dateselected)
+                model.setDate(dateSelected)
                 onDestroyView()
             } else {
                 Toast.makeText(
@@ -260,8 +258,8 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         onDestroyView()
     }
 
-    fun MonthtoNumber(month: String): Int {
-        val monthnum = when (month) {
+    fun monthToNumber(month: String): Int {
+        val monthNum = when (month) {
             "Jan" -> 1
             "Feb" -> 2
             "Mar" -> 3
@@ -276,7 +274,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
             "Dec" -> 12
             else -> -1
         }
-        return monthnum
+        return monthNum
     }
 }
 

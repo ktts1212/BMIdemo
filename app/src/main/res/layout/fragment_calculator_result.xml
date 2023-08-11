@@ -545,7 +545,7 @@
             <View
                 android:id="@+id/bmi_bottom_space"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="140dp"
                 android:layout_marginBottom="0dp"
                 android:background="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -560,7 +560,7 @@
         android:layout_width="315dp"
         android:layout_height="55dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="60dp"
         android:backgroundTint="#3659CF"
         android:fontFamily="@font/montserrat_extrabold"
         android:layout_centerHorizontal="true"

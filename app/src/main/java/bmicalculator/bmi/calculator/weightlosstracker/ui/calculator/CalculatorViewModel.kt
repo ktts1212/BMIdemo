@@ -1,7 +1,9 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.calculator
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -9,9 +11,29 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.util.Event
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
-class CalculatorViewModel(private val repository: Repository) : ViewModel() {
+class CalculatorViewModel(private val repository: Repository, private val state:SavedStateHandle) : ViewModel() {
+
+    companion object{
+        const val KEY_NAME="viewModel"
+        const val NAV_ID="navId"
+    }
+
+    fun saveData(bmiInfo: BmiInfo){
+        state[KEY_NAME]=bmiInfo
+    }
+
+    fun getData(): BmiInfo? {
+        return state[KEY_NAME]
+    }
+
+    fun saveNavId(id:Int){
+        state[NAV_ID]=id
+    }
+
+    fun getNavId():Int?{
+        return state[NAV_ID]
+    }
 
     private val statusMessage = MutableLiveData<Event<String>>()
     val message: LiveData<Event<String>>
@@ -21,9 +43,7 @@ class CalculatorViewModel(private val repository: Repository) : ViewModel() {
     val LocaleLanguage=null
 
     //记录用户的cal选择
-    var wtval: Float = 0f
     var wttype = "error"
-    var htval: Float = 0f
     var httype = "error"
 
     //记录BMI类型
@@ -105,10 +125,6 @@ class CalculatorViewModel(private val repository: Repository) : ViewModel() {
         _ht_cm.value = value
     }
 
-    //计算时获取到bmiInfo，
-    val bmiInfo = BmiInfo()
-
-
     fun insertInfo(bmiInfo: BmiInfo) = viewModelScope.launch {
         val newRowId = repository.insertBmiInfo(bmiInfo)
         if (newRowId > -1) {
@@ -122,11 +138,6 @@ class CalculatorViewModel(private val repository: Repository) : ViewModel() {
 
     var allInfo: MutableLiveData<List<BmiInfo>> =
         repository.getAllInfos().asLiveData() as MutableLiveData<List<BmiInfo>>
-
-
-    var listByYear: MutableLiveData<List<BmiInfo>> =
-        repository.selectByYear(LocalDate.now().year).asLiveData() as MutableLiveData<List<BmiInfo>>
-
 
     fun deleteBmiInfo(bmiInfo: BmiInfo) = viewModelScope.launch {
         val id = repository.deleteBmiInfo(bmiInfo)

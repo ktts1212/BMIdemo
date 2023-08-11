@@ -27,7 +27,6 @@ import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorVi
 import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gyf.immersionbar.ktx.immersionBar
-import kotlin.Exception
 
 private const val TAG = "RecordHistory"
 
@@ -48,9 +47,9 @@ class RecordHistoryFragment : DialogFragment() {
 
         val dao = AppDataBase.getDatabase(requireContext().applicationContext).bmiInfoDao()
         val repository = Repository(dao)
-        val factory = ViewModelFactory(repository)
+        val factory = ViewModelFactory(repository,requireActivity())
         viewModel =
-            ViewModelProvider(requireActivity(), factory).get(CalculatorViewModel::class.java)
+            ViewModelProvider(requireActivity(), factory)[CalculatorViewModel::class.java]
         return binding.root
     }
 
@@ -67,15 +66,9 @@ class RecordHistoryFragment : DialogFragment() {
 
         viewModel.allInfo.observe(requireActivity()) {
             val list = viewModel.allInfo.value
-            if (it == null || it.size == 0) {
+            if (it == null || it.isEmpty()) {
 
                 if (isAdded) {
-                    val editor = (activity as AppCompatActivity).getSharedPreferences(
-                        "data", Context.MODE_PRIVATE
-                    ).edit()
-                    editor.putBoolean("hasdata", false)
-                    editor.apply()
-
                     val navView =
                         (activity as AppCompatActivity).findViewById<BottomNavigationView>(
                             R.id.bottom_navigation_view
@@ -86,7 +79,6 @@ class RecordHistoryFragment : DialogFragment() {
                     transition.replace(R.id.fragment_container, CalculatorFragment())
                     transition.commit()
                 }
-
 
             }
             bmiInfoList = orderList(list!!) as ArrayList<BmiInfo>
@@ -109,7 +101,6 @@ class RecordHistoryFragment : DialogFragment() {
     override fun onResume() {
         super.onResume()
         val params = dialog?.window?.attributes
-        val displayMetrics = resources.displayMetrics
         params?.width = WindowManager.LayoutParams.MATCH_PARENT
         params?.height = WindowManager.LayoutParams.MATCH_PARENT
         params?.gravity = Gravity.BOTTOM
@@ -122,10 +113,10 @@ class RecordHistoryFragment : DialogFragment() {
         }
     }
 
-    fun orderList(list: List<BmiInfo>): List<BmiInfo> {
+    private fun orderList(list: List<BmiInfo>): List<BmiInfo> {
 
         val ls = mutableListOf<History>()
-        for (i in 0 until list.size) {
+        for (i in list.indices) {
             ls.add(History(list[i], orderTime(list[i])))
         }
         ls.sortByDescending { it.datetimestamp }
@@ -136,11 +127,11 @@ class RecordHistoryFragment : DialogFragment() {
         val l = mutableListOf<History>()
         while (y < ls.size) {
             l.clear()
-            var xadd = false
+            var xAdd = false
             while ((y < ls.size) && (ls[x].datetimestamp == ls[y].datetimestamp)) {
-                if (xadd == false) {
+                if (!xAdd) {
                     l.add(ls[x])
-                    xadd = true
+                    xAdd = true
                 }
                 l.add(ls[y])
                 y++
@@ -167,7 +158,7 @@ class RecordHistoryFragment : DialogFragment() {
         return orderedList
     }
 
-    fun orderTime(bmiInfo: BmiInfo): Long{
+    private fun orderTime(bmiInfo: BmiInfo): Long{
 
         val l1 = bmiInfo.date!!.split(" ")
         //获取当前的月份和天数
@@ -176,17 +167,4 @@ class RecordHistoryFragment : DialogFragment() {
         val dayOfYear = Utils.getDayOfYear(day.toInt(), month,bmiInfo.year)
         return dayOfYear * 10 + bmiInfo.year * 10000 + bmiInfo.phase.toLong()
     }
-
-    fun phaseToNumber(phase: String): Int {
-        Log.d(TAG,"phase:${viewModel.selectedPhase.value}")
-        Log.d(TAG,"morn:${getString(R.string.morning)}")
-        when (phase) {
-            getString(R.string.morning) -> return 1
-            getString(R.string.afternoon) -> return 2
-            getString(R.string.evening) -> return 3
-            getString(R.string.night) -> return 4
-            else -> throw Exception("phase Error")
-        }
-    }
-
 }

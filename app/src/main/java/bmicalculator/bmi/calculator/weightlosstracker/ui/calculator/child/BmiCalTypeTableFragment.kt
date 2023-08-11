@@ -40,9 +40,9 @@ class BmiCalTypeTableFragment : DialogFragment() {
         binding = FragmentBmiCalTypeTableBinding.inflate(layoutInflater, container, false)
         val dao = AppDataBase.getDatabase(requireContext().applicationContext).bmiInfoDao()
         val repository = Repository(dao)
-        val factory = ViewModelFactory(repository)
+        val factory = ViewModelFactory(repository, requireActivity())
         viewModel =
-            ViewModelProvider(requireActivity(), factory).get(CalculatorViewModel::class.java)
+            ViewModelProvider(requireActivity(), factory)[CalculatorViewModel::class.java]
         return binding.root
     }
 
@@ -65,11 +65,13 @@ class BmiCalTypeTableFragment : DialogFragment() {
             binding.typeTableTipText2.visibility = View.INVISIBLE
             scSize = 0.75
         } else {
-            val gender = if (viewModel.selectedGender.value!!.equals('0')) "Boy" else "Girl"
+            val gender = if (viewModel.selectedGender.value!! == '0')
+                getString(R.string.gender_boy) else getString(R.string.gender_girl)
 
-            binding.typeTableTipText1.setText("BMI for teenagers")
-            binding.typeTableTipText2.setText(
-                "${viewModel.selectedAge.value} years old (${gender})"
+            binding.typeTableTipText1.text = getString(R.string.bmi_teenager_tip)
+            binding.typeTableTipText2.text = String.format(
+                getString(R.string.bmi_teenager_info_tip),
+                viewModel.selectedAge.value, gender
             )
             ChildBmiDialData.setData(
                 viewModel.selectedAge.value!!,
@@ -110,8 +112,8 @@ class BmiCalTypeTableFragment : DialogFragment() {
         dialog?.window?.attributes = params as WindowManager.LayoutParams
     }
 
-    fun getBmiType(bmitype: String) {
-        when (bmitype) {
+    private fun getBmiType(bmiType: String) {
+        when (bmiType) {
             "vsuw" -> {
                 binding.typeTable.bmiVerysevereLayout.setBackgroundColor(
                     ContextCompat.getColor(
