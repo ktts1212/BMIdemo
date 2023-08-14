@@ -104,23 +104,31 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-
-        if (!hasData) {
+        Log.d("AAAAAA","${viewModel.getNavId()}")
+        if (viewModel.getNavId()!=null){
             currentFragmentTag = "calculator"
             binding.bottomNavigationView.selectedItemId = R.id.menu_calculator
             getFgByTag(currentFragmentTag)
             val transaction = supportFragmentManager.beginTransaction()
             transaction.add(R.id.fragment_container, mCurrentFragment, currentFragmentTag)
             transaction.show(mCurrentFragment).commit()
-        } else {
-            currentFragmentTag = "bmi"
-            binding.bottomNavigationView.selectedItemId = R.id.menu_bmi
-            getFgByTag(currentFragmentTag)
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.add(R.id.fragment_container, mCurrentFragment, currentFragmentTag)
-            transaction.show(mCurrentFragment).commit()
+        }else{
+            if (!hasData) {
+                currentFragmentTag = "calculator"
+                binding.bottomNavigationView.selectedItemId = R.id.menu_calculator
+                getFgByTag(currentFragmentTag)
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.add(R.id.fragment_container, mCurrentFragment, currentFragmentTag)
+                transaction.show(mCurrentFragment).commit()
+            } else {
+                currentFragmentTag = "bmi"
+                binding.bottomNavigationView.selectedItemId = R.id.menu_bmi
+                getFgByTag(currentFragmentTag)
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.add(R.id.fragment_container, mCurrentFragment, currentFragmentTag)
+                transaction.show(mCurrentFragment).commit()
+            }
         }
-
 
         binding.bottomNavigationView.setOnItemSelectedListener {
             val transaction = supportFragmentManager.beginTransaction()

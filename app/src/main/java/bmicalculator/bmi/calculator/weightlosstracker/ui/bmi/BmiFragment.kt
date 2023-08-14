@@ -57,13 +57,6 @@ class BmiFragment : Fragment() {
         val factory = ViewModelFactory(repository, requireActivity())
         viewModel =
             ViewModelProvider(requireActivity(), factory)[CalculatorViewModel::class.java]
-        val hasData=(activity as AppCompatActivity).getSharedPreferences("hasData",
-        Context.MODE_PRIVATE).getBoolean("hasData",false)
-        if (hasData) {
-            val navView =
-                (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
-            navView.selectedItemId = R.id.menu_bmi
-        }
         return binding.root
     }
 
@@ -99,14 +92,6 @@ class BmiFragment : Fragment() {
             val transition = fragmentManager.beginTransaction()
             transition.replace(R.id.fragment_container, CalculatorFragment())
             transition.commit()
-        }
-
-
-        if (viewModel.getNavId()!=null){
-            Log.d("wwwwwwwpp","${viewModel.getNavId()}")
-            val navView =
-                (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
-            navView.selectedItemId =viewModel.getNavId()!!
         }
 
         binding.bmiArrow.alpha = 0.75f

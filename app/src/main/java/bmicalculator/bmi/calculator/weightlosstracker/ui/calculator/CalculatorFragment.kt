@@ -37,6 +37,7 @@ import bmicalculator.bmi.calculator.weightlosstracker.util.CenterItemUtils
 import bmicalculator.bmi.calculator.weightlosstracker.util.LanguageHelper
 import com.google.android.material.tabs.TabLayout
 import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gyf.immersionbar.ktx.immersionBar
 import java.text.DateFormatSymbols
 import java.text.DecimalFormat
@@ -120,7 +121,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 }
             }
         }
-
 
         //标题用户点击
         binding.calUser.setOnClickListener {

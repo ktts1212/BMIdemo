@@ -34,7 +34,6 @@ class LanguageSelectFragment : DialogFragment(), View.OnClickListener {
 
     private lateinit var viewModel: CalculatorViewModel
 
-    private var hasData: Boolean = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,8 +44,6 @@ class LanguageSelectFragment : DialogFragment(), View.OnClickListener {
         val factory = ViewModelFactory(repository, requireActivity())
         viewModel =
             ViewModelProvider(requireActivity(), factory)[CalculatorViewModel::class.java]
-        hasData=(activity as AppCompatActivity).getSharedPreferences("hasData",Context.MODE_PRIVATE)
-            .getBoolean("hasData",false)
         return binding.root
     }
 
@@ -160,10 +157,8 @@ class LanguageSelectFragment : DialogFragment(), View.OnClickListener {
 
     override fun onClick(p0: View?) {
         val edit = activity?.getSharedPreferences("settings", 0)?.edit()
-        Log.d("wwwwww","${hasData}")
         viewModel.saveNavId(
-            if (hasData) R.id.menu_bmi
-            else R.id.menu_calculator
+            R.id.menu_calculator
         )
         Log.d("wwwwww1","${viewModel.getNavId()}")
         when (p0!!.id) {
