@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import bmicalculator.bmi.calculator.weightlosstracker.R
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.entity.BmiInfo
 import bmicalculator.bmi.calculator.weightlosstracker.ui.bmi.child.RecordFragment
+import bmicalculator.bmi.calculator.weightlosstracker.util.DcFormat
 import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
 
 class RecordAdapter(
@@ -50,7 +51,7 @@ class RecordAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.recordBmi.setText(bmiInfoList[position].bmi.toString())
+        holder.recordBmi.setText(DcFormat.tf!!.format(bmiInfoList[position].bmi))
         holder.recordDate.setText(bmiInfoList[position].date)
         holder.recordPhase.setText(Utils.numToPhase(context,bmiInfoList[position].phase))
         holder.recordType.setText(getBmiType(context, bmiInfoList[position].bmiType!!, holder))

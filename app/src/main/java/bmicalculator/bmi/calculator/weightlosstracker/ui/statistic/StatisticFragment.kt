@@ -43,6 +43,7 @@ import com.gyf.immersionbar.ktx.immersionBar
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 private const val TAG = "StatisticFragment"
 
@@ -79,9 +80,7 @@ class StatisticFragment : Fragment() {
         val dao = AppDataBase.getDatabase(requireContext().applicationContext).bmiInfoDao()
         val factory = ViewModelFactory(Repository(dao),requireActivity())
 
-        viewModel = ViewModelProvider(requireActivity(), factory).get(
-            CalculatorViewModel::class.java
-        )
+        viewModel = ViewModelProvider(requireActivity(), factory)[CalculatorViewModel::class.java]
         list = viewModel.allInfo.value
         binding = FragmentStatisticBinding.inflate(layoutInflater, container, false)
         return binding.root
@@ -93,8 +92,8 @@ class StatisticFragment : Fragment() {
 
         viewModel.allInfo.observe(requireActivity()) { info ->
 
-            info?.let {
-                if (it.isNullOrEmpty()) {
+            info?.let { it ->
+                if (it.isEmpty()) {
                     //throw Exception("There is no data")
                 } else {
 
@@ -104,7 +103,7 @@ class StatisticFragment : Fragment() {
                     list = orderList(viewModel.allInfo.value!!)
 
                     //dayList记录已天为单位的数据
-                    if (!dayList.isEmpty()) {
+                    if (dayList.isNotEmpty()) {
                         dayList.clear()
                     }
                     //保存kg的日单位数据
@@ -139,7 +138,7 @@ class StatisticFragment : Fragment() {
                     //将第一个数据设置为起始1，添加其他数据并计算相差天数
                     for (i in 1 until dateList.size) {
                         val timeStamp = dateList[i].datetimestamp
-                        val diffInMill = Math.abs(timeStamp - dateList[0].datetimestamp)
+                        val diffInMill = abs(timeStamp - dateList[0].datetimestamp)
                         //将毫秒转化为天数
                         Log.d(TAG, "diffInMill:${diffInMill}")
                         val diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMill)
@@ -151,7 +150,7 @@ class StatisticFragment : Fragment() {
                     //往kgDayList中添加数据
                     for (i in 0 until dateList.size){
                         val timeStamp=dateList[i].datetimestamp
-                        val differInMill=Math.abs(timeStamp-dateList[0].datetimestamp)
+                        val differInMill= abs(timeStamp-dateList[0].datetimestamp)
                         val diffInDays=TimeUnit.MILLISECONDS.toDays(differInMill)
                         kgDayList.add(Entry((diffInDays+1).toFloat(),dateList[i].bmiInfo.wt_kg.toFloat()))
                     }
@@ -210,7 +209,7 @@ class StatisticFragment : Fragment() {
                     xAxis.apply {
                         isEnabled = true
                         gridColor = Color.parseColor("#60EEEEEE")
-                        if (isAdded()) {
+                        if (isAdded) {
                             gridLineWidth = Utils.dip2px(requireContext(), 0.5f).toFloat()
                         }
                         //是否绘制x轴
@@ -220,12 +219,12 @@ class StatisticFragment : Fragment() {
                         position = XAxis.XAxisPosition.BOTTOM
                     }
 
-                    val xAxisto = binding.staLinechart2.xAxis
+                    val xAxisTo = binding.staLinechart2.xAxis
 
-                    xAxisto.apply {
+                    xAxisTo.apply {
                         isEnabled = true
                         gridColor = Color.parseColor("#60EEEEEE")
-                        if (isAdded()) {
+                        if (isAdded) {
                             gridLineWidth = Utils.dip2px(requireContext(), 0.5f).toFloat()
                         }
                         //是否绘制x轴
@@ -265,7 +264,7 @@ class StatisticFragment : Fragment() {
                         maxWidth = 45f
                         valueFormatter = object : ValueFormatter() {
                             override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-                                return DcFormat.tf.format(value)
+                                return DcFormat.tf!!.format(value)
                             }
                         }
                     }
@@ -290,7 +289,7 @@ class StatisticFragment : Fragment() {
                         maxWidth = 45f
                         valueFormatter = object : ValueFormatter() {
                             override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-                                    return DcFormat.tf.format(value)
+                                    return DcFormat.tf!!.format(value)
                             }
                         }
                     }
@@ -300,7 +299,7 @@ class StatisticFragment : Fragment() {
                     val lastEntryIndex = set.entryCount - 1
                     val lastEntry = set.getEntryForIndex(lastEntryIndex)
                     binding.staLinechart1.highlightValue(lastEntry.x, 0, true)
-                    //使用markview显示
+                    //使用markView显示
                     binding.staLinechart1.data.isHighlightEnabled = true
 
                     //重绘刷新
@@ -312,7 +311,7 @@ class StatisticFragment : Fragment() {
                     val lastEntryIndex2 = set2.entryCount - 1
                     val lastEntry2 = set2.getEntryForIndex(lastEntryIndex2)
                     binding.staLinechart2.highlightValue(lastEntry2.x, 0, true)
-                    //使用markview显示
+                    //使用markView显示
                     binding.staLinechart2.data.isHighlightEnabled = true
 
                     //重绘刷新
@@ -389,7 +388,7 @@ class StatisticFragment : Fragment() {
                     //将所有数据及其根据日期获得的时间戳加入dateList
                     maxY = 0f
                     maxKg=0f
-                    for (i in 0 until ls.size) {
+                    for (i in ls.indices) {
                         if (ls[i].bmi > maxY) {
                             maxY = ls[i].bmi
                         }
@@ -402,17 +401,17 @@ class StatisticFragment : Fragment() {
                     //将第一个数据设置为起始1，
                     dateList.sortBy { it.datetimestamp }
 
-                    val list = weekOrderdList(dateList)
+                    val list = weekOrderList(dateList)
                     val kgList=wtKgWeekOrderList(dateList)
 
                     //根据时间戳进行排序
                     list.sortedBy { it.timeStamp }
                     kgList.sortedBy { it.timeStamp }
 
-                    for (i in 0 until list.size) {
+                    for (i in list.indices) {
                         //weekList不需要计算相差的天数，需要计算相差的周数
                         val timeStamp = list[i].timeStamp
-                        val diffInMill = Math.abs(timeStamp - list[0].timeStamp)
+                        val diffInMill = abs(timeStamp - list[0].timeStamp)
                         //将毫秒转化为天数
                         val diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMill)
                         //天数除以7获取相差的周数
@@ -454,7 +453,7 @@ class StatisticFragment : Fragment() {
                     //将所有数据及其根据日期获得的时间戳加入dateList
                     maxY = 0f
                     maxKg=0f
-                    for (i in 0 until ls.size) {
+                    for (i in ls.indices) {
                         if (ls[i].bmi > maxY) {
                             maxY = ls[i].bmi
                         }
@@ -469,7 +468,7 @@ class StatisticFragment : Fragment() {
                     list.sortedBy { it.timeStamp }
                     kgList.sortedBy { it.timeStamp }
 
-                    for (i in 0 until list.size) {
+                    for (i in list.indices) {
                         //monthList不需要计算相差的天数，需要计算相差的月数
                         val differMonth=Utils.monthsBewteen(list[0].timeStamp,list[i].timeStamp)
                         monthList.add(Entry(differMonth.toFloat()+1, list[i].bmi))
@@ -505,7 +504,7 @@ class StatisticFragment : Fragment() {
                     //将第一个数据设置为起始1，添加其他数据并计算相差天数
                     for (i in 1 until dateList.size) {
                         val timeStamp = dateList[i].datetimestamp
-                        val diffInMill = Math.abs(timeStamp - dateList[0].datetimestamp)
+                        val diffInMill = abs(timeStamp - dateList[0].datetimestamp)
                         //将毫秒转化为天数
                         Log.d(TAG, "diffInMill:${diffInMill}")
                         val diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMill)
@@ -550,8 +549,8 @@ class StatisticFragment : Fragment() {
 
 
         //设置气泡
-        val mv = CustomMarkerView(requireContext(), R.layout.mark_view_layout)
-        val mv2=CustomMarkerView2(requireContext(),R.layout.mark_view_layout2)
+        val mv = CustomMarkerView(requireContext(), R.layout.mark_view_layout,viewModel.localeLanguage!!)
+        val mv2=CustomMarkerView2(requireContext(),R.layout.mark_view_layout2,viewModel.localeLanguage!!)
         binding.staLinechart1.marker = mv
         binding.staLinechart2.marker = mv2
 
@@ -580,10 +579,10 @@ class StatisticFragment : Fragment() {
     //根据日期给查询出的list进行排序
     fun orderList(list: List<BmiInfo>): List<BmiInfo> {
         val ls = mutableListOf<BmiInfo>()
-        for (i in 0 until list.size) {
-            if (ls.filter {
+        for (i in list.indices) {
+            if (ls.none {
                     it.date == list[i].date
-                }.isEmpty()) {
+                }) {
                 ls.add(list[i])
             } else {
                 val index = ls.indexOfFirst { it.date == list[i].date }
@@ -599,9 +598,9 @@ class StatisticFragment : Fragment() {
     fun wtKgWeekOrderList(list: List<History>): List<KgDate> {
         val ls = mutableListOf<KgDate>()
         val lsCount= mutableListOf<Int>()
-        for (i in 0 until list.size) {
+        for (i in list.indices) {
             val monday=Utils.getMondayOnWeek(list[i].datetimestamp)
-            if (ls.filter { it.timeStamp==monday }.isEmpty()){
+            if (ls.none { it.timeStamp == monday }){
                 ls.add(KgDate(monday,list[i].bmiInfo.wt_kg.toFloat()))
                 lsCount.add(1)
             }else{
@@ -609,26 +608,27 @@ class StatisticFragment : Fragment() {
                     ls.indexOfFirst { it.timeStamp==monday }
                 lsCount[index]++
                 ls[index].kg=
-                    DcFormat.tf.format(
+                    DcFormat.tf!!.format(
                         (ls[index].kg+list[i].bmiInfo.wt_kg)
                     ).replace(",",".").toFloat()
             }
         }
         for (i in 0 until ls.size){
-            ls[i].kg=DcFormat.tf.format(ls[i].kg/lsCount[i])
+            ls[i].kg=DcFormat.tf!!.format(ls[i].kg/lsCount[i])
                 .replace(",",".").toFloat()
         }
         return ls
     }
 
-    fun weekOrderdList(list: List<History>):List<BmiDate> {
+    fun weekOrderList(list: List<History>):List<BmiDate> {
         val ls = mutableListOf<BmiDate>()
         val lsCount= mutableListOf<Int>()
-        for (i in 0 until list.size) {
+        for (i in list.indices) {
             val monday = Utils.getMondayOnWeek(list[i].datetimestamp)
-            if (ls.filter {
+            if (ls.none {
                     it.timeStamp == monday
-                }.isEmpty()) {
+                }
+            ) {
                 ls.add(BmiDate(monday, list[i].bmiInfo.bmi))
                 lsCount.add(1)
             } else {
@@ -636,13 +636,13 @@ class StatisticFragment : Fragment() {
                     ls.indexOfFirst { it.timeStamp == monday }
                 lsCount[index]++
                 ls[index].bmi =
-                    DcFormat.tf.format(
+                    DcFormat.tf!!.format(
                         (ls[index].bmi + list[i].bmiInfo.bmi))
                         .replace(",", ".").toFloat()
             }
         }
         for (i in 0 until ls.size){
-            ls[i].bmi=DcFormat.tf.format(ls[i].bmi/lsCount[i])
+            ls[i].bmi=DcFormat.tf!!.format(ls[i].bmi/lsCount[i])
                 .replace(",",".").toFloat()
         }
         return ls
@@ -651,20 +651,20 @@ class StatisticFragment : Fragment() {
     fun wtKgMonthOrderList(list: List<History>): List<KgDate> {
         val ls = mutableListOf<KgDate>()
         val lsCount= mutableListOf<Int>()
-        for (i in 0 until list.size) {
+        for (i in list.indices) {
             val firstDayOnMonth=Utils.getFirstDayOnMonth(list[i].datetimestamp)
-            if (ls.filter {it.timeStamp==firstDayOnMonth  }.isEmpty()){
+            if (ls.none { it.timeStamp == firstDayOnMonth }){
                 ls.add(KgDate(firstDayOnMonth,list[i].bmiInfo.wt_kg.toFloat()))
                 lsCount.add(1)
             }else{
                 val index=ls.indexOfFirst { it.timeStamp==firstDayOnMonth }
                 lsCount[index]++
-                ls[index].kg=DcFormat.tf.format((ls[index].kg + list[i].bmiInfo.wt_kg))
+                ls[index].kg=DcFormat.tf!!.format((ls[index].kg + list[i].bmiInfo.wt_kg))
                     .replace(",",".").toFloat()
             }
         }
         for (i in 0 until  ls.size){
-            ls[i].kg=DcFormat.tf.format((ls[i].kg) / lsCount[i])
+            ls[i].kg=DcFormat.tf!!.format((ls[i].kg) / lsCount[i])
                 .replace(",",".").toFloat()
         }
         return ls
@@ -674,20 +674,20 @@ class StatisticFragment : Fragment() {
         val ls= mutableListOf<BmiDate>()
         //用来记录这个月有多少数据
         val lsCount= mutableListOf<Int>()
-        for (i in 0 until list.size){
+        for (i in list.indices){
             val firstDayOnMonth=Utils.getFirstDayOnMonth(list[i].datetimestamp)
-            if (ls.filter {it.timeStamp==firstDayOnMonth  }.isEmpty()){
+            if (ls.none { it.timeStamp == firstDayOnMonth }){
                 ls.add(BmiDate(firstDayOnMonth,list[i].bmiInfo.bmi))
                 lsCount.add(1)
             }else{
                 val index=ls.indexOfFirst { it.timeStamp==firstDayOnMonth }
                 lsCount[index]++
-                ls[index].bmi=DcFormat.tf.format((ls[index].bmi + list[i].bmiInfo.bmi))
+                ls[index].bmi=DcFormat.tf!!.format((ls[index].bmi + list[i].bmiInfo.bmi))
                     .replace(",",".").toFloat()
             }
         }
         for (i in 0 until  ls.size){
-            ls[i].bmi=DcFormat.tf.format((ls[i].bmi) / lsCount[i])
+            ls[i].bmi=DcFormat.tf!!.format((ls[i].bmi) / lsCount[i])
                 .replace(",",".").toFloat()
         }
         return ls
@@ -721,7 +721,7 @@ class StatisticFragment : Fragment() {
             valueTextSize = 14f
 
             //检查fragment是否关联到activity
-            if (isAdded()) {
+            if (isAdded) {
                 valueTypeface = ResourcesCompat.getFont(
                     requireContext(),
                     R.font.montserrat_extrabold
@@ -744,17 +744,17 @@ class StatisticFragment : Fragment() {
 
 
 
-        if (binding.staTabHeader.getTabAt(0)!!.isSelected==true){
+        if (binding.staTabHeader.getTabAt(0)!!.isSelected){
             binding.staLinechart1.xAxis.axisMaximum=bmiList[bmiList.size-1].x+7f
             binding.staLinechart1.xAxis.axisMinimum=bmiList[0].x-7f
             binding.staLinechart1.setVisibleXRange(7f, 7f)
             binding.staLinechart1.xAxis.setLabelCount(7, false)
-        }else if (binding.staTabHeader.getTabAt(1)!!.isSelected==true){
+        }else if (binding.staTabHeader.getTabAt(1)!!.isSelected){
             binding.staLinechart1.xAxis.axisMaximum=bmiList[bmiList.size-1].x+7f
             binding.staLinechart1.xAxis.axisMinimum=bmiList[0].x-7f
             binding.staLinechart1.setVisibleXRange(7f, 7f)
             binding.staLinechart1.xAxis.setLabelCount(7, false)
-        }else if (binding.staTabHeader.getTabAt(2)!!.isSelected==true){
+        }else if (binding.staTabHeader.getTabAt(2)!!.isSelected){
             binding.staLinechart1.xAxis.axisMaximum=bmiList[bmiList.size-1].x+7f
             binding.staLinechart1.xAxis.axisMinimum=bmiList[0].x-7f
             binding.staLinechart1.setVisibleXRange(7f, 7f)
@@ -794,7 +794,7 @@ class StatisticFragment : Fragment() {
             valueTextSize = 14f
 
             //检查fragment是否关联到activity
-            if (isAdded()) {
+            if (isAdded) {
                 valueTypeface = ResourcesCompat.getFont(
                     requireContext(),
                     R.font.montserrat_extrabold
@@ -815,17 +815,17 @@ class StatisticFragment : Fragment() {
         val lineData = LineData(lineDataSet)
 
         binding.staLinechart2.data = lineData
-        if (binding.staTabHeader.getTabAt(0)!!.isSelected==true){
+        if (binding.staTabHeader.getTabAt(0)!!.isSelected){
             binding.staLinechart2.xAxis.axisMaximum=wtList[wtList.size-1].x+7f
             binding.staLinechart2.xAxis.axisMinimum=wtList[0].x-7f
             binding.staLinechart2.setVisibleXRange(7f, 7f)
             binding.staLinechart2.xAxis.setLabelCount(7, false)
-        }else if (binding.staTabHeader.getTabAt(1)!!.isSelected==true){
+        }else if (binding.staTabHeader.getTabAt(1)!!.isSelected){
             binding.staLinechart2.xAxis.axisMaximum=wtList[wtList.size-1].x+7f
             binding.staLinechart2.xAxis.axisMinimum=wtList[0].x-7f
             binding.staLinechart2.setVisibleXRange(7f, 7f)
             binding.staLinechart2.xAxis.setLabelCount(7, false)
-        }else if (binding.staTabHeader.getTabAt(2)!!.isSelected==true) {
+        }else if (binding.staTabHeader.getTabAt(2)!!.isSelected) {
             binding.staLinechart2.xAxis.axisMaximum = wtList[wtList.size - 1].x + 7f
             binding.staLinechart2.xAxis.axisMinimum=wtList[0].x-7f
             binding.staLinechart2.setVisibleXRange(7f, 7f)

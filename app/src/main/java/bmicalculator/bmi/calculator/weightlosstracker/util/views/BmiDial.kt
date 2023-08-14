@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import bmicalculator.bmi.calculator.weightlosstracker.R
+import bmicalculator.bmi.calculator.weightlosstracker.util.DcFormat
 import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
 
 
@@ -89,27 +90,27 @@ class BmiDial(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(1.4f)).toFloat(),
             Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
 
-        numtext = "18.5"
+        numtext = DcFormat.tf!!.format(18.5)
         canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(2.9f)).toFloat(),
             Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
 
-        numtext = "25"
+        numtext = DcFormat.ff!!.format(25)
         canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(9.4f)).toFloat(),
             Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
 
-        numtext = "30"
+        numtext = DcFormat.ff!!.format(30)
         canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(14.4f)).toFloat(),
             Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
 
-        numtext = "35"
+        numtext = DcFormat.ff!!.format(35)
         canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(19.4f)).toFloat(),
             Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
 
-        numtext = "40"
+        numtext = DcFormat.ff!!.format(40)
         canvas.drawTextOnPath(numtext, mArc, getArcl(startAngle(24.4f)).toFloat(),
             Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
 
-        numtext = "17"
+        numtext = DcFormat.ff!!.format(17)
     }
 
     init {

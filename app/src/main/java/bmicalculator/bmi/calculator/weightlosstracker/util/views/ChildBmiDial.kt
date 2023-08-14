@@ -10,14 +10,14 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import bmicalculator.bmi.calculator.weightlosstracker.R
+import bmicalculator.bmi.calculator.weightlosstracker.util.DcFormat
 import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
-import java.util.Arrays
 
 
 class ChildBmiDial(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private var mArcRectF: RectF
     private var mSmallArcRectF: RectF
-    private var mScalePaint: Paint
+    private var mScalePaint: Paint = Paint()
 
 
     private var mArcRadius = 0  //外圆弧半径
@@ -30,7 +30,6 @@ class ChildBmiDial(context: Context?, attrs: AttributeSet?) : View(context, attr
     private var scaleRange: Float = 0f
 
     init {
-        mScalePaint = Paint()
         mScalePaint.isAntiAlias = true
         mScalePaint.textAlign = Paint.Align.CENTER
         mScaleTextSize = Utils.dip2px(context!!, 10f)
@@ -38,7 +37,7 @@ class ChildBmiDial(context: Context?, attrs: AttributeSet?) : View(context, attr
         mArcRectF = RectF()
         mSmallArcRectF = RectF()
         mArc = Path()
-        cScaleList.addAll(Arrays.asList("13.0","14.4", "18.0", "19.1","20.0"))
+        cScaleList.addAll(listOf("13.0","14.4", "18.0", "19.1","20.0"))
         scaleRange = 7.1f
     }
 
@@ -50,7 +49,7 @@ class ChildBmiDial(context: Context?, attrs: AttributeSet?) : View(context, attr
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
-        mArcRadius = Math.min(w, h) / 2 - Utils.dip2px(context,13.3f)
+        mArcRadius = w.coerceAtMost(h) / 2 - Utils.dip2px(context,13.3f)
         mSmallArcRadius = mArcRadius / 2
         mScaleRadius = mArcRadius + Utils.dip2px(context, 8f)
     }
@@ -111,31 +110,31 @@ class ChildBmiDial(context: Context?, attrs: AttributeSet?) : View(context, attr
         mScalePaint.typeface = ResourcesCompat.getFont(context, R.font.montserrat_extrabold)
         mScalePaint.textSize = Utils.dip2px(context,13.3f).toFloat()
 
-        canvas.drawTextOnPath(cScaleList[1], mArc,
-            getArcl(startAngle(cScaleList[1].toFloat()-cScaleList[0].toFloat())).toFloat(),
+        canvas.drawTextOnPath(DcFormat.tf!!.format(cScaleList[1].toFloat()), mArc,
+            getArc(startAngle(cScaleList[1].toFloat()-cScaleList[0].toFloat())).toFloat(),
             Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
-        canvas.drawTextOnPath(cScaleList[2], mArc,
-            getArcl(startAngle(cScaleList[2].toFloat()-cScaleList[0].toFloat())).toFloat(),
+        canvas.drawTextOnPath(DcFormat.tf!!.format(cScaleList[2].toFloat()), mArc,
+            getArc(startAngle(cScaleList[2].toFloat()-cScaleList[0].toFloat())).toFloat(),
             Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
 
 
-        canvas.drawTextOnPath(cScaleList[3], mArc,
-            getArcl(startAngle(cScaleList[3].toFloat()-cScaleList[0].toFloat())).toFloat(),
+        canvas.drawTextOnPath(DcFormat.tf!!.format(cScaleList[3].toFloat()), mArc,
+            getArc(startAngle(cScaleList[3].toFloat()-cScaleList[0].toFloat())).toFloat(),
             Utils.dip2px(context,-3.3f).toFloat(), mScalePaint)
 
     }
 
 
-    fun getArcl(radius: Float): Double {
+    private fun getArc(radius: Float): Double {
 
         return (radius - 180) * mArcRadius * Math.PI / 180
     }
 
-    fun startAngle(num: Float): Float {
+    private fun startAngle(num: Float): Float {
         return num / scaleRange * 180 + 180
     }
 
-    fun sweepAngle(num: Float): Float {
+    private fun sweepAngle(num: Float): Float {
         return num / scaleRange * 180
     }
 }

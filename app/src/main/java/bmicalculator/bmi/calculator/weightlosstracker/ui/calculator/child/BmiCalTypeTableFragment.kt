@@ -24,6 +24,7 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatab
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFactory
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
 import bmicalculator.bmi.calculator.weightlosstracker.util.ChildBmiDialData
+import bmicalculator.bmi.calculator.weightlosstracker.util.DcFormat
 
 class BmiCalTypeTableFragment : DialogFragment() {
 
@@ -58,7 +59,27 @@ class BmiCalTypeTableFragment : DialogFragment() {
             )
         }
 
-        getBmiType(viewModel.bmitype)
+        if (viewModel.localeLanguage !in DcFormat.enList){
+            binding.typeTable.bmiVerysevereText2.text=
+                binding.typeTable.bmiVerysevereText2.text.toString().replace(".",",")
+            binding.typeTable.bmiSevereText2.text=
+                binding.typeTable.bmiSevereText2.text.toString().replace(".",",")
+            binding.typeTable.bmiUweightText2.text=
+                binding.typeTable.bmiUweightText2.text.toString().replace(".",",")
+            binding.typeTable.bmiNormalText2.text=
+                binding.typeTable.bmiNormalText2.text.toString().replace(".",",")
+            binding.typeTable.bmiOverweightText2.text=
+                binding.typeTable.bmiOverweightText2.text.toString().replace(".",",")
+            binding.typeTable.bmiOb1Text2.text=
+                binding.typeTable.bmiOb1Text2.text.toString().replace(".",",")
+            binding.typeTable.bmiOb2Text2.text=
+                binding.typeTable.bmiOb2Text2.text.toString().replace(".",",")
+            binding.typeTable.bmiOb3Text2.text=
+                binding.typeTable.bmiOb3Text2.text.toString().replace(".",",")
+        }
+
+
+        getBmiType(viewModel.bmiType)
         if (viewModel.selectedAge.value!! > 20) {
             binding.typeTableChildDial.visibility = View.GONE
             binding.typeTableDial.visibility = View.VISIBLE
@@ -89,10 +110,10 @@ class BmiCalTypeTableFragment : DialogFragment() {
             binding.typeTable.bmiOb3.visibility = View.GONE
 
             val ls = ChildBmiDialData.cScaleList
-            binding.typeTable.bmiUweightText2.setText("${ls[0]} - ${ls[1]}")
-            binding.typeTable.bmiNormalText2.setText("${ls[1]} - ${ls[2]}")
-            binding.typeTable.bmiOverweightText2.setText("${ls[2]} - ${ls[3]}")
-            binding.typeTable.bmiOb1Text2.setText("${ls[3]} - ${ls[4]}")
+            binding.typeTable.bmiUweightText2.text = "${ls[0]} - ${ls[1]}".replace(".",",")
+            binding.typeTable.bmiNormalText2.text = "${ls[1]} - ${ls[2]}".replace(".",",")
+            binding.typeTable.bmiOverweightText2.text = "${ls[2]} - ${ls[3]}".replace(".",",")
+            binding.typeTable.bmiOb1Text2.text = "${ls[3]} - ${ls[4]}".replace(".",",")
             scSize = 0.6
         }
 

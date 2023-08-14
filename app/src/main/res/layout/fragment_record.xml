@@ -69,8 +69,8 @@
 
             <bmicalculator.bmi.calculator.weightlosstracker.util.views.BmiDial
                 android:id="@+id/rc_dial"
-                android:layout_width="360dp"
-                android:layout_height="360dp"
+                android:layout_width="320dp"
+                android:layout_height="320dp"
                 android:layout_marginTop="25dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -78,9 +78,9 @@
 
             <bmicalculator.bmi.calculator.weightlosstracker.util.views.BmiArrow
                 android:id="@+id/rc_arrow"
-                android:layout_width="36dp"
-                android:layout_height="150dp"
-                android:layout_marginTop="-198.5dp"
+                android:layout_width="30dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="-178.5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rc_dial" />
@@ -89,7 +89,7 @@
                 android:id="@+id/rc_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-110dp"
+                android:layout_marginTop="-80dp"
                 android:fontFamily="@font/montserrat_extrabold"
                 android:text="@string/bmi_tip_description"
                 android:textAlignment="center"
@@ -416,10 +416,12 @@
                             android:textColor="@color/black" />
 
                         <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="15dp"
-                            android:layout_marginStart="318dp"
-                            android:layout_marginTop="59dp"
+                            android:layout_width="20dp"
+                            android:layout_height="12dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="7.5dp"
+                            android:layout_marginEnd="11dp"
                             android:src="@drawable/ad_tag1" />
 
                     </RelativeLayout>
@@ -497,10 +499,12 @@
                             android:textColor="@color/black" />
 
                         <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="15dp"
-                            android:layout_marginStart="318dp"
-                            android:layout_marginTop="59dp"
+                            android:layout_width="20dp"
+                            android:layout_height="12dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="7.5dp"
+                            android:layout_marginEnd="11dp"
                             android:src="@drawable/ad_tag1" />
 
                     </RelativeLayout>
@@ -577,10 +581,12 @@
                             android:textColor="@color/black" />
 
                         <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="15dp"
-                            android:layout_marginStart="318dp"
-                            android:layout_marginTop="59dp"
+                            android:layout_width="20dp"
+                            android:layout_height="12dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="7.5dp"
+                            android:layout_marginEnd="11dp"
                             android:src="@drawable/ad_tag1" />
 
                     </RelativeLayout>

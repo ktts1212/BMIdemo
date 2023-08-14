@@ -76,7 +76,7 @@
                 android:id="@+id/bmi_type_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-140dp"
+                android:layout_marginTop="-150dp"
                 android:gravity="center_horizontal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/type_table_dial">
@@ -91,7 +91,7 @@
                 android:id="@+id/type_table_btn"
                 android:layout_width="315dp"
                 android:layout_height="55dp"
-                android:layout_marginTop="23dp"
+                android:layout_marginTop="10dp"
                 android:backgroundTint="#3659CF"
                 android:fontFamily="@font/montserrat_extrabold"
                 android:gravity="center"

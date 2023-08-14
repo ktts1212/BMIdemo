@@ -107,8 +107,8 @@
 
             <bmicalculator.bmi.calculator.weightlosstracker.util.views.BmiArrow
                 android:id="@+id/bmi_arrow"
-                android:layout_width="36dp"
-                android:layout_height="150dp"
+                android:layout_width="30dp"
+                android:layout_height="120dp"
                 android:layout_marginTop="142dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -118,7 +118,7 @@
                 android:id="@+id/bmi_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-110dp"
+                android:layout_marginTop="-80dp"
                 android:fontFamily="@font/montserrat_extrabold"
                 android:text="@string/bmi_tip_description"
                 android:textAlignment="center"

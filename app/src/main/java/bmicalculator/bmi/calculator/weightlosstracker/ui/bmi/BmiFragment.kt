@@ -1,7 +1,6 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.bmi
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
@@ -12,7 +11,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -28,6 +26,7 @@ import bmicalculator.bmi.calculator.weightlosstracker.ui.bmi.child.RecordHistory
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
 import bmicalculator.bmi.calculator.weightlosstracker.util.ChildBmiDialData
+import bmicalculator.bmi.calculator.weightlosstracker.util.DcFormat
 import bmicalculator.bmi.calculator.weightlosstracker.util.SweepAngel
 import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -41,7 +40,9 @@ class BmiFragment : Fragment() {
 
     private lateinit var viewModel: CalculatorViewModel
 
-    private val allInfo = ArrayList<BmiInfo>()
+    private val allInfoList = ArrayList<BmiInfo>()
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -96,63 +97,89 @@ class BmiFragment : Fragment() {
 
         binding.bmiArrow.alpha = 0.75f
         binding.bmiArrow.pivotX = Utils.dip2px(
-            requireContext(), 18f
+            requireContext(), 15f
         ).toFloat()
 
         binding.bmiArrow.pivotY = Utils.dip2px(
-            requireContext(), 18f
+            requireContext(), 15f
         ).toFloat()
 
+        if (viewModel.localeLanguage !in DcFormat.enList){
+            binding.newRecord.bmiVerysevereText2.text=
+                binding.newRecord.bmiVerysevereText2.text.toString().replace(".",",")
+            binding.newRecord.bmiSevereText2.text=
+                binding.newRecord.bmiSevereText2.text.toString().replace(".",",")
+            binding.newRecord.bmiUweightText2.text=
+                binding.newRecord.bmiUweightText2.text.toString().replace(".",",")
+            binding.newRecord.bmiNormalText2.text=
+                binding.newRecord.bmiNormalText2.text.toString().replace(".",",")
+            binding.newRecord.bmiOverweightText2.text=
+                binding.newRecord.bmiOverweightText2.text.toString().replace(".",",")
+            binding.newRecord.bmiOb1Text2.text=
+                binding.newRecord.bmiOb1Text2.text.toString().replace(".",",")
+            binding.newRecord.bmiOb2Text2.text=
+                binding.newRecord.bmiOb2Text2.text.toString().replace(".",",")
+            binding.newRecord.bmiOb3Text2.text=
+                binding.newRecord.bmiOb3Text2.text.toString().replace(".",",")
+        }
 
         viewModel.allInfo.observe(requireActivity()) { bmiInfo ->
-            for (element in bmiInfo) {
-                allInfo.add(element)
-            }
 
-            if (isAdded) {
-                binding.bmiLabel.text =
-                    String.format(getString(R.string.bmi_tip_description), "...")
-            }
+            if (bmiInfo.isNotEmpty()){
+                allInfoList.clear()
 
-
-            allInfo.sortByDescending { it.timestape }
-            val newRecord = allInfo.maxBy { it.timestape }
-            viewModel.bmiNewRecord.value = newRecord
-            Log.d(TAG, newRecord.toString())
-            if (newRecord.age > 20) {
-                binding.typeTableChildDial.visibility = View.GONE
-                binding.typeTableDial.visibility = View.VISIBLE
-                binding.bmiArrow.rotation = SweepAngel.sweepAngle(newRecord.bmi)
-                binding.bmiDate.text = newRecord.date
-                binding.bmiValue.text = newRecord.bmi.toString()
-                if (isAdded) {
-                    getBmiType(newRecord.bmiType!!)
-                    getWtHtType(newRecord)
+                for (element in bmiInfo) {
+                    allInfoList.add(element)
                 }
 
-            } else {
-                binding.typeTableChildDial.visibility = View.VISIBLE
-                binding.typeTableDial.visibility = View.GONE
-                binding.bmiValue.text = newRecord.bmi.toString()
-                binding.bmiDate.text = newRecord.date
-                ChildBmiDialData.setData(newRecord.age, newRecord.gender)
-                binding.typeTableChildDial.getData(
-                    ChildBmiDialData.cScaleList,
-                    ChildBmiDialData.scaleRange
-                )
-                binding.newRecord.bmiVerysevere.visibility = View.GONE
-                binding.newRecord.bmiSevere.visibility = View.GONE
-                binding.newRecord.bmiOb2.visibility = View.GONE
-                binding.newRecord.bmiOb3.visibility = View.GONE
-                val ls = ChildBmiDialData.cScaleList
-                binding.newRecord.bmiUweightText2.setText("${ls[0]} - ${ls[1]}")
-                binding.newRecord.bmiNormalText2.setText("${ls[1]} - ${ls[2]}")
-                binding.newRecord.bmiOverweightText2.setText("${ls[2]} - ${ls[3]}")
-                binding.newRecord.bmiOb1Text2.setText("${ls[3]} - ${ls[4]}")
-                getBmiType(newRecord.bmiType.toString())
-                binding.bmiArrow.rotation = SweepAngel.childSweepAngle(newRecord.bmi)
-                getWtHtType(newRecord)
+                if (isAdded) {
+                    binding.bmiLabel.text =
+                        String.format(getString(R.string.bmi_tip_description), "...")
+                }
+
+
+                allInfoList.sortByDescending { it.timestape }
+                val newRecord = allInfoList.maxBy { it.timestape }
+                viewModel.bmiNewRecord.value = newRecord
+                Log.d(TAG, newRecord.toString())
+                if (newRecord.age > 20) {
+                    binding.typeTableChildDial.visibility = View.GONE
+                    binding.typeTableDial.visibility = View.VISIBLE
+                    binding.bmiArrow.rotation = SweepAngel.sweepAngle(newRecord.bmi)
+                    binding.bmiDate.text = newRecord.date
+                    binding.bmiValue.text = DcFormat.tf!!.format(newRecord.bmi)
+                    if (isAdded) {
+                        getBmiType(newRecord.bmiType!!)
+                        getWtHtType(newRecord)
+                    }
+
+                } else {
+                    binding.typeTableChildDial.visibility = View.VISIBLE
+                    binding.typeTableDial.visibility = View.GONE
+                    binding.bmiValue.text = DcFormat.tf!!.format(newRecord.bmi)
+                    binding.bmiDate.text = newRecord.date
+                    ChildBmiDialData.setData(newRecord.age, newRecord.gender)
+                    binding.typeTableChildDial.getData(
+                        ChildBmiDialData.cScaleList,
+                        ChildBmiDialData.scaleRange
+                    )
+                    binding.newRecord.bmiVerysevere.visibility = View.GONE
+                    binding.newRecord.bmiSevere.visibility = View.GONE
+                    binding.newRecord.bmiOb2.visibility = View.GONE
+                    binding.newRecord.bmiOb3.visibility = View.GONE
+                    val ls = ChildBmiDialData.cScaleList
+                    binding.newRecord.bmiUweightText2.setText("${ls[0]} - ${ls[1]}")
+                    binding.newRecord.bmiNormalText2.setText("${ls[1]} - ${ls[2]}")
+                    binding.newRecord.bmiOverweightText2.setText("${ls[2]} - ${ls[3]}")
+                    binding.newRecord.bmiOb1Text2.setText("${ls[3]} - ${ls[4]}")
+                    getBmiType(newRecord.bmiType.toString())
+                    binding.bmiArrow.rotation = SweepAngel.childSweepAngle(newRecord.bmi)
+                    getWtHtType(newRecord)
+                }
+            }else{
+                onDestroyView()
             }
+
         }
 
         binding.menuRecent.setOnClickListener {
@@ -556,7 +583,7 @@ class BmiFragment : Fragment() {
                 "lbftin" -> {
                     binding.bmiCalInfoNew.text = String.format(
                         getString(R.string.bmi_input_data),
-                        "${newRecord.wt_lb} lb",
+                        "${DcFormat.tf!!.format(newRecord.wt_lb)} lb",
                         "${newRecord.ht_ft} ft ${newRecord.ht_in} in",
                         gender,
                         "${newRecord.age}"
@@ -566,8 +593,8 @@ class BmiFragment : Fragment() {
                 "lbcm" -> {
                     binding.bmiCalInfoNew.text = String.format(
                         getString(R.string.bmi_input_data),
-                        "${newRecord.wt_lb} lb",
-                        "${newRecord.ht_cm} cm",
+                        "${DcFormat.tf!!.format(newRecord.wt_lb)} lb",
+                        "${DcFormat.tf!!.format(newRecord.ht_cm)} cm",
                         gender,
                         "${newRecord.age}"
                     )
@@ -576,7 +603,7 @@ class BmiFragment : Fragment() {
                 "kgftin" -> {
                     binding.bmiCalInfoNew.text = String.format(
                         getString(R.string.bmi_input_data),
-                        "${newRecord.wt_kg} kg",
+                        "${DcFormat.tf!!.format(newRecord.wt_kg)} kg",
                         "${newRecord.ht_ft} ft ${newRecord.ht_in} in",
                         gender,
                         "${newRecord.age}"
@@ -586,8 +613,8 @@ class BmiFragment : Fragment() {
                 "kgcm" -> {
                     binding.bmiCalInfoNew.text = String.format(
                         getString(R.string.bmi_input_data),
-                        "${newRecord.wt_kg} kg",
-                        "${newRecord.ht_cm} cm",
+                        "${DcFormat.tf!!.format(newRecord.wt_kg)} kg",
+                        "${DcFormat.tf!!.format(newRecord.ht_cm)} cm",
                         gender,
                         "${newRecord.age}"
                     )

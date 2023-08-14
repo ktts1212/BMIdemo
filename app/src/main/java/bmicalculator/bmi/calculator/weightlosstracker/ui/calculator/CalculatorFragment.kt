@@ -37,7 +37,6 @@ import bmicalculator.bmi.calculator.weightlosstracker.util.CenterItemUtils
 import bmicalculator.bmi.calculator.weightlosstracker.util.LanguageHelper
 import com.google.android.material.tabs.TabLayout
 import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gyf.immersionbar.ktx.immersionBar
 import java.text.DateFormatSymbols
 import java.text.DecimalFormat
@@ -86,7 +85,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         //设置toolbar的显示
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbarCal)
-
         return binding.root
     }
 
@@ -380,11 +378,11 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     binding.wtInput.setText(
                         if (isEu) {
                             df.format(
-                                formatEuro.format(viewModel.wt_lb.value).replace(",", ".")
+                                formatEuro.format(viewModel.wtLb.value).replace(",", ".")
                                     .toDouble()
                             )
                         } else {
-                            df.format(viewModel.wt_lb.value)
+                            df.format(viewModel.wtLb.value)
                         }
                     )
                 } else {
@@ -392,11 +390,11 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
                         if (isEu) {
                             df.format(
-                                formatEuro.format(viewModel.wt_kg.value).replace(",", ".")
+                                formatEuro.format(viewModel.wtKg.value).replace(",", ".")
                                     .toDouble()
                             )
                         } else {
-                            df.format(viewModel.wt_kg.value)
+                            df.format(viewModel.wtKg.value)
                         }
                     )
                 }
@@ -420,11 +418,11 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                             "Please input a valid weight to calculate your BMI accurately",
                             Toast.LENGTH_SHORT
                         ).show()
-                        viewModel.setwtlb(
+                        viewModel.setWtLb(
                             df.format(2).replace(",", ".").toDouble()
                         )
                     } else {
-                        viewModel.setwtlb(
+                        viewModel.setWtLb(
                             if (isEu) {
                                 df.format(str.toDouble()).replace(",", ".").toDouble()
                             } else {
@@ -434,10 +432,10 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
                     }
                     if (!firstConvert) {
-                        if (df.format(viewModel.wt_lb.value!! * Multi_1).replace(",", ".")
+                        if (df.format(viewModel.wtLb.value!! * Multi_1).replace(",", ".")
                                 .toDouble() < 1
                         ) {
-                            viewModel.setwtkg(
+                            viewModel.setWtKg(
                                 if (isEu) {
                                     //formatEnglish.format(df.format(1).toDouble()).toDouble()
                                     df.format(1).replace(",", ".").toDouble()
@@ -446,12 +444,12 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                                 }
                             )
                         } else {
-                            viewModel.setwtkg(
+                            viewModel.setWtKg(
                                 if (isEu) {
-                                    df.format(viewModel.wt_lb.value!! * Multi_1).replace(",", ".")
+                                    df.format(viewModel.wtLb.value!! * Multi_1).replace(",", ".")
                                         .toDouble()
                                 } else {
-                                    df.format(viewModel.wt_lb.value!! * Multi_1).toDouble()
+                                    df.format(viewModel.wtLb.value!! * Multi_1).toDouble()
                                 }
                             )
                         }
@@ -464,7 +462,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                             "Please input a valid weight to calculate your BMI accurately",
                             Toast.LENGTH_SHORT
                         ).show()
-                        viewModel.setwtkg(
+                        viewModel.setWtKg(
                             if (isEu) {
                                 // nf_en.format(df.format(1).toDouble()).toDouble()
                                 df.format(1).replace(",", ".").toDouble()
@@ -473,7 +471,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                             }
                         )
                     } else {
-                        viewModel.setwtkg(
+                        viewModel.setWtKg(
                             if (isEu) {
                                 df.format(str.toDouble()).replace(",", ".").toDouble()
                             } else {
@@ -481,12 +479,12 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                             }
                         )
                     }
-                    viewModel.setwtlb(
+                    viewModel.setWtLb(
                         if (isEu) {
-                            df.format(viewModel.wt_kg.value!! / Multi_1).replace(",", ".")
+                            df.format(viewModel.wtKg.value!! / Multi_1).replace(",", ".")
                                 .toDouble()
                         } else {
-                            df.format(viewModel.wt_kg.value!! / Multi_1).toDouble()
+                            df.format(viewModel.wtKg.value!! / Multi_1).toDouble()
                         }
                     )
                 }
@@ -699,17 +697,17 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     binding.htCardFtin1.visibility = View.VISIBLE
                     binding.htCardFtin2.visibility = View.VISIBLE
                     binding.htCardCm.visibility = View.INVISIBLE
-                    binding.htInputFtin1.setText(viewModel.ht_ft.value.toString() + "'")
-                    binding.htInputFtin2.setText(viewModel.ht_in.value.toString() + "''")
+                    binding.htInputFtin1.setText(viewModel.htFt.value.toString() + "'")
+                    binding.htInputFtin2.setText(viewModel.htIn.value.toString() + "''")
                 } else {
                     binding.htCardFtin1.visibility = View.INVISIBLE
                     binding.htCardFtin2.visibility = View.INVISIBLE
                     binding.htCardCm.visibility = View.VISIBLE
                     binding.htInputCm.setText(
                         if (isEu) {
-                            tf.format(viewModel.ht_cm.value?.toDouble())
+                            tf.format(viewModel.htCm.value?.toDouble())
                         } else {
-                            viewModel.ht_cm.value.toString()
+                            viewModel.htCm.value.toString()
                         }
                     )
                 }
@@ -721,38 +719,38 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     val strIn = binding.htInputFtin2.text.toString()
                     if (strFt.isNotEmpty()) {
                         if (strFt.contains("'")) {
-                            viewModel.sethtft(
+                            viewModel.setHtFt(
                                 strFt.dropLast(1).toInt()
                             )
                         } else {
-                            viewModel.sethtft(
+                            viewModel.setHtFt(
                                 strFt.toInt()
                             )
                         }
                     } else {
-                        viewModel.sethtft(1)
+                        viewModel.setHtFt(1)
                     }
                     if (strIn.isNotEmpty()) {
                         if (strIn.contains("''")) {
-                            viewModel.sethtin(
+                            viewModel.setHtIn(
                                 strIn.dropLast(2).toInt()
                             )
                         } else if (strIn.contains("'")) {
-                            viewModel.sethtin(
+                            viewModel.setHtIn(
                                 strIn.dropLast(1).toInt()
                             )
                         } else {
-                            viewModel.sethtin(
+                            viewModel.setHtIn(
                                 strIn.toInt()
                             )
                         }
                     } else {
-                        viewModel.sethtin(0)
+                        viewModel.setHtIn(0)
                     }
 
 
                     if (htFirstConvert) {
-                        viewModel.sethtcm(
+                        viewModel.setHtCm(
                             if (isEu) {
                                 tf.format(170).replace(",", ".").toDouble()
                             } else {
@@ -761,17 +759,17 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         )
                         htFirstConvert = false
                     } else {
-                        viewModel.sethtcm(
+                        viewModel.setHtCm(
 
                             if (isEu) {
                                 tf.format(
-                                    viewModel.ht_in.value!! * Multi_tin +
-                                            viewModel.ht_ft.value!! * Multi_haft
+                                    viewModel.htIn.value!! * Multi_tin +
+                                            viewModel.htFt.value!! * Multi_haft
                                 ).replace(",", ".").toDouble()
                             } else {
                                 tf.format(
-                                    viewModel.ht_in.value!! * Multi_tin +
-                                            viewModel.ht_ft.value!! * Multi_haft
+                                    viewModel.htIn.value!! * Multi_tin +
+                                            viewModel.htFt.value!! * Multi_haft
                                 ).toDouble()
                             }
 
@@ -782,7 +780,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 } else {
                     val htCm = binding.htInputCm.text.toString()
                     if (htCm.isNotEmpty()) {
-                        viewModel.sethtcm(
+                        viewModel.setHtCm(
                             if (isEu) {
                                 binding.htInputCm.text.toString().replace(",", ".").toDouble()
                             } else {
@@ -791,11 +789,11 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         )
                     } else {
                         if (isEu) {
-                            viewModel.sethtcm(
+                            viewModel.setHtCm(
                                 tf.format(1).replace(",", ".").toDouble()
                             )
                         } else {
-                            viewModel.sethtcm(
+                            viewModel.setHtCm(
                                 tf.format(1).toDouble()
                             )
                         }
@@ -803,12 +801,12 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     }
 
 
-                    viewModel.sethtft(
-                        ff.format((viewModel.ht_cm.value!! / Multi_haft).toInt()).toInt()
+                    viewModel.setHtFt(
+                        ff.format((viewModel.htCm.value!! / Multi_haft).toInt()).toInt()
                     )
-                    viewModel.sethtin(
+                    viewModel.setHtIn(
                         ff.format(
-                            (viewModel.ht_cm.value!! - viewModel.ht_ft.value!! * Multi_haft)
+                            (viewModel.htCm.value!! - viewModel.htFt.value!! * Multi_haft)
                                     / Multi_tin
                         ).toInt()
                     )
@@ -1290,7 +1288,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             if (binding.wtTab.getTabAt(0)!!.isSelected) {
                 val str = binding.wtInput.text.toString()
                 if (str.isNotEmpty()) {
-                    viewModel.setwtlb(
+                    viewModel.setWtLb(
 
                         if (isEu) {
                             str.replace(",", ".").toDouble()
@@ -1299,7 +1297,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         }
                     )
                 } else {
-                    viewModel.setwtlb(
+                    viewModel.setWtLb(
                         140.00
                     )
                 }
@@ -1307,7 +1305,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             } else {
                 val str = binding.wtInput.text.toString()
                 if (str.isNotEmpty()) {
-                    viewModel.setwtkg(
+                    viewModel.setWtKg(
 
                         if (isEu) {
                             str.replace(",", ".").toDouble()
@@ -1316,7 +1314,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         }
                     )
                 } else {
-                    viewModel.setwtkg(
+                    viewModel.setWtKg(
                         65.00
                     )
                 }
@@ -1326,32 +1324,32 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 val str = binding.htInputFtin1.text.toString()
                 val str2 = binding.htInputFtin2.text.toString()
                 if (str.isNotEmpty() && str.isNotEmpty()) {
-                    viewModel.sethtft(
+                    viewModel.setHtFt(
                         if (str.contains("'")) str.dropLast(1).toInt()
                         else str.toInt()
 
                     )
 
-                    viewModel.sethtin(
+                    viewModel.setHtIn(
                         if (str2.contains("''")) str2.dropLast(2).toInt()
                         else str2.toInt()
                     )
                 } else {
                     if (str.isEmpty()) {
-                        viewModel.sethtft(5)
-                        viewModel.sethtin(str2.toInt())
+                        viewModel.setHtFt(5)
+                        viewModel.setHtIn(str2.toInt())
                     }
 
                     if (str2.isEmpty()) {
-                        viewModel.sethtin(7)
-                        viewModel.sethtft(str.toInt())
+                        viewModel.setHtIn(7)
+                        viewModel.setHtFt(str.toInt())
                     }
                 }
 
             } else {
                 val str = binding.htInputCm.text.toString()
                 if (str.isNotEmpty()) {
-                    viewModel.sethtcm(
+                    viewModel.setHtCm(
 
                         if (isEu) {
                             str.replace(",", ".").toDouble()
@@ -1360,7 +1358,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         }
                     )
                 } else {
-                    viewModel.sethtcm(
+                    viewModel.setHtCm(
                         170.0
                     )
                 }
@@ -1371,20 +1369,20 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 if (binding.wtTab.getTabAt(0)!!.isSelected &&
                     binding.htTab.getTabAt(0)!!.isSelected
                 ) {
-                    val bmiVal = viewModel.wt_lb.value!! / ((viewModel.ht_ft.value!! * 12 +
-                            viewModel.ht_in.value!!)).toDouble().pow(2.0) * 703
-                    viewModel.setBmival(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
-                    viewModel.wttype = "lb"
-                    viewModel.httype = "ftin"
-                    viewModel.setwtkg(
-                        df.format(viewModel.wt_lb.value!! * Multi_1)
+                    val bmiVal = viewModel.wtLb.value!! / ((viewModel.htFt.value!! * 12 +
+                            viewModel.htIn.value!!)).toDouble().pow(2.0) * 703
+                    viewModel.setBmiVal(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
+                    viewModel.wtType = "lb"
+                    viewModel.htType = "ftin"
+                    viewModel.setWtKg(
+                        df.format(viewModel.wtLb.value!! * Multi_1)
                             .replace(",", ".")
                             .toDouble()
                     )
-                    viewModel.sethtcm(
+                    viewModel.setHtCm(
                         tf.format(
-                            viewModel.ht_in.value!! * Multi_tin +
-                                    viewModel.ht_ft.value!! * Multi_haft
+                            viewModel.htIn.value!! * Multi_tin +
+                                    viewModel.htFt.value!! * Multi_haft
                         ).replace(",", ".").toDouble()
                     )
                 }
@@ -1393,23 +1391,23 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     binding.htTab.getTabAt(1)!!.isSelected
                 ) {
                     val bmiVal =
-                        viewModel.wt_lb.value!! * 0.453 / (viewModel.ht_cm.value!! * 0.01).pow(
+                        viewModel.wtLb.value!! * 0.453 / (viewModel.htCm.value!! * 0.01).pow(
                             2.0
                         )
-                    viewModel.setBmival(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
-                    viewModel.wttype = "lb"
-                    viewModel.httype = "cm"
-                    viewModel.setwtkg(
-                        df.format(viewModel.wt_lb.value!! * Multi_1)
+                    viewModel.setBmiVal(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
+                    viewModel.wtType = "lb"
+                    viewModel.htType = "cm"
+                    viewModel.setWtKg(
+                        df.format(viewModel.wtLb.value!! * Multi_1)
                             .replace(",", ".")
                             .toDouble()
                     )
-                    viewModel.sethtft(
-                        ff.format((viewModel.ht_cm.value!! / Multi_haft).toInt()).replace(",", ".")
+                    viewModel.setHtFt(
+                        ff.format((viewModel.htCm.value!! / Multi_haft).toInt()).replace(",", ".")
                             .toInt()
                     )
-                    viewModel.sethtin(
-                        ff.format((viewModel.ht_cm.value!! - viewModel.ht_ft.value!! * Multi_haft) / Multi_tin)
+                    viewModel.setHtIn(
+                        ff.format((viewModel.htCm.value!! - viewModel.htFt.value!! * Multi_haft) / Multi_tin)
                             .toInt()
                     )
                 }
@@ -1418,22 +1416,22 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     binding.htTab.getTabAt(0)!!.isSelected
                 ) {
                     val bmiVal =
-                        viewModel.wt_kg.value!! /
-                                (viewModel.ht_ft.value!! * 0.3048 + viewModel.ht_in.value!! * 0.0254).pow(
+                        viewModel.wtKg.value!! /
+                                (viewModel.htFt.value!! * 0.3048 + viewModel.htIn.value!! * 0.0254).pow(
                                     2.0
                                 )
-                    viewModel.setBmival(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
-                    viewModel.wttype = "kg"
-                    viewModel.httype = "ftin"
-                    viewModel.setwtlb(
-                        df.format(viewModel.wt_kg.value!! / Multi_1)
+                    viewModel.setBmiVal(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
+                    viewModel.wtType = "kg"
+                    viewModel.htType = "ftin"
+                    viewModel.setWtLb(
+                        df.format(viewModel.wtKg.value!! / Multi_1)
                             .replace(",", ".")
                             .toDouble()
                     )
-                    viewModel.sethtcm(
+                    viewModel.setHtCm(
                         tf.format(
-                            viewModel.ht_in.value!! * Multi_tin +
-                                    viewModel.ht_ft.value!! * Multi_haft
+                            viewModel.htIn.value!! * Multi_tin +
+                                    viewModel.htFt.value!! * Multi_haft
                         ).replace(",", ".").toDouble()
                     )
                 }
@@ -1441,37 +1439,37 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 if (binding.wtTab.getTabAt(1)!!.isSelected &&
                     binding.htTab.getTabAt(1)!!.isSelected
                 ) {
-                    val bmiVal = viewModel.wt_kg.value!! / (viewModel.ht_cm.value!! * 0.01).pow(2.0)
-                    viewModel.setBmival(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
-                    viewModel.wttype = "kg"
-                    viewModel.httype = "cm"
-                    viewModel.setwtlb(
-                        df.format(viewModel.wt_kg.value!! / Multi_1)
+                    val bmiVal = viewModel.wtKg.value!! / (viewModel.htCm.value!! * 0.01).pow(2.0)
+                    viewModel.setBmiVal(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
+                    viewModel.wtType = "kg"
+                    viewModel.htType = "cm"
+                    viewModel.setWtLb(
+                        df.format(viewModel.wtKg.value!! / Multi_1)
                             .replace(",", ".")
                             .toDouble()
                     )
-                    viewModel.sethtft(
-                        ff.format((viewModel.ht_cm.value!! / Multi_haft).toInt()).replace(",", ".")
+                    viewModel.setHtFt(
+                        ff.format((viewModel.htCm.value!! / Multi_haft).toInt()).replace(",", ".")
                             .toInt()
                     )
-                    viewModel.sethtin(
-                        ff.format((viewModel.ht_cm.value!! - viewModel.ht_ft.value!! * Multi_haft) / Multi_tin)
+                    viewModel.setHtIn(
+                        ff.format((viewModel.htCm.value!! - viewModel.htFt.value!! * Multi_haft) / Multi_tin)
                             .toInt()
                     )
                 }
                 val bInfo=BmiInfo(
-                    viewModel.wt_lb.value!!.toDouble(),
-                    viewModel.wt_kg.value!!.toDouble(),
-                    viewModel.ht_ft.value!!.toInt(), viewModel.ht_in.value!!.toInt(),
-                    viewModel.ht_cm.value!!.toDouble(),
+                    viewModel.wtLb.value!!.toDouble(),
+                    viewModel.wtKg.value!!.toDouble(),
+                    viewModel.htFt.value!!.toInt(), viewModel.htIn.value!!.toInt(),
+                    viewModel.htCm.value!!.toDouble(),
                     viewModel.selectedDate.value, viewModel.selectedPhase.value!!,
                     viewModel.selectedAge.value!!.toInt(),
                     viewModel.selectedGender.value!!.toChar(),
-                    viewModel.bmival.value!!,
+                    viewModel.bmiVal.value!!,
                     -1,
                                 -1,
-                    viewModel.bmitype,
-                    viewModel.wttype + viewModel.httype,
+                    viewModel.bmiType,
+                    viewModel.wtType + viewModel.htType,
                     0
                 )
                 viewModel.saveData(bInfo)
@@ -1629,6 +1627,8 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         viewModel.setAge(pos - 1)
         Log.d(TAG, "当前选中:${ageList[pos]}")
     }
+
+
 
     private fun initBar() {
         immersionBar {

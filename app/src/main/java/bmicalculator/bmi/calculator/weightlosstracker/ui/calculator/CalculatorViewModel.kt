@@ -1,6 +1,5 @@
 package bmicalculator.bmi.calculator.weightlosstracker.ui.calculator
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -40,23 +39,23 @@ class CalculatorViewModel(private val repository: Repository, private val state:
         get() = statusMessage
 
 
-    val LocaleLanguage=null
+    var localeLanguage:String?=null
 
     //记录用户的cal选择
-    var wttype = "error"
-    var httype = "error"
+    var wtType = "error"
+    var htType = "error"
 
     //记录BMI类型
-    var bmitype = "null"
+    var bmiType = "null"
 
     //记录bmi所属类型
     val bmiNewRecord=MutableLiveData<BmiInfo>()
 
     //记录BMI
-    var bmival = MutableLiveData<Float>(0f)
+    var bmiVal = MutableLiveData(0f)
 
-    fun setBmival(data: Float) {
-        bmival.value = data
+    fun setBmiVal(data: Float) {
+        bmiVal.value = data
     }
 
     //共享日期
@@ -81,60 +80,60 @@ class CalculatorViewModel(private val repository: Repository, private val state:
     }
 
     //年龄
-    val selectedAge = MutableLiveData<Int>(25)
+    val selectedAge = MutableLiveData(25)
 
     fun setAge(data: Int) {
         selectedAge.value = data
     }
 
     //体重lb
-    private val _wt_lb: MutableLiveData<Double> = MutableLiveData(140.00)
+    private val _wtLb: MutableLiveData<Double> = MutableLiveData(140.00)
 
-    val wt_lb: LiveData<Double> get() = _wt_lb
+    val wtLb: LiveData<Double> get() = _wtLb
 
-    fun setwtlb(value: Double) {
-        _wt_lb.value = value
+    fun setWtLb(value: Double) {
+        _wtLb.value = value
     }
 
     //体重kg
-    private val _wt_kg: MutableLiveData<Double> = MutableLiveData(65.00)
+    private val _wtKg: MutableLiveData<Double> = MutableLiveData(65.00)
 
-    val wt_kg: LiveData<Double> get() = _wt_kg
+    val wtKg: LiveData<Double> get() = _wtKg
 
-    fun setwtkg(value: Double) {
-        _wt_kg.value = value
+    fun setWtKg(value: Double) {
+        _wtKg.value = value
     }
 
     //身高fin
-    private val _ht_ft: MutableLiveData<Int> = MutableLiveData(5)
-    val ht_ft: LiveData<Int> get() = _ht_ft
-    fun sethtft(value: Int) {
-        _ht_ft.value = value
+    private val _htFt: MutableLiveData<Int> = MutableLiveData(5)
+    val htFt: LiveData<Int> get() = _htFt
+    fun setHtFt(value: Int) {
+        _htFt.value = value
     }
 
-    private val _ht_in: MutableLiveData<Int> = MutableLiveData(7)
-    val ht_in: LiveData<Int> get() = _ht_in
-    fun sethtin(value: Int) {
-        _ht_in.value = value
+    private val _htIn: MutableLiveData<Int> = MutableLiveData(7)
+    val htIn: LiveData<Int> get() = _htIn
+    fun setHtIn(value: Int) {
+        _htIn.value = value
     }
 
     //身高ht_cm
-    val _ht_cm: MutableLiveData<Double> = MutableLiveData(170.0)
-    val ht_cm: LiveData<Double> get() = _ht_cm
-    fun sethtcm(value: Double) {
-        _ht_cm.value = value
+    private val _htCm: MutableLiveData<Double> = MutableLiveData(170.0)
+    val htCm: LiveData<Double> get() = _htCm
+    fun setHtCm(value: Double) {
+        _htCm.value = value
     }
 
     fun insertInfo(bmiInfo: BmiInfo) = viewModelScope.launch {
         val newRowId = repository.insertBmiInfo(bmiInfo)
         if (newRowId > -1) {
-            statusMessage.value = Event("BminInfo Inserted Successfully $newRowId")
+            statusMessage.value = Event("bmiInfo Inserted Successfully $newRowId")
         } else {
-            statusMessage.value = Event("Error Occured")
+            statusMessage.value = Event("Error Occur")
         }
     }
 
-    var infoCount = MutableLiveData<Int>(-1)
+    var infoCount = MutableLiveData(-1)
 
     var allInfo: MutableLiveData<List<BmiInfo>> =
         repository.getAllInfos().asLiveData() as MutableLiveData<List<BmiInfo>>

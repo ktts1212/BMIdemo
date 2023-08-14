@@ -4,14 +4,12 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import bmicalculator.bmi.calculator.weightlosstracker.R
@@ -20,7 +18,6 @@ import bmicalculator.bmi.calculator.weightlosstracker.logic.Repository
 import bmicalculator.bmi.calculator.weightlosstracker.logic.database.configDatabase.AppDataBase
 import bmicalculator.bmi.calculator.weightlosstracker.logic.model.ViewModelFactory
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.CalculatorViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gyf.immersionbar.ktx.immersionBar
 
 
@@ -60,7 +57,6 @@ class LanguageSelectFragment : DialogFragment(), View.OnClickListener {
             .getString(
                 "language", "en"
             )
-        Log.d(TAG, "lan:${lan}")
         currentCard = getCurrentLanguageSelectedImage(lan.toString())
 
         binding.lcard1.setOnClickListener(this)
@@ -160,7 +156,6 @@ class LanguageSelectFragment : DialogFragment(), View.OnClickListener {
         viewModel.saveNavId(
             R.id.menu_calculator
         )
-        Log.d("wwwwww1","${viewModel.getNavId()}")
         when (p0!!.id) {
             R.id.lcard_1 -> {
                 binding.lcard1Img.visibility = View.VISIBLE
