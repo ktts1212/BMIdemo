@@ -26,8 +26,8 @@ class BaseApplication:Application() {
     fun customAdapterForExternal(){
         AutoSizeConfig.getInstance().externalAdaptManager
             .addExternalAdaptInfoOfActivity(DatePickerFragment::class.java,
-                ExternalAdaptInfo(true,400f))
+                ExternalAdaptInfo(true,375f))
             .addExternalAdaptInfoOfActivity(TimePickerFragment::class.java,
-            ExternalAdaptInfo(true,400f))
+            ExternalAdaptInfo(true,375f))
     }
 }

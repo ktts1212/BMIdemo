@@ -219,7 +219,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         )
                     }
                 }
-
+                //隐藏键盘
                 val inputMethodManager = v.context.getSystemService(Context.INPUT_METHOD_SERVICE)
                         as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(v.windowToken, 0)
@@ -409,8 +409,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 if (isEu && str.isNotEmpty()) {
                     str = df.format(str.toDouble()).replace(",", ".")
                 }
-                Log.d(TAG, "isEu:${isEu}")
-                Log.d(TAG, "267str:${str}")
                 if (tab?.position == 0) {
                     if (str.isEmpty() || str.toDouble() < 2) {
                         Toast.makeText(
@@ -464,7 +462,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         ).show()
                         viewModel.setWtKg(
                             if (isEu) {
-                                // nf_en.format(df.format(1).toDouble()).toDouble()
                                 df.format(1).replace(",", ".").toDouble()
                             } else {
                                 df.format(1).toDouble()
@@ -508,6 +505,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     return
                 }
                 var str = p0.toString()
+                //根据语言判断是否需要进行数字格式转换
                 if (str.contains(".") && isEu) {
                     isChanged = true
                     binding.wtInput.setText(str.replace(".", ","))
@@ -515,33 +513,31 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     isChanged = true
                     binding.wtInput.setText(str.replace(",", "."))
                 }
-
+                //如果直接输入一个小数点，默认为最小值
                 if (str.length == 1 && (str == "." || str == ",")) {
                     isChanged = true
                     binding.wtInput.setText(
                         df.format(1)
                     )
                 }
-
+                //将数字格式全部转换为小数点
                 if (isEu && str.isNotEmpty()) {
                     str = str.replace(",", ".")
                 } else if (!isEu && str.isNotEmpty()) {
                     str = str.replace(",", ".")
                 }
 
-                Log.d(TAG, "first str:${str}")
-
                 if (str.isNotEmpty()) {
                     if (str.contains(".") && str[str.length - 1] != '.') {
                         //规定小数位数
+                        //如果有两个小数点，就抹去最后一个小数点及其后面的内容
                         val dotIndex = str.indexOf('.')
                         val lastDotIndex = str.lastIndexOf('.')
                         if (dotIndex != lastDotIndex) {
                             str = str.removeRange(lastDotIndex, lastDotIndex + 1)
                         }
-
+                        //小数部分
                         val decimalPart: String = str.substring(str.indexOf(".") + 1)
-                        Log.d(TAG, "decimalFormat:${decimalPart}")
                         val decimalNumber = decimalPart.length
                         if (decimalNumber > 2) {
                             Toast.makeText(
@@ -551,7 +547,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                             ).show()
                             isChanged = true
                             val subStr = str.substring(0, str.indexOf(".") + 3)
-                            Log.d(TAG, "subStr:${subStr}")
                             binding.wtInput.setText(
                                 if (isEu) {
                                     df.format(subStr.toDouble())
@@ -568,22 +563,14 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                                 ).show()
                                 isChanged = true
                                 binding.wtInput.setText(
-                                    if (isEu) {
                                         df.format(551)
-                                    } else {
-                                        df.format(551)
-                                    }
                                 )
                             } else if (str.substring(0, str.indexOf(".")).length > 3) {
                                 isChanged
                                 binding.wtInput.setText(
-                                    if (isEu) {
                                         df.format(
                                             str.substring(str.indexOf(".") - 3).toDouble()
                                         )
-                                    } else {
-                                        df.format(str.substring(str.indexOf(".") - 3).toDouble())
-                                    }
                                 )
                             }
                         } else if (binding.wtTab.getTabAt(1)!!.isSelected) {
@@ -595,47 +582,31 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                                 ).show()
                                 isChanged = true
                                 binding.wtInput.setText(
-
-                                    if (isEu) {
                                         df.format(250)
-                                    } else {
-                                        df.format(250)
-                                    }
                                 )
                             } else if (str.substring(0, str.indexOf(".")).length > 3) {
                                 isChanged
                                 binding.wtInput.setText(
-
-                                    if (isEu) {
                                         df.format(str.substring(str.indexOf(".") - 3).toDouble())
-                                    } else {
-                                        df.format(str.substring(str.indexOf(".") - 3).toDouble())
-                                    }
                                 )
                             }
                         }
                     } else if (!str.contains(".")) {
                         if (binding.wtTab.getTabAt(0)?.isSelected == true) {
 
-                            if (str.length > 3) {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Please input a valid weight to calculate your BMI accurately",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-
-                                str = str.substring(str.length - 3)
-                                isChanged = true
-                                binding.wtInput.setText(
-
-                                    if (isEu) {
-                                        df.format(str.toInt())
-                                    } else {
-                                        df.format(str.toInt())
-                                    }
-
-                                )
-                            }
+//                            if (str.length > 3) {
+//                                Toast.makeText(
+//                                    requireContext(),
+//                                    "Please input a valid weight to calculate your BMI accurately",
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+//
+//                                str = str.substring(str.length - 3)
+//                                isChanged = true
+//                                binding.wtInput.setText(
+//                                        df.format(str.toInt())
+//                                )
+//                            }
 
                             if (str.toDouble() > 551) {
                                 Toast.makeText(
@@ -645,23 +616,18 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                                 ).show()
                                 isChanged = true
                                 binding.wtInput.setText(
-
-                                    if (isEu) {
                                         df.format(551)
-                                    } else {
-                                        df.format(551)
-                                    }
                                 )
                             }
                         } else if (binding.wtTab.getTabAt(1)?.isSelected == true) {
 
-                            if (str.length > 3) {
-                                str = str.substring(str.length - 3)
-                                isChanged = true
-                                binding.wtInput.setText(
-                                    df.format(str.toInt())
-                                )
-                            }
+//                            if (str.length > 3) {
+//                                str = str.substring(str.length - 3)
+//                                isChanged = true
+//                                binding.wtInput.setText(
+//                                    df.format(str.toInt())
+//                                )
+//                            }
                             if (str.toDouble() > 250) {
                                 Toast.makeText(
                                     requireContext(),
@@ -670,18 +636,12 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                                 ).show()
                                 isChanged = true
                                 binding.wtInput.setText(
-
-                                    if (isEu) {
                                         df.format(250)
-                                    } else {
-                                        df.format(250)
-                                    }
                                 )
                             }
                         }
                     }
                 }
-
                 binding.wtInput.setSelection(binding.wtInput.text.length)
                 isChanged = false
             }
@@ -1072,12 +1032,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         if (str.length > 3) {
                             isChanged = true
                             binding.htInputCm.setText(
-                                if (isEu) {
                                     tf.format(str.toInt())
-                                } else {
-                                    tf.format(str.toInt())
-                                }
-                                // tf.format((str).toDouble())
                             )
                         }
                         if (str.toDouble() > 250) {
@@ -1088,15 +1043,8 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         }
                     }
                 }
-//                else {
-//                    isChanged = true
-//                    binding.htInputCm.setText(
-//                        tf.format(170)
-//                    )
-//                }
                 isChanged = false
             }
-
         })
 
         //日期

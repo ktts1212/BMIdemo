@@ -7,7 +7,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:background="@color/white"
-        android:layout_height="80dp"
+        android:layout_height="99.5dp"
         android:layout_marginStart="15dp"
         app:cardCornerRadius="15dp"
         app:cardElevation="0dp"
@@ -21,7 +21,7 @@
             <TextView
                 android:id="@+id/record_bmi"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="33dp"
                 android:text="24.7"
                 android:textColor="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
@@ -51,6 +51,8 @@
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@id/record_dot"
                 android:layout_marginStart="5dp"
+                android:maxWidth="160dp"
+                android:textColor="@color/black"
                 app:layout_constraintTop_toBottomOf="@id/record_bmi"
                 android:textFontWeight="400"/>
             

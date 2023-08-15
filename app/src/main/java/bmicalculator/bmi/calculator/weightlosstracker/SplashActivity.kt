@@ -10,6 +10,7 @@ import android.util.Log
 import bmicalculator.bmi.calculator.weightlosstracker.databinding.ActivitySplashBinding
 import bmicalculator.bmi.calculator.weightlosstracker.util.interpolator.BezierInterpolator
 import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
+import com.gyf.immersionbar.ktx.immersionBar
 import java.util.Timer
 import kotlin.concurrent.schedule
 
@@ -38,18 +39,26 @@ class SplashActivity : AppCompatActivity(), Animator.AnimatorListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
+        immersionInit()
         setContentView(binding.root)
         initobjAnimator()
+    }
+
+    private fun immersionInit(){
+        immersionBar {
+            statusBarDarkFont(true)
+            statusBarColor("#FF3659CF")
+        }
     }
 
     fun initobjAnimator() {
         //前一秒指针转动
         binding.logoArrow.pivotX = Utils.dip2px(this, 4f).toFloat()
-        binding.logoArrow.pivotY = Utils.dip2px(this, 4f).toFloat()
+        binding.logoArrow.pivotY = Utils.dip2px(this, 19f).toFloat()
         Log.d("SplashAc", (binding.logoArrow.width.toFloat()).toString())
         anim1 = ObjectAnimator.ofFloat(
             binding.logoArrow, "rotation",
-            0f, 230f
+            -120f, 54f
         )
         anim1.setDuration(1000)
         anim1.setInterpolator(BezierInterpolator(0.25f, 0f, 0.1f, 0.1f))
@@ -65,7 +74,7 @@ class SplashActivity : AppCompatActivity(), Animator.AnimatorListener {
         //第二秒指针转动
         anim5 = ObjectAnimator.ofFloat(
             binding.logoArrow, "rotation",
-            230f, 130f
+            54f, -54f
         )
         anim5.setDuration(1000)
         anim5.setInterpolator(BezierInterpolator(0.25f, 0f, 0.1f, 0.1f))

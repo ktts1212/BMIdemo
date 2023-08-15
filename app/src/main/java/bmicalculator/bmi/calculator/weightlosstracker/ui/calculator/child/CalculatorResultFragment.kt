@@ -322,7 +322,7 @@ class CalculatorResultFragment : DialogFragment() {
 
                 binding.bmiCalSuggest.text =
                     TextUtils.concat(
-                        spannableString,"/n/n",String.format(
+                        spannableString,"\n\n",String.format(
                             getString(R.string.bmi_result_suggest_start),
                             if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
                             else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
@@ -388,7 +388,7 @@ class CalculatorResultFragment : DialogFragment() {
 
                 binding.bmiCalSuggest.text =
                     TextUtils.concat(
-                        spannableString,"/n/n",String.format(
+                        spannableString,"\n\n",String.format(
                             getString(R.string.bmi_result_suggest_start),
                             if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
                             else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
@@ -455,7 +455,7 @@ class CalculatorResultFragment : DialogFragment() {
 
                 binding.bmiCalSuggest.text =
                     TextUtils.concat(
-                        spannableString,"/n/n",String.format(
+                        spannableString,"\n\n",String.format(
                             getString(R.string.bmi_result_suggest_start),
                             if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
                             else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
@@ -510,7 +510,20 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
-                binding.bmiCalSuggest.setText(R.string.bmi_range_normal_adult_description)
+                val spannableString=SpannableStringBuilder("  "+
+                        getString(R.string.bmi_range_normal_adult_description)
+                )
+                val drawable=ContextCompat.getDrawable(requireContext(),R.drawable.adult_suggest4)
+                drawable?.setBounds(0,0,Utils.dip2px(requireContext(),16f),Utils.dip2px(
+                    requireContext(),16f
+                ))
+                val imageSpan=ImageSpan(drawable!!,DynamicDrawableSpan.ALIGN_BOTTOM)
+                spannableString.setSpan(imageSpan,0,1,Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
+                binding.bmiCalSuggest.text =
+                    TextUtils.concat(
+                        spannableString
+                        )
             } else if (bVal >= 25 && bVal < 30) {
                 viewModel.bmiType = "ow"
                 binding.bmiCalTypeDisplay.setBackgroundColor(
@@ -557,13 +570,24 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
+                val spannableString=SpannableStringBuilder("  "+
+                        getString(R.string.bmi_range_overweight_adult_description)
+                )
+                val drawable=ContextCompat.getDrawable(requireContext(),R.drawable.adult_suggest5)
+                drawable?.setBounds(0,0,Utils.dip2px(requireContext(),16f),Utils.dip2px(
+                    requireContext(),16f
+                ))
+                val imageSpan=ImageSpan(drawable!!,DynamicDrawableSpan.ALIGN_BOTTOM)
+                spannableString.setSpan(imageSpan,0,1,Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                 binding.bmiCalSuggest.text =
-                    getString(R.string.bmi_range_overweight_adult_description) + "\n\n" +
-                            String.format(
-                                getString(R.string.bmi_result_suggest_start),
-                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                            )
+                    TextUtils.concat(
+                        spannableString,"\n\n",String.format(
+                            getString(R.string.bmi_result_suggest_start),
+                            if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                            else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                        )
+                    )
                 binding.wtRange.text = wtRange
                 binding.wtChazhi.text = "(-${DcFormat.tf?.format(wtChaZhi)} ${viewModel.wtType})"
             } else if (bVal >= 30 && bVal < 35) {
@@ -612,13 +636,26 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
+
+                val spannableString=SpannableStringBuilder("  "+
+                        getString(R.string.bmi_range_obeseClassI_adult_description)
+                )
+                val drawable=ContextCompat.getDrawable(requireContext(),R.drawable.adult_suggest6)
+                drawable?.setBounds(0,0,Utils.dip2px(requireContext(),16f),Utils.dip2px(
+                    requireContext(),16f
+                ))
+                val imageSpan=ImageSpan(drawable!!,DynamicDrawableSpan.ALIGN_BOTTOM)
+                spannableString.setSpan(imageSpan,0,1,Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                 binding.bmiCalSuggest.text =
-                    getString(R.string.bmi_range_obeseClassI_adult_description) + "\n\n" +
-                            String.format(
-                                getString(R.string.bmi_result_suggest_start),
-                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                            )
+                    TextUtils.concat(
+                        spannableString,"\n\n",String.format(
+                            getString(R.string.bmi_result_suggest_start),
+                            if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                            else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                        )
+                    )
+
                 binding.wtRange.text = wtRange
                 binding.wtChazhi.text = "(-${DcFormat.tf?.format(wtChaZhi)} ${viewModel.wtType})"
             } else if (bVal >= 35 && bVal < 40) {
@@ -667,13 +704,24 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
+                val spannableString=SpannableStringBuilder("  "+
+                        getString(R.string.bmi_range_obeseClassII_description)
+                )
+                val drawable=ContextCompat.getDrawable(requireContext(),R.drawable.adult_suggest7)
+                drawable?.setBounds(0,0,Utils.dip2px(requireContext(),16f),Utils.dip2px(
+                    requireContext(),16f
+                ))
+                val imageSpan=ImageSpan(drawable!!,DynamicDrawableSpan.ALIGN_BOTTOM)
+                spannableString.setSpan(imageSpan,0,1,Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                 binding.bmiCalSuggest.text =
-                    getString(R.string.bmi_range_obeseClassII_description) + "\n\n" +
-                            String.format(
-                                getString(R.string.bmi_result_suggest_start),
-                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                            )
+                    TextUtils.concat(
+                        spannableString,"\n\n",String.format(
+                            getString(R.string.bmi_result_suggest_start),
+                            if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                            else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                        )
+                    )
                 binding.wtRange.text = wtRange
                 binding.wtChazhi.text = "(-${DcFormat.tf?.format(wtChaZhi)} ${viewModel.wtType})"
             } else {
@@ -722,13 +770,25 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
+
+                val spannableString=SpannableStringBuilder("  "+
+                        getString(R.string.bmi_range_obeseClassIII_description)
+                )
+                val drawable=ContextCompat.getDrawable(requireContext(),R.drawable.adult_suggest8)
+                drawable?.setBounds(0,0,Utils.dip2px(requireContext(),16f),Utils.dip2px(
+                    requireContext(),16f
+                ))
+                val imageSpan=ImageSpan(drawable!!,DynamicDrawableSpan.ALIGN_BOTTOM)
+                spannableString.setSpan(imageSpan,0,1,Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                 binding.bmiCalSuggest.text =
-                    getString(R.string.bmi_range_obeseClassIII_description) + "\n\n" +
-                            String.format(
-                                getString(R.string.bmi_result_suggest_start),
-                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                            )
+                    TextUtils.concat(
+                        spannableString,"\n\n",String.format(
+                            getString(R.string.bmi_result_suggest_start),
+                            if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                            else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                        )
+                    )
                 binding.wtRange.text = wtRange
                 binding.wtChazhi.text = "(-${DcFormat.tf?.format(wtChaZhi)} ${viewModel.wtType})"
             }
@@ -794,13 +854,25 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
+                val spannableString=SpannableStringBuilder("  "+
+                        getString(R.string.bmi_range_underweight_child_description)
+                )
+                val drawable=ContextCompat.getDrawable(requireContext(),R.drawable.child_suggest1)
+                drawable?.setBounds(0,0,Utils.dip2px(requireContext(),16f),Utils.dip2px(
+                    requireContext(),16f
+                ))
+                val imageSpan=ImageSpan(drawable!!,DynamicDrawableSpan.ALIGN_BOTTOM)
+                spannableString.setSpan(imageSpan,0,1,Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                 binding.bmiCalSuggest.text =
-                    getString(R.string.bmi_range_underweight_child_description) + "\n\n" +
-                            String.format(
-                                getString(R.string.bmi_result_suggest_start),
-                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                            )
+                    TextUtils.concat(
+                        spannableString,"\n\n",String.format(
+                            getString(R.string.bmi_result_suggest_start),
+                            if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                            else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                        )
+                    )
+
                 binding.wtRange.text = wtRange
                 binding.wtChazhi.text = "(+${DcFormat.tf?.format(wtChaZhi)} ${viewModel.wtType})"
             } else if (bVal < ChildBmiDialData.cScaleList[2].toFloat() &&
@@ -851,7 +923,20 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
-                binding.bmiCalSuggest.text = getString(R.string.bmi_range_normal_child_description)
+                val spannableString=SpannableStringBuilder("  "+
+                        getString(R.string.bmi_range_normal_child_description)
+                )
+                val drawable=ContextCompat.getDrawable(requireContext(),R.drawable.child_suggest2)
+                drawable?.setBounds(0,0,Utils.dip2px(requireContext(),16f),Utils.dip2px(
+                    requireContext(),16f
+                ))
+                val imageSpan=ImageSpan(drawable!!,DynamicDrawableSpan.ALIGN_BOTTOM)
+                spannableString.setSpan(imageSpan,0,1,Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
+                binding.bmiCalSuggest.text =
+                    TextUtils.concat(
+                        spannableString
+                        )
 
             } else if (bVal < ChildBmiDialData.cScaleList[3].toFloat() &&
                 bVal >= ChildBmiDialData.cScaleList[2].toFloat()
@@ -901,13 +986,25 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
+                val spannableString=SpannableStringBuilder("  "+
+                        getString(R.string.bmi_range_overweight_child_description)
+                )
+                val drawable=ContextCompat.getDrawable(requireContext(),R.drawable.child_suggest3)
+                drawable?.setBounds(0,0,Utils.dip2px(requireContext(),16f),Utils.dip2px(
+                    requireContext(),16f
+                ))
+                val imageSpan=ImageSpan(drawable!!,DynamicDrawableSpan.ALIGN_BOTTOM)
+                spannableString.setSpan(imageSpan,0,1,Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                 binding.bmiCalSuggest.text =
-                    getString(R.string.bmi_range_overweight_child_description) + "\n\n" +
-                            String.format(
-                                getString(R.string.bmi_result_suggest_start),
-                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                            )
+                    TextUtils.concat(
+                        spannableString,"\n\n",String.format(
+                            getString(R.string.bmi_result_suggest_start),
+                            if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                            else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                        )
+                    )
+
                 binding.wtRange.text = wtRange
                 binding.wtChazhi.text = "(-${DcFormat.tf?.format(wtChaZhi)} ${viewModel.wtType})"
             } else {
@@ -957,13 +1054,24 @@ class CalculatorResultFragment : DialogFragment() {
                     typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.montserrat_extrabold)
                 }
+                val spannableString=SpannableStringBuilder("  "+
+                        getString(R.string.bmi_range_obeseClassI_child_description)
+                )
+                val drawable=ContextCompat.getDrawable(requireContext(),R.drawable.child_suggest4)
+                drawable?.setBounds(0,0,Utils.dip2px(requireContext(),16f),Utils.dip2px(
+                    requireContext(),16f
+                ))
+                val imageSpan=ImageSpan(drawable!!,DynamicDrawableSpan.ALIGN_BOTTOM)
+                spannableString.setSpan(imageSpan,0,1,Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                 binding.bmiCalSuggest.text =
-                    getString(R.string.bmi_range_obeseClassI_child_description) + "\n\n" +
-                            String.format(
-                                getString(R.string.bmi_result_suggest_start),
-                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                            )
+                    TextUtils.concat(
+                        spannableString,"\n\n",String.format(
+                            getString(R.string.bmi_result_suggest_start),
+                            if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                            else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                        )
+                    )
                 binding.wtRange.text = wtRange
                 binding.wtChazhi.text = "(-${DcFormat.tf?.format(wtChaZhi)} ${viewModel.wtType})"
             }
@@ -1179,7 +1287,7 @@ class CalculatorResultFragment : DialogFragment() {
             1 -> {
                 return AdInfo(
                     R.drawable.ad1,
-                    R.string.ad1,
+                    R.string.app_recommend_women,
                     "",
                     R.string.ad1_url,
                     R.string.ad1_score
@@ -1189,7 +1297,7 @@ class CalculatorResultFragment : DialogFragment() {
             2 -> {
                 return AdInfo(
                     R.drawable.ad2,
-                    R.string.ad2,
+                    R.string.app_recommend_men,
                     "",
                     R.string.ad2_url,
                     R.string.ad2_score
@@ -1199,7 +1307,7 @@ class CalculatorResultFragment : DialogFragment() {
             3 -> {
                 return AdInfo(
                     R.drawable.ad3,
-                    R.string.ad3,
+                    R.string.app_recommend_lose_weight,
                     "",
                     R.string.ad3_url,
                     R.string.ad3_score
@@ -1209,7 +1317,7 @@ class CalculatorResultFragment : DialogFragment() {
             4 -> {
                 return AdInfo(
                     R.drawable.ad4,
-                    R.string.ad4,
+                    R.string.app_recommend_fasting,
                     "",
                     R.string.ad4_url,
                     R.string.ad4_score
@@ -1219,7 +1327,7 @@ class CalculatorResultFragment : DialogFragment() {
             5 -> {
                 return AdInfo(
                     R.drawable.ad5,
-                    R.string.ad5,
+                    R.string.app_recommend_walking,
                     "",
                     R.string.ad5_url,
                     R.string.ad5_score
@@ -1229,7 +1337,7 @@ class CalculatorResultFragment : DialogFragment() {
             6 -> {
                 return AdInfo(
                     R.drawable.ad6,
-                    R.string.ad6,
+                    R.string.app_recommend_home,
                     "",
                     R.string.ad6_url,
                     R.string.ad6_score
@@ -1239,7 +1347,7 @@ class CalculatorResultFragment : DialogFragment() {
             7 -> {
                 return AdInfo(
                     R.drawable.ad7,
-                    R.string.ad7,
+                    R.string.app_recommend_30_day,
                     "",
                     R.string.ad7_url,
                     R.string.ad7_score
@@ -1249,7 +1357,7 @@ class CalculatorResultFragment : DialogFragment() {
             8 -> {
                 return AdInfo(
                     R.drawable.ad8,
-                    R.string.ad8,
+                    R.string.app_recommend_six_pack,
                     "",
                     R.string.ad8_url,
                     R.string.ad8_score
@@ -1259,7 +1367,7 @@ class CalculatorResultFragment : DialogFragment() {
             9 -> {
                 return AdInfo(
                     R.drawable.ad9,
-                    R.string.ad9,
+                    R.string.app_recommend_step_tracker,
                     "",
                     R.string.ad9_url,
                     R.string.ad9_score
@@ -1269,7 +1377,7 @@ class CalculatorResultFragment : DialogFragment() {
             else -> {
                 return AdInfo(
                     R.drawable.ad10,
-                    R.string.ad10,
+                    R.string.app_recommend_blood_pressure_monitor,
                     "",
                     R.string.ad10_url,
                     R.string.ad10_score

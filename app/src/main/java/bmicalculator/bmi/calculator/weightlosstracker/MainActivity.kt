@@ -190,27 +190,7 @@ class MainActivity : AppCompatActivity(), RecordFragment.OnDeleteTypeListener {
         outState.putString("currentFragmentTag", currentFragmentTag)
     }
 
-    fun reGetFragment(tag: String) {
-        val transaction = supportFragmentManager.beginTransaction()
-        when (tag) {
-            "statistic" -> {
-                mCurrentFragment = StatisticFragment()
-            }
-
-            "bmi" -> {
-                mCurrentFragment = BmiFragment()
-
-            }
-
-            "calculator" -> {
-                mCurrentFragment = CalculatorFragment()
-            }
-        }
-        transaction.add(R.id.fragment_container, mCurrentFragment, tag)
-        transaction.show(mCurrentFragment).commit()
-    }
-
-    fun getFgByTag(tag: String) {
+    private fun getFgByTag(tag: String) {
         when (tag) {
             "statistic" -> {
                 mCurrentFragment = StatisticFragment()

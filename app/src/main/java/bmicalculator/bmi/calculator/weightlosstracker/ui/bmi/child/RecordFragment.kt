@@ -7,6 +7,11 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.TextUtils
+import android.text.style.DynamicDrawableSpan
+import android.text.style.ImageSpan
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -135,7 +140,8 @@ class RecordFragment : DialogFragment() {
             //getWtHtType(currentBmiInfo)
 
         }
-        binding.recordTime.text = "${currentBmiInfo.date} ${currentBmiInfo.phase}"
+        binding.recordTime.text =
+            "${currentBmiInfo.date} ${Utils.numToPhase(requireContext(), currentBmiInfo.phase)}"
         adShow(currentBmiInfo.bmi)
 
         binding.recordDel.setOnClickListener {
@@ -273,13 +279,28 @@ class RecordFragment : DialogFragment() {
                     )
                 )
                 if (bmiInfo.age > 20) {
+                    val spannableString = SpannableStringBuilder(
+                        "  " +
+                                getString(R.string.bmi_range_very_severely_underweight_description)
+                    )
+                    val drawable =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.adult_suggest1)
+                    drawable?.setBounds(
+                        0, 0, Utils.dip2px(requireContext(), 16f), Utils.dip2px(
+                            requireContext(), 16f
+                        )
+                    )
+                    val imageSpan = ImageSpan(drawable!!, DynamicDrawableSpan.ALIGN_BOTTOM)
+                    spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                     binding.rcCalSuggest.text =
-                        getString(R.string.bmi_range_very_severely_underweight_description) + "\n\n" +
-                                String.format(
-                                    getString(R.string.bmi_result_suggest_start),
-                                    if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                    else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                                )
+                        TextUtils.concat(
+                            spannableString, "\n\n", String.format(
+                                getString(R.string.bmi_result_suggest_start),
+                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                            )
+                        )
                     binding.rcWtRange.text = wtRange
                     binding.rcWtChazhi.text = "(+${DcFormat.tf?.format(wtChaZhi)} ${wtType})"
                 }
@@ -299,13 +320,28 @@ class RecordFragment : DialogFragment() {
                     )
                 )
                 if (bmiInfo.age > 20) {
+                    val spannableString = SpannableStringBuilder(
+                        "  " +
+                                getString(R.string.bmi_range_severely_underweight_description)
+                    )
+                    val drawable =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.adult_suggest2)
+                    drawable?.setBounds(
+                        0, 0, Utils.dip2px(requireContext(), 16f), Utils.dip2px(
+                            requireContext(), 16f
+                        )
+                    )
+                    val imageSpan = ImageSpan(drawable!!, DynamicDrawableSpan.ALIGN_BOTTOM)
+                    spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                     binding.rcCalSuggest.text =
-                        getString(R.string.bmi_range_severely_underweight_description) + "\n\n" +
-                                String.format(
-                                    getString(R.string.bmi_result_suggest_start),
-                                    if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                    else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                                )
+                        TextUtils.concat(
+                            spannableString, "\n\n", String.format(
+                                getString(R.string.bmi_result_suggest_start),
+                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                            )
+                        )
                     binding.rcWtRange.text = wtRange
                     binding.rcWtChazhi.text = "(+${DcFormat.tf?.format(wtChaZhi)} ${wtType})"
                 }
@@ -324,21 +360,51 @@ class RecordFragment : DialogFragment() {
                     )
                 )
                 if (bmiInfo.age > 20) {
+                    val spannableString = SpannableStringBuilder(
+                        "  " +
+                                getString(R.string.bmi_range_underweight_adult_description)
+                    )
+                    val drawable =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.adult_suggest3)
+                    drawable?.setBounds(
+                        0, 0, Utils.dip2px(requireContext(), 16f), Utils.dip2px(
+                            requireContext(), 16f
+                        )
+                    )
+                    val imageSpan = ImageSpan(drawable!!, DynamicDrawableSpan.ALIGN_BOTTOM)
+                    spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                     binding.rcCalSuggest.text =
-                        getString(R.string.bmi_range_underweight_adult_description) + "\n\n" +
-                                String.format(
-                                    getString(R.string.bmi_result_suggest_start),
-                                    if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                    else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                                )
+                        TextUtils.concat(
+                            spannableString, "\n\n", String.format(
+                                getString(R.string.bmi_result_suggest_start),
+                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                            )
+                        )
                 } else {
+                    val spannableString = SpannableStringBuilder(
+                        "  " +
+                                getString(R.string.bmi_range_underweight_child_description)
+                    )
+                    val drawable =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.child_suggest1)
+                    drawable?.setBounds(
+                        0, 0, Utils.dip2px(requireContext(), 16f), Utils.dip2px(
+                            requireContext(), 16f
+                        )
+                    )
+                    val imageSpan = ImageSpan(drawable!!, DynamicDrawableSpan.ALIGN_BOTTOM)
+                    spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                     binding.rcCalSuggest.text =
-                        getString(R.string.bmi_range_underweight_child_description) + "\n\n" +
-                                String.format(
-                                    getString(R.string.bmi_result_suggest_start),
-                                    if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                    else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                                )
+                        TextUtils.concat(
+                            spannableString, "\n\n", String.format(
+                                getString(R.string.bmi_result_suggest_start),
+                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                            )
+                        )
                 }
                 binding.rcWtRange.text = wtRange
                 binding.rcWtChazhi.text = "(+${DcFormat.tf?.format(wtChaZhi)} ${wtType})"
@@ -357,11 +423,43 @@ class RecordFragment : DialogFragment() {
                     )
                 )
                 if (bmiInfo.age > 20) {
+                    val spannableString = SpannableStringBuilder(
+                        "  " +
+                                getString(R.string.bmi_range_normal_adult_description)
+                    )
+                    val drawable =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.adult_suggest4)
+                    drawable?.setBounds(
+                        0, 0, Utils.dip2px(requireContext(), 16f), Utils.dip2px(
+                            requireContext(), 16f
+                        )
+                    )
+                    val imageSpan = ImageSpan(drawable!!, DynamicDrawableSpan.ALIGN_BOTTOM)
+                    spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                     binding.rcCalSuggest.text =
-                        getString(R.string.bmi_range_normal_adult_description)
+                        TextUtils.concat(
+                            spannableString
+                        )
                 } else {
+                    val spannableString = SpannableStringBuilder(
+                        "  " +
+                                getString(R.string.bmi_range_normal_child_description)
+                    )
+                    val drawable =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.child_suggest2)
+                    drawable?.setBounds(
+                        0, 0, Utils.dip2px(requireContext(), 16f), Utils.dip2px(
+                            requireContext(), 16f
+                        )
+                    )
+                    val imageSpan = ImageSpan(drawable!!, DynamicDrawableSpan.ALIGN_BOTTOM)
+                    spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                     binding.rcCalSuggest.text =
-                        getString(R.string.bmi_range_normal_child_description)
+                        TextUtils.concat(
+                            spannableString,
+                        )
                 }
             }
 
@@ -378,21 +476,51 @@ class RecordFragment : DialogFragment() {
                     )
                 )
                 if (bmiInfo.age > 20) {
+                    val spannableString = SpannableStringBuilder(
+                        "  " +
+                                getString(R.string.bmi_range_overweight_adult_description)
+                    )
+                    val drawable =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.adult_suggest5)
+                    drawable?.setBounds(
+                        0, 0, Utils.dip2px(requireContext(), 16f), Utils.dip2px(
+                            requireContext(), 16f
+                        )
+                    )
+                    val imageSpan = ImageSpan(drawable!!, DynamicDrawableSpan.ALIGN_BOTTOM)
+                    spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                     binding.rcCalSuggest.text =
-                        getString(R.string.bmi_range_overweight_adult_description) + "\n\n" +
-                                String.format(
-                                    getString(R.string.bmi_result_suggest_start),
-                                    if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                    else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                                )
+                        TextUtils.concat(
+                            spannableString, "\n\n", String.format(
+                                getString(R.string.bmi_result_suggest_start),
+                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                            )
+                        )
                 } else {
+                    val spannableString = SpannableStringBuilder(
+                        "  " +
+                                getString(R.string.bmi_range_overweight_child_description)
+                    )
+                    val drawable =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.child_suggest3)
+                    drawable?.setBounds(
+                        0, 0, Utils.dip2px(requireContext(), 16f), Utils.dip2px(
+                            requireContext(), 16f
+                        )
+                    )
+                    val imageSpan = ImageSpan(drawable!!, DynamicDrawableSpan.ALIGN_BOTTOM)
+                    spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                     binding.rcCalSuggest.text =
-                        getString(R.string.bmi_range_overweight_child_description) + "\n\n" +
-                                String.format(
-                                    getString(R.string.bmi_result_suggest_start),
-                                    if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                    else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                                )
+                        TextUtils.concat(
+                            spannableString, "\n\n", String.format(
+                                getString(R.string.bmi_result_suggest_start),
+                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                            )
+                        )
                 }
                 binding.rcWtRange.text = wtRange
                 binding.rcWtChazhi.text = "(-${DcFormat.tf?.format(wtChaZhi)} ${wtType})"
@@ -410,22 +538,53 @@ class RecordFragment : DialogFragment() {
                         )
                     )
                 )
+
                 if (bmiInfo.age > 20) {
+                    val spannableString = SpannableStringBuilder(
+                        "  " +
+                                getString(R.string.bmi_range_obeseClassI_adult_description)
+                    )
+                    val drawable =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.adult_suggest6)
+                    drawable?.setBounds(
+                        0, 0, Utils.dip2px(requireContext(), 16f), Utils.dip2px(
+                            requireContext(), 16f
+                        )
+                    )
+                    val imageSpan = ImageSpan(drawable!!, DynamicDrawableSpan.ALIGN_BOTTOM)
+                    spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                     binding.rcCalSuggest.text =
-                        getString(R.string.bmi_range_obeseClassI_adult_description) + "\n\n" +
-                                String.format(
-                                    getString(R.string.bmi_result_suggest_start),
-                                    if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                    else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                                )
+                        TextUtils.concat(
+                            spannableString, "\n\n", String.format(
+                                getString(R.string.bmi_result_suggest_start),
+                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                            )
+                        )
                 } else {
+                    val spannableString = SpannableStringBuilder(
+                        "  " +
+                                getString(R.string.bmi_range_obeseClassI_child_description)
+                    )
+                    val drawable =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.child_suggest4)
+                    drawable?.setBounds(
+                        0, 0, Utils.dip2px(requireContext(), 16f), Utils.dip2px(
+                            requireContext(), 16f
+                        )
+                    )
+                    val imageSpan = ImageSpan(drawable!!, DynamicDrawableSpan.ALIGN_BOTTOM)
+                    spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                     binding.rcCalSuggest.text =
-                        getString(R.string.bmi_range_obeseClassI_child_description) + "\n\n" +
-                                String.format(
-                                    getString(R.string.bmi_result_suggest_start),
-                                    if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                    else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                                )
+                        TextUtils.concat(
+                            spannableString, "\n\n", String.format(
+                                getString(R.string.bmi_result_suggest_start),
+                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                            )
+                        )
                 }
                 binding.rcWtRange.text = wtRange
                 binding.rcWtChazhi.text = "(-${DcFormat.tf?.format(wtChaZhi)} ${wtType})"
@@ -443,14 +602,30 @@ class RecordFragment : DialogFragment() {
                         )
                     )
                 )
+
                 if (bmiInfo.age > 20) {
+                    val spannableString = SpannableStringBuilder(
+                        "  " +
+                                getString(R.string.bmi_range_obeseClassII_description)
+                    )
+                    val drawable =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.adult_suggest7)
+                    drawable?.setBounds(
+                        0, 0, Utils.dip2px(requireContext(), 16f), Utils.dip2px(
+                            requireContext(), 16f
+                        )
+                    )
+                    val imageSpan = ImageSpan(drawable!!, DynamicDrawableSpan.ALIGN_BOTTOM)
+                    spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                     binding.rcCalSuggest.text =
-                        getString(R.string.bmi_range_obeseClassII_description) + "\n\n" +
-                                String.format(
-                                    getString(R.string.bmi_result_suggest_start),
-                                    if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                    else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                                )
+                        TextUtils.concat(
+                            spannableString, "\n\n", String.format(
+                                getString(R.string.bmi_result_suggest_start),
+                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                            )
+                        )
                 }
                 binding.rcWtRange.text = wtRange
                 binding.rcWtChazhi.text = "(-${DcFormat.tf?.format(wtChaZhi)} ${wtType})"
@@ -469,13 +644,28 @@ class RecordFragment : DialogFragment() {
                     )
                 )
                 if (bmiInfo.age > 20) {
+                    val spannableString = SpannableStringBuilder(
+                        "  " +
+                                getString(R.string.bmi_range_obeseClassIII_description)
+                    )
+                    val drawable =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.adult_suggest8)
+                    drawable?.setBounds(
+                        0, 0, Utils.dip2px(requireContext(), 16f), Utils.dip2px(
+                            requireContext(), 16f
+                        )
+                    )
+                    val imageSpan = ImageSpan(drawable!!, DynamicDrawableSpan.ALIGN_BOTTOM)
+                    spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
                     binding.rcCalSuggest.text =
-                        getString(R.string.bmi_range_obeseClassIII_description) + "\n\n" +
-                                String.format(
-                                    getString(R.string.bmi_result_suggest_start),
-                                    if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
-                                    else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
-                                )
+                        TextUtils.concat(
+                            spannableString, "\n\n", String.format(
+                                getString(R.string.bmi_result_suggest_start),
+                                if (viewModel.htType == "cm") viewModel.htCm.value.toString() + "cm"
+                                else viewModel.htFt.value.toString() + "ft ${viewModel.htIn.value}in"
+                            )
+                        )
                 }
                 binding.rcWtRange.text = wtRange
                 binding.rcWtChazhi.text = "(-${DcFormat.tf?.format(wtChaZhi)} ${wtType})"
@@ -525,7 +715,7 @@ class RecordFragment : DialogFragment() {
             binding.rcAd3Tv3.text = getString(adInfo.appScore)
             binding.rcAd3Tv2.text = getString(adInfo.appLink)
         } else {
-            val numbers = if (currentBmiInfo.age.equals('0') )
+            val numbers = if (currentBmiInfo.age.equals('0'))
                 mutableListOf(2, 3, 6, 7, 8) else mutableListOf(1, 3, 6, 7, 8)
             var randomIndex = Random.nextInt(numbers.size)
             val num1 = numbers[randomIndex]
@@ -572,7 +762,7 @@ class RecordFragment : DialogFragment() {
             1 -> {
                 return AdInfo(
                     R.drawable.ad1,
-                    R.string.ad1,
+                    R.string.app_recommend_women,
                     "",
                     R.string.ad1_url,
                     R.string.ad1_score
@@ -582,7 +772,7 @@ class RecordFragment : DialogFragment() {
             2 -> {
                 return AdInfo(
                     R.drawable.ad2,
-                    R.string.ad2,
+                    R.string.app_recommend_men,
                     "",
                     R.string.ad2_url,
                     R.string.ad2_score
@@ -592,7 +782,7 @@ class RecordFragment : DialogFragment() {
             3 -> {
                 return AdInfo(
                     R.drawable.ad3,
-                    R.string.ad3,
+                    R.string.app_recommend_lose_weight,
                     "",
                     R.string.ad3_url,
                     R.string.ad3_score
@@ -602,7 +792,7 @@ class RecordFragment : DialogFragment() {
             4 -> {
                 return AdInfo(
                     R.drawable.ad4,
-                    R.string.ad4,
+                    R.string.app_recommend_fasting,
                     "",
                     R.string.ad4_url,
                     R.string.ad4_score
@@ -612,7 +802,7 @@ class RecordFragment : DialogFragment() {
             5 -> {
                 return AdInfo(
                     R.drawable.ad5,
-                    R.string.ad5,
+                    R.string.app_recommend_walking,
                     "",
                     R.string.ad5_url,
                     R.string.ad5_score
@@ -622,7 +812,7 @@ class RecordFragment : DialogFragment() {
             6 -> {
                 return AdInfo(
                     R.drawable.ad6,
-                    R.string.ad6,
+                    R.string.app_recommend_home,
                     "",
                     R.string.ad6_url,
                     R.string.ad6_score
@@ -632,7 +822,7 @@ class RecordFragment : DialogFragment() {
             7 -> {
                 return AdInfo(
                     R.drawable.ad7,
-                    R.string.ad7,
+                    R.string.app_recommend_30_day,
                     "",
                     R.string.ad7_url,
                     R.string.ad7_score
@@ -642,7 +832,7 @@ class RecordFragment : DialogFragment() {
             8 -> {
                 return AdInfo(
                     R.drawable.ad8,
-                    R.string.ad8,
+                    R.string.app_recommend_six_pack,
                     "",
                     R.string.ad8_url,
                     R.string.ad8_score
@@ -652,7 +842,7 @@ class RecordFragment : DialogFragment() {
             9 -> {
                 return AdInfo(
                     R.drawable.ad9,
-                    R.string.ad9,
+                    R.string.app_recommend_step_tracker,
                     "",
                     R.string.ad9_url,
                     R.string.ad9_score
@@ -662,7 +852,7 @@ class RecordFragment : DialogFragment() {
             else -> {
                 return AdInfo(
                     R.drawable.ad10,
-                    R.string.ad10,
+                    R.string.app_recommend_blood_pressure_monitor,
                     "",
                     R.string.ad10_url,
                     R.string.ad10_score

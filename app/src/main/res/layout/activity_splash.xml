@@ -4,44 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff0099cc">
-
-    <!--    <bmicalculator.bmi.calculator.weightlosstracker.util.views.LogoDial-->
-    <!--        android:id="@+id/logo_gial"-->
-    <!--        android:layout_width="73dp"-->
-    <!--        android:layout_height="53dp"-->
-    <!--        android:layout_marginStart="32dp"-->
-    <!--        android:layout_marginTop="200dp"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+    android:background="#FF3659CF">
 
     <ImageView
         android:id="@+id/logo_dial"
         android:layout_width="73dp"
         android:layout_height="53dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="286dp"
+        android:layout_marginTop="293.5dp"
         android:src="@drawable/splash_logo_dial_new"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <bmicalculator.bmi.calculator.weightlosstracker.util.views.LogoArrow
+<!--    <bmicalculator.bmi.calculator.weightlosstracker.util.views.LogoArrow-->
+<!--        android:id="@+id/logo_arrow"-->
+<!--        android:layout_width="8dp"-->
+<!--        android:layout_height="23dp"-->
+<!--        android:layout_marginStart="64.5dp"-->
+<!--        android:layout_marginTop="321.5dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <ImageView
         android:id="@+id/logo_arrow"
         android:layout_width="8dp"
         android:layout_height="23dp"
+        android:src="@drawable/splash_arrow"
         android:layout_marginStart="64.5dp"
-        android:layout_marginTop="321.5dp"
+        android:layout_marginTop="311dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <!--    <bmicalculator.bmi.calculator.weightlosstracker.util.views.LogoText-->
-    <!--        android:id="@+id/logo_text"-->
-    <!--        android:layout_width="350dp"-->
-    <!--        android:layout_height="200dp"-->
-    <!--        android:layout_marginStart="-10dp"-->
-    <!--        android:layout_marginTop="320dp"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <ImageView
         android:id="@+id/logo_text"

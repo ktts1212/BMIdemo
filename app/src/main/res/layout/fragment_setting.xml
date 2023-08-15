@@ -207,8 +207,8 @@
                                 android:layout_marginBottom="23.5dp"
                                 android:checked="true"
                                 android:enabled="true"
-                                app:thumbTint="#3659CF"
-                                app:trackTint="#354AD8"
+                                app:thumbTint="@color/switch_color_selector"
+                                app:trackTint="@color/switch_color_selector"
                                 app:useMaterialThemeColors="false" />
                         </RelativeLayout>
                     </com.google.android.material.card.MaterialCardView>

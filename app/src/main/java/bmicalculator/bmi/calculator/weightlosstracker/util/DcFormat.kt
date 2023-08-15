@@ -13,7 +13,7 @@ object DcFormat {
 
     var ff:DecimalFormat?=null
 
-    val enList= listOf("en","zh-rCN","zh-rWT","ko")
+    val enList= listOf("en","zh-rCN","zh-rTW","ko")
 
 
     fun setData(language:String){
