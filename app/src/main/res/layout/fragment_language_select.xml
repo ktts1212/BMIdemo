@@ -48,528 +48,553 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <com.google.android.material.card.MaterialCardView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="15dp"
-        android:background="@color/white"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_language">
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_language"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/lcard_1"
+                android:id="@+id/languages_selected"
                 android:layout_width="match_parent"
-                android:layout_height="63.5dp"
-                android:clickable="true"
-                app:cardElevation="0dp">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@color/white"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/lcard_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="63.5dp"
+                        android:clickable="true"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="28.5dp"
+                                android:lineHeight="21sp"
+                                android:text="English"
+                                android:textColor="@color/black"
+                                android:textFontWeight="400"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:visibility="invisible"
+                                android:id="@+id/lcard_1_img"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="27dp"
+                                android:layout_marginEnd="15dp"
+                                android:src="@drawable/select_icon" />
+
+
+                        </RelativeLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/lcard_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="49.5dp"
+                        android:clickable="true"
+                        app:cardElevation="0dp">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:background="#D4D4D5" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="1dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="15dp"
+                                android:lineHeight="21sp"
+                                android:text="Português"
+                                android:textColor="@color/black"
+                                android:textFontWeight="400"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/lcard_2_img"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="12.5dp"
+                                android:src="@drawable/select_icon"
+                                android:visibility="invisible" />
+
+
+                        </RelativeLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
                         android:layout_marginStart="15dp"
-                        android:layout_marginTop="28.5dp"
-                        android:lineHeight="21sp"
-                        android:text="English"
-                        android:textColor="@color/black"
-                        android:textFontWeight="400"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:visibility="invisible"
-                        android:id="@+id/lcard_1_img"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="27dp"
                         android:layout_marginEnd="15dp"
-                        android:src="@drawable/select_icon" />
+                        android:background="#D4D4D5" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/lcard_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="49.5dp"
+                        android:clickable="true"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="15dp"
+                                android:lineHeight="21sp"
+                                android:text="Pусский"
+                                android:textColor="@color/black"
+                                android:textFontWeight="400"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/lcard_3_img"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="12.5dp"
+                                android:src="@drawable/select_icon"
+                                android:visibility="invisible" />
 
 
-                </RelativeLayout>
+                        </RelativeLayout>
 
-            </com.google.android.material.card.MaterialCardView>
+                    </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/lcard_2"
-                android:layout_width="match_parent"
-                android:layout_height="49.5dp"
-                android:clickable="true"
-                app:cardElevation="0dp">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="#D4D4D5" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="1dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
                         android:layout_marginStart="15dp"
-                        android:layout_marginTop="15dp"
-                        android:lineHeight="21sp"
-                        android:text="Português"
-                        android:textColor="@color/black"
-                        android:textFontWeight="400"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:id="@+id/lcard_2_img"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="15dp"
                         android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="12.5dp"
-                        android:src="@drawable/select_icon"
-                        android:visibility="invisible" />
+                        android:background="#D4D4D5" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/lcard_4"
+                        android:layout_width="match_parent"
+                        android:layout_height="49.5dp"
+                        android:clickable="true"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="15dp"
+                                android:lineHeight="21sp"
+                                android:text="Português"
+                                android:textColor="@color/black"
+                                android:textFontWeight="400"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/lcard_4_img"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="12.5dp"
+                                android:src="@drawable/select_icon"
+                                android:visibility="invisible" />
 
 
-                </RelativeLayout>
+                        </RelativeLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#D4D4D5" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/lcard_5"
+                        android:layout_width="match_parent"
+                        android:layout_height="49.5dp"
+                        android:clickable="true"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="15dp"
+                                android:lineHeight="21sp"
+                                android:text="Deutsch"
+                                android:textColor="@color/black"
+                                android:textFontWeight="400"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/lcard_5_img"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="12.5dp"
+                                android:src="@drawable/select_icon"
+                                android:visibility="invisible" />
+
+
+                        </RelativeLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#D4D4D5" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/lcard_6"
+                        android:layout_width="match_parent"
+                        android:layout_height="49.5dp"
+                        android:clickable="true"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="15dp"
+                                android:lineHeight="21sp"
+                                android:text="繁體中文"
+                                android:textColor="@color/black"
+                                android:textFontWeight="400"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/lcard_6_img"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="12.5dp"
+                                android:src="@drawable/select_icon"
+                                android:visibility="invisible" />
+
+
+                        </RelativeLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#D4D4D5" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/lcard_7"
+                        android:layout_width="match_parent"
+                        android:layout_height="49.5dp"
+                        android:clickable="true"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="15dp"
+                                android:lineHeight="21sp"
+                                android:text="简体中文"
+                                android:textColor="@color/black"
+                                android:textFontWeight="400"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/lcard_7_img"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="12.5dp"
+                                android:src="@drawable/select_icon"
+                                android:visibility="invisible" />
+
+
+                        </RelativeLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#D4D4D5" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/lcard_8"
+                        android:layout_width="match_parent"
+                        android:layout_height="49.5dp"
+                        android:clickable="true"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="15dp"
+                                android:lineHeight="21sp"
+                                android:text="Français"
+                                android:textColor="@color/black"
+                                android:textFontWeight="400"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/lcard_8_img"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="12.5dp"
+                                android:src="@drawable/select_icon"
+                                android:visibility="invisible" />
+
+
+                        </RelativeLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#D4D4D5" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/lcard_9"
+                        android:layout_width="match_parent"
+                        android:layout_height="49.5dp"
+                        android:clickable="true"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="15dp"
+                                android:lineHeight="21sp"
+                                android:text="Español"
+                                android:textColor="@color/black"
+                                android:textFontWeight="400"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/lcard_9_img"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="12.5dp"
+                                android:src="@drawable/select_icon"
+                                android:visibility="invisible" />
+
+
+                        </RelativeLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#D4D4D5" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/lcard_10"
+                        android:layout_width="match_parent"
+                        android:layout_height="49.5dp"
+                        android:clickable="true"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="15dp"
+                                android:lineHeight="21sp"
+                                android:text="Italiano"
+                                android:textColor="@color/black"
+                                android:textFontWeight="400"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/lcard_10_img"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="12.5dp"
+                                android:src="@drawable/select_icon"
+                                android:visibility="invisible" />
+
+
+                        </RelativeLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#D4D4D5" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/lcard_11"
+                        android:layout_width="match_parent"
+                        android:layout_height="49.5dp"
+                        android:clickable="true"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="15dp"
+                                android:lineHeight="21sp"
+                                android:text="한국어"
+                                android:textColor="@color/black"
+                                android:textFontWeight="400"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/lcard_11_img"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="12.5dp"
+                                android:src="@drawable/select_icon"
+                                android:visibility="invisible" />
+
+
+                        </RelativeLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+
+                </LinearLayout>
+
 
             </com.google.android.material.card.MaterialCardView>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:background="#D4D4D5" />
+                android:layout_height="150dp"
+                android:background="@color/bg1"
+                app:layout_constraintTop_toBottomOf="@id/languages_selected"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/lcard_3"
-                android:layout_width="match_parent"
-                android:layout_height="49.5dp"
-                android:clickable="true"
-                app:cardElevation="0dp">
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+    </ScrollView>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="15dp"
-                        android:lineHeight="21sp"
-                        android:text="Pусский"
-                        android:textColor="@color/black"
-                        android:textFontWeight="400"
-                        android:textSize="16sp" />
 
-                    <ImageView
-                        android:id="@+id/lcard_3_img"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="12.5dp"
-                        android:src="@drawable/select_icon"
-                        android:visibility="invisible" />
-
-
-                </RelativeLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:background="#D4D4D5" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/lcard_4"
-                android:layout_width="match_parent"
-                android:layout_height="49.5dp"
-                android:clickable="true"
-                app:cardElevation="0dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="15dp"
-                        android:lineHeight="21sp"
-                        android:text="Português"
-                        android:textColor="@color/black"
-                        android:textFontWeight="400"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:id="@+id/lcard_4_img"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="12.5dp"
-                        android:src="@drawable/select_icon"
-                        android:visibility="invisible" />
-
-
-                </RelativeLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:background="#D4D4D5" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/lcard_5"
-                android:layout_width="match_parent"
-                android:layout_height="49.5dp"
-                android:clickable="true"
-                app:cardElevation="0dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="15dp"
-                        android:lineHeight="21sp"
-                        android:text="Deutsch"
-                        android:textColor="@color/black"
-                        android:textFontWeight="400"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:id="@+id/lcard_5_img"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="12.5dp"
-                        android:src="@drawable/select_icon"
-                        android:visibility="invisible" />
-
-
-                </RelativeLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:background="#D4D4D5" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/lcard_6"
-                android:layout_width="match_parent"
-                android:layout_height="49.5dp"
-                android:clickable="true"
-                app:cardElevation="0dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="15dp"
-                        android:lineHeight="21sp"
-                        android:text="繁體中文"
-                        android:textColor="@color/black"
-                        android:textFontWeight="400"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:id="@+id/lcard_6_img"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="12.5dp"
-                        android:src="@drawable/select_icon"
-                        android:visibility="invisible" />
-
-
-                </RelativeLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:background="#D4D4D5" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/lcard_7"
-                android:layout_width="match_parent"
-                android:layout_height="49.5dp"
-                android:clickable="true"
-                app:cardElevation="0dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="15dp"
-                        android:lineHeight="21sp"
-                        android:text="简体中文"
-                        android:textColor="@color/black"
-                        android:textFontWeight="400"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:id="@+id/lcard_7_img"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="12.5dp"
-                        android:src="@drawable/select_icon"
-                        android:visibility="invisible" />
-
-
-                </RelativeLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:background="#D4D4D5" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/lcard_8"
-                android:layout_width="match_parent"
-                android:layout_height="49.5dp"
-                android:clickable="true"
-                app:cardElevation="0dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="15dp"
-                        android:lineHeight="21sp"
-                        android:text="Français"
-                        android:textColor="@color/black"
-                        android:textFontWeight="400"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:id="@+id/lcard_8_img"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="12.5dp"
-                        android:src="@drawable/select_icon"
-                        android:visibility="invisible" />
-
-
-                </RelativeLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:background="#D4D4D5" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/lcard_9"
-                android:layout_width="match_parent"
-                android:layout_height="49.5dp"
-                android:clickable="true"
-                app:cardElevation="0dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="15dp"
-                        android:lineHeight="21sp"
-                        android:text="Español"
-                        android:textColor="@color/black"
-                        android:textFontWeight="400"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:id="@+id/lcard_9_img"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="12.5dp"
-                        android:src="@drawable/select_icon"
-                        android:visibility="invisible" />
-
-
-                </RelativeLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:background="#D4D4D5" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/lcard_10"
-                android:layout_width="match_parent"
-                android:layout_height="49.5dp"
-                android:clickable="true"
-                app:cardElevation="0dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="15dp"
-                        android:lineHeight="21sp"
-                        android:text="Italiano"
-                        android:textColor="@color/black"
-                        android:textFontWeight="400"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:id="@+id/lcard_10_img"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="12.5dp"
-                        android:src="@drawable/select_icon"
-                        android:visibility="invisible" />
-
-
-                </RelativeLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:background="#D4D4D5" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/lcard_11"
-                android:layout_width="match_parent"
-                android:layout_height="49.5dp"
-                android:clickable="true"
-                app:cardElevation="0dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="15dp"
-                        android:lineHeight="21sp"
-                        android:text="한국어"
-                        android:textColor="@color/black"
-                        android:textFontWeight="400"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:id="@+id/lcard_11_img"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="12.5dp"
-                        android:src="@drawable/select_icon"
-                        android:visibility="invisible" />
-
-
-                </RelativeLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-
-        </LinearLayout>
-
-
-    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

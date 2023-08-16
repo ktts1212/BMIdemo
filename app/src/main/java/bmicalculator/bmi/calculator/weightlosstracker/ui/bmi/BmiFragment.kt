@@ -97,11 +97,11 @@ class BmiFragment : Fragment() {
 
         binding.bmiArrow.alpha = 0.75f
         binding.bmiArrow.pivotX = Utils.dip2px(
-            requireContext(), 15f
+            requireContext(), 16f
         ).toFloat()
 
         binding.bmiArrow.pivotY = Utils.dip2px(
-            requireContext(), 15f
+            requireContext(), 16f
         ).toFloat()
 
         if (viewModel.localeLanguage !in DcFormat.enList){

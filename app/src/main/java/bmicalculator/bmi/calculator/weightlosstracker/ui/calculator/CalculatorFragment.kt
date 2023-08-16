@@ -34,6 +34,9 @@ import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.DatePi
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.SettingFragment
 import bmicalculator.bmi.calculator.weightlosstracker.ui.calculator.child.TimePickerFragment
 import bmicalculator.bmi.calculator.weightlosstracker.util.CenterItemUtils
+import bmicalculator.bmi.calculator.weightlosstracker.util.DcFormat.df
+import bmicalculator.bmi.calculator.weightlosstracker.util.DcFormat.ff
+import bmicalculator.bmi.calculator.weightlosstracker.util.DcFormat.tf
 import bmicalculator.bmi.calculator.weightlosstracker.util.LanguageHelper
 import com.google.android.material.tabs.TabLayout
 import bmicalculator.bmi.calculator.weightlosstracker.util.Utils
@@ -69,7 +72,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
     private var childViewHalfCount: Int = 0
 
-    private lateinit var currentDialogFragmentTag:String
+    private lateinit var currentDialogFragmentTag: String
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
@@ -79,12 +82,22 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         binding = FragmentCalculatorBinding.inflate(layoutInflater, container, false)
         val dao = AppDataBase.getDatabase(requireContext().applicationContext).bmiInfoDao()
         val repository = Repository(dao)
-        val factory = ViewModelFactory(repository,requireActivity())
+        val factory = ViewModelFactory(repository, requireActivity())
         viewModel =
             ViewModelProvider(requireActivity(), factory)[CalculatorViewModel::class.java]
         //设置toolbar的显示
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbarCal)
+
+        val ft=childFragmentManager.beginTransaction()
+        val dialogFragments=childFragmentManager.fragments
+        for (dialogFragment in dialogFragments){
+            if ((dialogFragment.tag == "DatePicker") || (dialogFragment.tag =="TimePicker")){
+                ft.remove(dialogFragment)
+            }
+        }
+        ft.commit()
+
         return binding.root
     }
 
@@ -124,7 +137,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         binding.calUser.setOnClickListener {
             val dialog = SettingFragment()
             dialog.show(childFragmentManager, "SettingFragment")
-            currentDialogFragmentTag="SettingFragment"
+            currentDialogFragmentTag = "SettingFragment"
         }
 
         val formatEnglish = NumberFormat.getNumberInstance(Locale.ENGLISH)
@@ -368,9 +381,112 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 false
             }
         }
+        //年龄
+        ageInit()
+
+        var firstConvert=true
+        var htFirstConvert=true
+        if (viewModel.getData()!=null){
+            val info=viewModel.getData()
+            firstConvert=false
+            htFirstConvert=false
+            when (info!!.wtHtType) {
+                "lbftin" -> {
+                    binding.htCardFtin1.visibility = View.VISIBLE
+                    binding.htCardFtin2.visibility = View.VISIBLE
+                    binding.htCardCm.visibility = View.INVISIBLE
+                    binding.wtTab.getTabAt(0)?.select()
+                    binding.wtInput.setText(info.wt_lb.toString())
+                    binding.htTab.getTabAt(0)?.select()
+                    binding.htInputFtin1.setText("${info.ht_ft}'")
+                    binding.htInputFtin2.setText("${info.ht_in}''")
+                }
+
+                "kgftin" -> {
+                    binding.htCardFtin1.visibility = View.VISIBLE
+                    binding.htCardFtin2.visibility = View.VISIBLE
+                    binding.htCardCm.visibility = View.INVISIBLE
+                    binding.wtTab.getTabAt(1)?.select()
+                    binding.wtInput.setText(info.wt_kg.toString())
+                    binding.htTab.getTabAt(0)?.select()
+                    binding.htInputFtin1.setText("${info.ht_ft}'")
+                    binding.htInputFtin2.setText("${info.ht_in}''")
+                }
+
+                "lbcm" -> {
+                    binding.htCardFtin1.visibility = View.INVISIBLE
+                    binding.htCardFtin2.visibility = View.INVISIBLE
+                    binding.htCardCm.visibility = View.VISIBLE
+                    binding.wtTab.getTabAt(0)?.select()
+                    binding.wtInput.setText(info.wt_lb.toString())
+                    binding.htTab.getTabAt(1)?.select()
+                    binding.htInputCm.setText(info.ht_cm.toString())
+                }
+
+                else -> {
+                    binding.htCardFtin1.visibility = View.INVISIBLE
+                    binding.htCardFtin2.visibility = View.INVISIBLE
+                    binding.htCardCm.visibility = View.VISIBLE
+                    binding.wtTab.getTabAt(1)?.select()
+                    binding.wtInput.setText(info.wt_kg.toString())
+                    binding.htTab.getTabAt(1)?.select()
+                    binding.htInputCm.setText(info.ht_cm.toString())
+                }
+            }
+            if (isAdded) {
+                binding.timeInputPhase.text = Utils.numToPhase(
+                    requireContext(),
+                    info.phase
+                )
+                binding.timeInputDate.text = info.date
+                binding.ageRecyclerView.scrollToPosition(childViewHalfCount + info.age - 1)
+                //滑动之后100ms后移动到中心位置
+                binding.ageRecyclerView.postDelayed({
+                    if (::adapter.isInitialized) {
+                        scrollToCenter(info.age + 1)
+                    }
+                }, 100L)
+            }
+            when (info.gender) {
+                '0' -> {
+                    binding.genderSelectedMale.isSelected = true
+                    binding.genderSelectedFemale.also { relativeLayout ->
+                        relativeLayout.isSelected = false
+                        relativeLayout.alpha = 0.5f
+                    }
+                    binding.genderSelectedFemalePic.visibility = View.INVISIBLE
+                    binding.genderSelectedMale.alpha = 1f
+                    binding.genderSelectedMalePic.visibility = View.VISIBLE
+                    viewModel.selectedGender.value = '0'
+                }
+                '1' -> {
+                    binding.genderSelectedFemale.isSelected = true
+                    binding.genderSelectedMale.also { relativeLayout ->
+                        relativeLayout.isSelected = false
+                        relativeLayout.alpha = 0.5f
+                    }
+                    binding.genderSelectedMalePic.visibility = View.INVISIBLE
+                    binding.genderSelectedFemale.alpha = 1f
+                    binding.genderSelectedFemalePic.visibility = View.VISIBLE
+                    viewModel.selectedGender.value = '1'
+                }
+                else -> {
+                    binding.genderSelectedFemale.isSelected = false
+                    binding.genderSelectedMale.also { relativeLayout ->
+                        relativeLayout.isSelected = false
+                        relativeLayout.alpha = 0.5f
+                    }
+                    binding.genderSelectedMalePic.visibility = View.INVISIBLE
+                    binding.genderSelectedFemale.alpha = 0.5f
+                    binding.genderSelectedFemalePic.visibility = View.INVISIBLE
+                    viewModel.selectedGender.value = '2'
+                }
+            }
+
+        }
 
         //点击单位转换按钮
-        var firstConvert = true
+
         binding.wtTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -563,14 +679,14 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                                 ).show()
                                 isChanged = true
                                 binding.wtInput.setText(
-                                        df.format(551)
+                                    df.format(551)
                                 )
                             } else if (str.substring(0, str.indexOf(".")).length > 3) {
                                 isChanged
                                 binding.wtInput.setText(
-                                        df.format(
-                                            str.substring(str.indexOf(".") - 3).toDouble()
-                                        )
+                                    df.format(
+                                        str.substring(str.indexOf(".") - 3).toDouble()
+                                    )
                                 )
                             }
                         } else if (binding.wtTab.getTabAt(1)!!.isSelected) {
@@ -582,12 +698,12 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                                 ).show()
                                 isChanged = true
                                 binding.wtInput.setText(
-                                        df.format(250)
+                                    df.format(250)
                                 )
                             } else if (str.substring(0, str.indexOf(".")).length > 3) {
                                 isChanged
                                 binding.wtInput.setText(
-                                        df.format(str.substring(str.indexOf(".") - 3).toDouble())
+                                    df.format(str.substring(str.indexOf(".") - 3).toDouble())
                                 )
                             }
                         }
@@ -616,7 +732,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                                 ).show()
                                 isChanged = true
                                 binding.wtInput.setText(
-                                        df.format(551)
+                                    df.format(551)
                                 )
                             }
                         } else if (binding.wtTab.getTabAt(1)?.isSelected == true) {
@@ -636,7 +752,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                                 ).show()
                                 isChanged = true
                                 binding.wtInput.setText(
-                                        df.format(250)
+                                    df.format(250)
                                 )
                             }
                         }
@@ -649,7 +765,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
 
         //身高
-        var htFirstConvert = true
+
         binding.htTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             @SuppressLint("SetTextI18n")
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -1032,7 +1148,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         if (str.length > 3) {
                             isChanged = true
                             binding.htInputCm.setText(
-                                    tf.format(str.toInt())
+                                tf.format(str.toInt())
                             )
                         }
                         if (str.toDouble() > 250) {
@@ -1058,8 +1174,10 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             "Jun" -> "June"
             else -> monthName
         }
-        binding.timeInputDate.text = "$monthName ${day},${year}"
-        viewModel.setDate(binding.timeInputDate.text.toString())
+        if (viewModel.getData()==null){
+            binding.timeInputDate.text = "$monthName ${day},${year}"
+            viewModel.setDate(binding.timeInputDate.text.toString())
+        }
         binding.timeInputDate.setOnClickListener {
             val dialog = DatePickerFragment()
             dialog.show(childFragmentManager, "DatePicker")
@@ -1092,13 +1210,16 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 getString(R.string.evening)
             }
         }
-        binding.timeInputPhase.text = phase
-        viewModel.setPhase(
-            Utils.phaseToNum(
-                requireContext(),
-                binding.timeInputPhase.text.toString()
+        if (viewModel.getData()==null){
+            binding.timeInputPhase.text = phase
+            viewModel.setPhase(
+                Utils.phaseToNum(
+                    requireContext(),
+                    binding.timeInputPhase.text.toString()
+                )
             )
-        )
+        }
+
         //时间
         binding.timeInputPhase.setOnClickListener {
             val dialog = TimePickerFragment()
@@ -1113,11 +1234,11 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 )
             }
         }
-        //年龄
-        ageInit()
 
-        binding.genderSelectedMale.isSelected = false
-        binding.genderSelectedFemale.isSelected = false
+        if ((viewModel.getData()==null)||(viewModel.getData()!!.gender=='2')) {
+            binding.genderSelectedMale.isSelected = false
+            binding.genderSelectedFemale.isSelected = false
+        }
         //性别
         binding.genderSelectedMale.setOnClickListener { vw ->
             if (!vw.isSelected) {
@@ -1163,6 +1284,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         binding.htInputFtin1.setText("${newRecord.ht_ft}'")
                         binding.htInputFtin2.setText("${newRecord.ht_in}''")
                     }
+
                     "kgftin" -> {
                         binding.htCardFtin1.visibility = View.VISIBLE
                         binding.htCardFtin2.visibility = View.VISIBLE
@@ -1173,6 +1295,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         binding.htInputFtin1.setText("${newRecord.ht_ft}'")
                         binding.htInputFtin2.setText("${newRecord.ht_in}''")
                     }
+
                     "lbcm" -> {
                         binding.htCardFtin1.visibility = View.INVISIBLE
                         binding.htCardFtin2.visibility = View.INVISIBLE
@@ -1182,6 +1305,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                         binding.htTab.getTabAt(1)?.select()
                         binding.htInputCm.setText(newRecord.ht_cm.toString())
                     }
+
                     else -> {
                         binding.htCardFtin1.visibility = View.INVISIBLE
                         binding.htCardFtin2.visibility = View.INVISIBLE
@@ -1233,179 +1357,13 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
         binding.btnCalculate.setOnClickListener {
 
-            if (binding.wtTab.getTabAt(0)!!.isSelected) {
-                val str = binding.wtInput.text.toString()
-                if (str.isNotEmpty()) {
-                    viewModel.setWtLb(
-
-                        if (isEu) {
-                            str.replace(",", ".").toDouble()
-                        } else {
-                            str.toDouble()
-                        }
-                    )
-                } else {
-                    viewModel.setWtLb(
-                        140.00
-                    )
-                }
-
-            } else {
-                val str = binding.wtInput.text.toString()
-                if (str.isNotEmpty()) {
-                    viewModel.setWtKg(
-
-                        if (isEu) {
-                            str.replace(",", ".").toDouble()
-                        } else {
-                            str.toDouble()
-                        }
-                    )
-                } else {
-                    viewModel.setWtKg(
-                        65.00
-                    )
-                }
-            }
-
-            if (binding.htTab.getTabAt(0)!!.isSelected) {
-                val str = binding.htInputFtin1.text.toString()
-                val str2 = binding.htInputFtin2.text.toString()
-                if (str.isNotEmpty() && str.isNotEmpty()) {
-                    viewModel.setHtFt(
-                        if (str.contains("'")) str.dropLast(1).toInt()
-                        else str.toInt()
-
-                    )
-
-                    viewModel.setHtIn(
-                        if (str2.contains("''")) str2.dropLast(2).toInt()
-                        else str2.toInt()
-                    )
-                } else {
-                    if (str.isEmpty()) {
-                        viewModel.setHtFt(5)
-                        viewModel.setHtIn(str2.toInt())
-                    }
-
-                    if (str2.isEmpty()) {
-                        viewModel.setHtIn(7)
-                        viewModel.setHtFt(str.toInt())
-                    }
-                }
-
-            } else {
-                val str = binding.htInputCm.text.toString()
-                if (str.isNotEmpty()) {
-                    viewModel.setHtCm(
-
-                        if (isEu) {
-                            str.replace(",", ".").toDouble()
-                        } else {
-                            str.toDouble()
-                        }
-                    )
-                } else {
-                    viewModel.setHtCm(
-                        170.0
-                    )
-                }
-            }
+            dataJudge(isEu)
 
             if (binding.genderSelectedMale.isSelected || binding.genderSelectedFemale.isSelected) {
 
-                if (binding.wtTab.getTabAt(0)!!.isSelected &&
-                    binding.htTab.getTabAt(0)!!.isSelected
-                ) {
-                    val bmiVal = viewModel.wtLb.value!! / ((viewModel.htFt.value!! * 12 +
-                            viewModel.htIn.value!!)).toDouble().pow(2.0) * 703
-                    viewModel.setBmiVal(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
-                    viewModel.wtType = "lb"
-                    viewModel.htType = "ftin"
-                    viewModel.setWtKg(
-                        df.format(viewModel.wtLb.value!! * Multi_1)
-                            .replace(",", ".")
-                            .toDouble()
-                    )
-                    viewModel.setHtCm(
-                        tf.format(
-                            viewModel.htIn.value!! * Multi_tin +
-                                    viewModel.htFt.value!! * Multi_haft
-                        ).replace(",", ".").toDouble()
-                    )
-                }
+                unitConvert()
 
-                if (binding.wtTab.getTabAt(0)!!.isSelected &&
-                    binding.htTab.getTabAt(1)!!.isSelected
-                ) {
-                    val bmiVal =
-                        viewModel.wtLb.value!! * 0.453 / (viewModel.htCm.value!! * 0.01).pow(
-                            2.0
-                        )
-                    viewModel.setBmiVal(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
-                    viewModel.wtType = "lb"
-                    viewModel.htType = "cm"
-                    viewModel.setWtKg(
-                        df.format(viewModel.wtLb.value!! * Multi_1)
-                            .replace(",", ".")
-                            .toDouble()
-                    )
-                    viewModel.setHtFt(
-                        ff.format((viewModel.htCm.value!! / Multi_haft).toInt()).replace(",", ".")
-                            .toInt()
-                    )
-                    viewModel.setHtIn(
-                        ff.format((viewModel.htCm.value!! - viewModel.htFt.value!! * Multi_haft) / Multi_tin)
-                            .toInt()
-                    )
-                }
-
-                if (binding.wtTab.getTabAt(1)!!.isSelected &&
-                    binding.htTab.getTabAt(0)!!.isSelected
-                ) {
-                    val bmiVal =
-                        viewModel.wtKg.value!! /
-                                (viewModel.htFt.value!! * 0.3048 + viewModel.htIn.value!! * 0.0254).pow(
-                                    2.0
-                                )
-                    viewModel.setBmiVal(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
-                    viewModel.wtType = "kg"
-                    viewModel.htType = "ftin"
-                    viewModel.setWtLb(
-                        df.format(viewModel.wtKg.value!! / Multi_1)
-                            .replace(",", ".")
-                            .toDouble()
-                    )
-                    viewModel.setHtCm(
-                        tf.format(
-                            viewModel.htIn.value!! * Multi_tin +
-                                    viewModel.htFt.value!! * Multi_haft
-                        ).replace(",", ".").toDouble()
-                    )
-                }
-
-                if (binding.wtTab.getTabAt(1)!!.isSelected &&
-                    binding.htTab.getTabAt(1)!!.isSelected
-                ) {
-                    val bmiVal = viewModel.wtKg.value!! / (viewModel.htCm.value!! * 0.01).pow(2.0)
-                    viewModel.setBmiVal(tf.format(bmiVal.toFloat()).replace(",", ".").toFloat())
-                    viewModel.wtType = "kg"
-                    viewModel.htType = "cm"
-                    viewModel.setWtLb(
-                        df.format(viewModel.wtKg.value!! / Multi_1)
-                            .replace(",", ".")
-                            .toDouble()
-                    )
-                    viewModel.setHtFt(
-                        ff.format((viewModel.htCm.value!! / Multi_haft).toInt()).replace(",", ".")
-                            .toInt()
-                    )
-                    viewModel.setHtIn(
-                        ff.format((viewModel.htCm.value!! - viewModel.htFt.value!! * Multi_haft) / Multi_tin)
-                            .toInt()
-                    )
-                }
-                val bInfo=BmiInfo(
+                val bInfo = BmiInfo(
                     viewModel.wtLb.value!!.toDouble(),
                     viewModel.wtKg.value!!.toDouble(),
                     viewModel.htFt.value!!.toInt(), viewModel.htIn.value!!.toInt(),
@@ -1415,7 +1373,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                     viewModel.selectedGender.value!!.toChar(),
                     viewModel.bmiVal.value!!,
                     -1,
-                                -1,
+                    -1,
                     viewModel.bmiType,
                     viewModel.wtType + viewModel.htType,
                     0
@@ -1577,7 +1535,6 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
     }
 
 
-
     private fun initBar() {
         immersionBar {
             statusBarColor(R.color.bg1)
@@ -1591,6 +1548,308 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         if (!hidden) {
             initBar()
         }
+    }
+
+    private fun dataJudge(isEu: Boolean) {
+        if (binding.wtTab.getTabAt(0)!!.isSelected) {
+            val str = binding.wtInput.text.toString()
+            if (str.isNotEmpty()) {
+                viewModel.setWtLb(
+
+                    if (isEu) {
+                        str.replace(",", ".").toDouble()
+                    } else {
+                        str.toDouble()
+                    }
+                )
+            } else {
+                viewModel.setWtLb(
+                    140.00
+                )
+            }
+
+        } else {
+            val str = binding.wtInput.text.toString()
+            if (str.isNotEmpty()) {
+                viewModel.setWtKg(
+
+                    if (isEu) {
+                        str.replace(",", ".").toDouble()
+                    } else {
+                        str.toDouble()
+                    }
+                )
+            } else {
+                viewModel.setWtKg(
+                    65.00
+                )
+            }
+        }
+
+        if (binding.htTab.getTabAt(0)!!.isSelected) {
+            val str = binding.htInputFtin1.text.toString()
+            val str2 = binding.htInputFtin2.text.toString()
+            if (str.isNotEmpty() && str.isNotEmpty()) {
+                viewModel.setHtFt(
+                    if (str.contains("'")) str.dropLast(1).toInt()
+                    else str.toInt()
+
+                )
+
+                viewModel.setHtIn(
+                    if (str2.contains("''")) str2.dropLast(2).toInt()
+                    else str2.toInt()
+                )
+            } else {
+                if (str.isEmpty()) {
+                    viewModel.setHtFt(5)
+                    viewModel.setHtIn(str2.toInt())
+                }
+
+                if (str2.isEmpty()) {
+                    viewModel.setHtIn(7)
+                    viewModel.setHtFt(str.toInt())
+                }
+            }
+
+        } else {
+            val str = binding.htInputCm.text.toString()
+            if (str.isNotEmpty()) {
+                viewModel.setHtCm(
+
+                    if (isEu) {
+                        str.replace(",", ".").toDouble()
+                    } else {
+                        str.toDouble()
+                    }
+                )
+            } else {
+                viewModel.setHtCm(
+                    170.0
+                )
+            }
+        }
+    }
+
+    private fun unitConvert() {
+        if (binding.wtTab.getTabAt(0)!!.isSelected &&
+            binding.htTab.getTabAt(0)!!.isSelected
+        ) {
+            val bmiVal = viewModel.wtLb.value!! / ((viewModel.htFt.value!! * 12 +
+                    viewModel.htIn.value!!)).toDouble().pow(2.0) * 703
+            viewModel.setBmiVal(tf!!.format(bmiVal.toFloat()).replace(",", ".").toFloat())
+            viewModel.wtType = "lb"
+            viewModel.htType = "ftin"
+            viewModel.setWtKg(
+                df!!.format(viewModel.wtLb.value!! * Multi_1)
+                    .replace(",", ".")
+                    .toDouble()
+            )
+            viewModel.setHtCm(
+                tf!!.format(
+                    viewModel.htIn.value!! * Multi_tin +
+                            viewModel.htFt.value!! * Multi_haft
+                ).replace(",", ".").toDouble()
+            )
+        }
+
+        if (binding.wtTab.getTabAt(0)!!.isSelected &&
+            binding.htTab.getTabAt(1)!!.isSelected
+        ) {
+            val bmiVal =
+                viewModel.wtLb.value!! * 0.453 / (viewModel.htCm.value!! * 0.01).pow(
+                    2.0
+                )
+            viewModel.setBmiVal(tf!!.format(bmiVal.toFloat()).replace(",", ".").toFloat())
+            viewModel.wtType = "lb"
+            viewModel.htType = "cm"
+            viewModel.setWtKg(
+                df!!.format(viewModel.wtLb.value!! * Multi_1)
+                    .replace(",", ".")
+                    .toDouble()
+            )
+            viewModel.setHtFt(
+                ff!!.format((viewModel.htCm.value!! / Multi_haft).toInt()).replace(",", ".")
+                    .toInt()
+            )
+            viewModel.setHtIn(
+                ff!!.format((viewModel.htCm.value!! - viewModel.htFt.value!! * Multi_haft) / Multi_tin)
+                    .toInt()
+            )
+        }
+
+        if (binding.wtTab.getTabAt(1)!!.isSelected &&
+            binding.htTab.getTabAt(0)!!.isSelected
+        ) {
+            val bmiVal =
+                viewModel.wtKg.value!! /
+                        (viewModel.htFt.value!! * 0.3048 + viewModel.htIn.value!! * 0.0254).pow(
+                            2.0
+                        )
+            viewModel.setBmiVal(tf!!.format(bmiVal.toFloat()).replace(",", ".").toFloat())
+            viewModel.wtType = "kg"
+            viewModel.htType = "ftin"
+            viewModel.setWtLb(
+                df!!.format(viewModel.wtKg.value!! / Multi_1)
+                    .replace(",", ".")
+                    .toDouble()
+            )
+            viewModel.setHtCm(
+                tf!!.format(
+                    viewModel.htIn.value!! * Multi_tin +
+                            viewModel.htFt.value!! * Multi_haft
+                ).replace(",", ".").toDouble()
+            )
+        }
+
+        if (binding.wtTab.getTabAt(1)!!.isSelected &&
+            binding.htTab.getTabAt(1)!!.isSelected
+        ) {
+            val bmiVal = viewModel.wtKg.value!! / (viewModel.htCm.value!! * 0.01).pow(2.0)
+            viewModel.setBmiVal(tf!!.format(bmiVal.toFloat()).replace(",", ".").toFloat())
+            viewModel.wtType = "kg"
+            viewModel.htType = "cm"
+            viewModel.setWtLb(
+                df!!.format(viewModel.wtKg.value!! / Multi_1)
+                    .replace(",", ".")
+                    .toDouble()
+            )
+            viewModel.setHtFt(
+                ff!!.format((viewModel.htCm.value!! / Multi_haft).toInt()).replace(",", ".")
+                    .toInt()
+            )
+            viewModel.setHtIn(
+                ff!!.format((viewModel.htCm.value!! - viewModel.htFt.value!! * Multi_haft) / Multi_tin)
+                    .toInt()
+            )
+        }
+    }
+
+    private fun toSaveData() {
+
+        var lb =140.0
+        var kg =65.0
+        var ft =5
+        var inch =7
+        var cm =170.0
+        val mDate: String=binding.timeInputDate.text.toString()
+        val phase: Int=viewModel.selectedPhase.value!!
+        val age: Int =viewModel.selectedAge.value!!
+        val gender: Char =if (viewModel.selectedGender.value==null) '2'
+        else viewModel.selectedGender.value!!
+        var type ="error"
+
+        if (binding.wtTab.getTabAt(0)!!.isSelected &&
+            binding.htTab.getTabAt(0)!!.isSelected
+        ) {
+
+            lb = if (binding.wtInput.text.toString().isEmpty()) 1.0
+            else binding.wtInput.text.toString().replace(",", ".").toDouble()
+            kg = 70.0
+            ft = if (binding.htInputFtin1.text.toString().isEmpty()) 1
+            else if (binding.htInputFtin1.text.toString().contains("'"))
+                binding.htInputFtin1.text.toString().dropLast(1).toInt()
+            else binding.htInputFtin1.text.toString().toInt()
+
+            inch = if (binding.htInputFtin2.text.toString().isEmpty()) 0
+            else if (binding.htInputFtin2.text.toString().contains("'"))
+                binding.htInputFtin2.text.toString().dropLast(2).toInt()
+            else binding.htInputFtin2.text.toString().toInt()
+
+            cm = 170.0
+
+            type="wtftin"
+
+        }
+
+        if (binding.wtTab.getTabAt(0)!!.isSelected &&
+            binding.htTab.getTabAt(1)!!.isSelected
+        ) {
+            lb = if (binding.wtInput.text.toString().isEmpty()) 1.0
+            else binding.wtInput.text.toString().replace(",", ".").toDouble()
+            kg = 70.0
+            ft = if (binding.htInputFtin1.text.toString().isEmpty()) 1
+            else if (binding.htInputFtin1.text.toString().contains("'"))
+                binding.htInputFtin1.text.toString().dropLast(1).toInt()
+            else binding.htInputFtin1.text.toString().toInt()
+
+            inch = if (binding.htInputFtin2.text.toString().isEmpty()) 0
+            else if (binding.htInputFtin2.text.toString().contains("''"))
+                binding.htInputFtin2.text.toString().dropLast(2).toInt()
+            else binding.htInputFtin2.text.toString().toInt()
+
+            cm = if (binding.htInputCm.text.toString().isEmpty()) 1.0
+            else binding.htInputCm.text.toString().toDouble()
+
+            type="wtcm"
+        }
+
+        if (binding.wtTab.getTabAt(1)!!.isSelected &&
+            binding.htTab.getTabAt(0)!!.isSelected
+        ) {
+            lb = 140.0
+            kg = if (binding.wtInput.text.toString().isEmpty()) 2.0
+            else binding.wtInput.text.toString().replace(",", ".").toDouble()
+            ft = if (binding.htInputFtin1.text.toString().isEmpty()) 1
+            else if (binding.htInputFtin1.text.toString().contains("'"))
+                binding.htInputFtin1.text.toString().dropLast(1).toInt()
+            else binding.htInputFtin1.text.toString().toInt()
+
+            inch = if (binding.htInputFtin2.text.toString().isEmpty()) 0
+            else if (binding.htInputFtin2.text.toString().contains("''"))
+                binding.htInputFtin2.text.toString().dropLast(2).toInt()
+            else binding.htInputFtin2.text.toString().toInt()
+
+            cm = if (binding.htInputCm.text.toString().isEmpty()) 1.0
+            else binding.htInputCm.text.toString().toDouble()
+
+            type="kgftin"
+        }
+
+        if (binding.wtTab.getTabAt(1)!!.isSelected &&
+            binding.htTab.getTabAt(1)!!.isSelected
+        ) {
+            lb = 140.0
+            kg = if (binding.wtInput.text.toString().isEmpty()) 2.0
+            else binding.wtInput.text.toString().replace(",", ".").toDouble()
+            ft = if (binding.htInputFtin1.text.toString().isEmpty()) 1
+            else if (binding.htInputFtin1.text.toString().contains("'"))
+                binding.htInputFtin1.text.toString().dropLast(1).toInt()
+            else binding.htInputFtin1.text.toString().toInt()
+
+            inch = if (binding.htInputFtin2.text.toString().isEmpty()) 0
+            else if (binding.htInputFtin2.text.toString().contains("''"))
+                binding.htInputFtin2.text.toString().dropLast(2).toInt()
+            else binding.htInputFtin2.text.toString().toInt()
+
+            cm = if (binding.htInputCm.text.toString().isEmpty()) 1.0
+            else binding.htInputCm.text.toString().toDouble()
+
+            type="kgcm"
+        }
+
+        val bInfo = BmiInfo(
+            lb,
+            kg,
+            ft, inch,
+            cm,
+            mDate, phase,
+            age,
+            gender,
+            0f,
+            -1,
+            -1,
+            "null",
+            type,
+            0
+        )
+        Log.d("binfo","$bInfo")
+        viewModel.saveData(bInfo)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        toSaveData()
     }
 }
 

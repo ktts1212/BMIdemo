@@ -95,11 +95,11 @@ class CalculatorResultFragment : DialogFragment() {
 
         binding.bmiArrow.pivotX = Utils.dip2px(
             requireContext(),
-            15f
+            16f
         ).toFloat()
         binding.bmiArrow.pivotY = Utils.dip2px(
             requireContext(),
-            15f
+            16f
         ).toFloat()
 
         binding.calDiscard.setOnClickListener {

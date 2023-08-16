@@ -153,9 +153,6 @@ class LanguageSelectFragment : DialogFragment(), View.OnClickListener {
 
     override fun onClick(p0: View?) {
         val edit = activity?.getSharedPreferences("settings", 0)?.edit()
-        viewModel.saveNavId(
-            R.id.menu_calculator
-        )
         when (p0!!.id) {
             R.id.lcard_1 -> {
                 binding.lcard1Img.visibility = View.VISIBLE

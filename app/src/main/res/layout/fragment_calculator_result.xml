@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
     android:background="@color/white"
     android:orientation="vertical"
-    android:layout_gravity="center_horizontal"
     android:theme="@style/CalculatorResultFragment"
     tools:context=".ui.calculator.child.CalculatorResultFragment">
 
@@ -35,7 +35,8 @@
         android:id="@+id/bmi_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="60dp">
+        android:layout_marginTop="60dp"
+        android:scrollbars="none">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -62,9 +63,9 @@
 
             <bmicalculator.bmi.calculator.weightlosstracker.util.views.BmiArrow
                 android:id="@+id/bmi_arrow"
-                android:layout_width="30dp"
-                android:layout_height="120dp"
-                android:layout_marginTop="-175.5dp"
+                android:layout_width="32dp"
+                android:layout_height="128dp"
+                android:layout_marginTop="-174.5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/bmi_dial" />
@@ -214,10 +215,10 @@
                         android:layout_marginStart="17dp"
                         android:layout_marginTop="14dp"
                         android:layout_marginEnd="17dp"
+                        android:gravity="left"
                         android:text="@string/bmi_range_normal_adult_description"
                         android:textColor="@color/black"
                         android:textFontWeight="400"
-                        android:gravity="left"
                         android:textSize="14sp" />
 
                     <TextView
@@ -307,14 +308,13 @@
                         android:layout_height="match_parent">
 
 
-                            <ImageView
-                                android:id="@+id/bmi_ad1_iv1"
-                                android:layout_width="49dp"
-                                android:layout_height="49dp"
-                                android:layout_marginTop="15dp"
-                                android:layout_marginStart="16dp"
-                                android:src="@drawable/ad6" />
-
+                        <ImageView
+                            android:id="@+id/bmi_ad1_iv1"
+                            android:layout_width="49dp"
+                            android:layout_height="49dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="15dp"
+                            android:src="@drawable/ad6" />
 
 
                         <TextView
@@ -367,8 +367,8 @@
                             android:layout_height="12dp"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentBottom="true"
-                            android:layout_marginBottom="7.5dp"
                             android:layout_marginEnd="11dp"
+                            android:layout_marginBottom="7.5dp"
                             android:src="@drawable/ad_tag1" />
 
                     </RelativeLayout>
@@ -450,8 +450,8 @@
                             android:layout_height="12dp"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentBottom="true"
-                            android:layout_marginBottom="7.5dp"
                             android:layout_marginEnd="11dp"
+                            android:layout_marginBottom="7.5dp"
                             android:src="@drawable/ad_tag1" />
 
                     </RelativeLayout>
@@ -533,8 +533,8 @@
                             android:layout_height="12dp"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentBottom="true"
-                            android:layout_marginBottom="7.5dp"
                             android:layout_marginEnd="11dp"
+                            android:layout_marginBottom="7.5dp"
                             android:src="@drawable/ad_tag1" />
 
                     </RelativeLayout>
@@ -561,10 +561,10 @@
         android:layout_width="315dp"
         android:layout_height="55dp"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"
         android:backgroundTint="#3659CF"
         android:fontFamily="@font/montserrat_extrabold"
-        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="@string/save"
         android:textColor="@color/white"

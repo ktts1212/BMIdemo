@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -55,16 +56,6 @@ class MainActivity : AppCompatActivity(), RecordFragment.OnDeleteTypeListener {
             )
         lan?.let { DcFormat.setData(it) }
 
-        //删除fragment堆栈中的所有fragment
-        val fragments = supportFragmentManager.fragments
-        val ft = supportFragmentManager.beginTransaction()
-        for (fragment in fragments) {
-            if (fragment != null) {
-                ft.remove(fragment)
-            }
-        }
-        ft.commit()
-
         if (savedInstanceState != null) {
             currentFragmentTag = savedInstanceState.getString("currentFragmentTag").toString()
         }
@@ -91,6 +82,19 @@ class MainActivity : AppCompatActivity(), RecordFragment.OnDeleteTypeListener {
             viewModel.htType = bmiInfo.wtHtType?.substring(2) ?: "error"
         }
 
+        if (viewModel.getNavId()!=null){
+            val fragments = supportFragmentManager.fragments
+            val ft = supportFragmentManager.beginTransaction()
+            for (fragment in fragments) {
+                Log.d("alltag","${fragment.tag}")
+                if (fragment.tag !=idToTag(viewModel.getNavId()!!) ) {
+                    Log.d("fgtag","${fragment.tag}")
+                    ft.remove(fragment)
+                }
+            }
+            ft.commit()
+        }
+
         viewModel.message.observe(this) { event ->
             event.getContentIfNotHandled()?.let { msg ->
                 Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
@@ -114,12 +118,12 @@ class MainActivity : AppCompatActivity(), RecordFragment.OnDeleteTypeListener {
 
         }
         if (viewModel.getNavId() != null) {
-            currentFragmentTag = "calculator"
-            binding.bottomNavigationView.selectedItemId = R.id.menu_calculator
+            currentFragmentTag = idToTag(viewModel.getNavId()!!)
+            binding.bottomNavigationView.selectedItemId = viewModel.getNavId()!!
             getFgByTag(currentFragmentTag)
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.add(R.id.fragment_container, mCurrentFragment, currentFragmentTag)
-            transaction.replace(R.id.fragment_container,mCurrentFragment).commit()
+//            val transaction = supportFragmentManager.beginTransaction()
+//            transaction.add(R.id.fragment_container, mCurrentFragment, currentFragmentTag)
+//            transaction.show(mCurrentFragment).commit()
         } else {
             if (!hasData) {
                 currentFragmentTag = "calculator"
@@ -139,6 +143,7 @@ class MainActivity : AppCompatActivity(), RecordFragment.OnDeleteTypeListener {
         }
 
         binding.bottomNavigationView.setOnItemSelectedListener {
+            viewModel.saveNavId(it.itemId)
             val transaction = supportFragmentManager.beginTransaction()
             transaction.hide(mCurrentFragment)
             when (it.itemId) {
@@ -188,6 +193,23 @@ class MainActivity : AppCompatActivity(), RecordFragment.OnDeleteTypeListener {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("currentFragmentTag", currentFragmentTag)
+    }
+
+    private fun idToTag(id:Int):String{
+       return when(id){
+            R.id.menu_calculator->{
+                "calculator"
+            }
+            R.id.menu_bmi->{
+                "bmi"
+            }
+            R.id.menu_statistics->{
+                "statistic"
+            }
+            else->{
+                "error"
+            }
+        }
     }
 
     private fun getFgByTag(tag: String) {

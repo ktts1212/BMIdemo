@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bmi_lo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:id="@+id/bmi_lo"
     android:clickable="true"
     android:splitMotionEvents="false"
     tools:context=".ui.bmi.BmiFragment">
@@ -57,11 +57,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
+        android:clickable="true"
         android:text="date display"
         android:textColor="@color/black"
         android:textFontWeight="400"
         android:textSize="14sp"
-        android:clickable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_bmi" />
 
@@ -70,6 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:scrollbars="none"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bmi_date">
 
@@ -84,7 +85,7 @@
                 android:layout_height="20dp"
                 android:background="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <bmicalculator.bmi.calculator.weightlosstracker.util.views.ChildBmiDial
                 android:id="@+id/type_table_child_dial"
@@ -107,8 +108,8 @@
 
             <bmicalculator.bmi.calculator.weightlosstracker.util.views.BmiArrow
                 android:id="@+id/bmi_arrow"
-                android:layout_width="30dp"
-                android:layout_height="120dp"
+                android:layout_width="32dp"
+                android:layout_height="128dp"
                 android:layout_marginTop="145dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -177,7 +178,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-                        android:visibility="gone"
                         android:id="@+id/bmi_type_tip_new"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
@@ -185,6 +185,7 @@
                         android:background="@drawable/shape_bmi_help"
                         android:backgroundTint="@color/normal"
                         android:src="@drawable/bmi_type_help"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/bmi_type_space"
                         app:layout_constraintStart_toEndOf="@id/bmi_cal_type_text_new"
@@ -239,8 +240,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/bmi_cal_type_new"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bmi_cal_type_new" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

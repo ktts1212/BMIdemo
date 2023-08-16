@@ -51,6 +51,7 @@
         android:id="@+id/rc_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="none"
         android:layout_marginTop="50dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -59,8 +60,8 @@
 
             <bmicalculator.bmi.calculator.weightlosstracker.util.views.ChildBmiDial
                 android:id="@+id/rc_child_dial"
-                android:layout_width="360dp"
-                android:layout_height="360dp"
+                android:layout_width="320dp"
+                android:layout_height="320dp"
                 android:layout_marginTop="25dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -78,9 +79,9 @@
 
             <bmicalculator.bmi.calculator.weightlosstracker.util.views.BmiArrow
                 android:id="@+id/rc_arrow"
-                android:layout_width="30dp"
-                android:layout_height="120dp"
-                android:layout_marginTop="-175.5dp"
+                android:layout_width="32dp"
+                android:layout_height="128dp"
+                android:layout_marginTop="-174.5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rc_dial" />

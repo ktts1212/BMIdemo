@@ -10,7 +10,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_sta"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="58dp"
         android:background="@color/bg1"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,56 +28,59 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/sta_tab_header"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/shape_tablayout"
+        android:backgroundTint="#F1F1F1"
+        android:clickable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_sta"
+        android:layout_marginTop="8dp"
+        app:tabBackground="@drawable/tab_selector_sta"
+        app:tabIndicatorHeight="0dp"
+        app:tabSelectedTextColor="@color/black"
+        app:tabTextAppearance="@style/MyTabTextAppearance"
+        app:tabTextColor="#808080">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:clickable="false"
+            android:minHeight="48dp"
+            android:text="@string/day" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:clickable="false"
+            android:minHeight="48dp"
+            android:text="@string/week" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:clickable="false"
+            android:minHeight="48dp"
+            android:text="@string/month" />
+
+    </com.google.android.material.tabs.TabLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbars="none"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_sta">
+        app:layout_constraintTop_toBottomOf="@id/sta_tab_header"
+        android:layout_marginTop="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/sta_tab_header"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/shape_tablayout"
-                android:clickable="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tabBackground="@drawable/tab_selector_sta"
-                android:backgroundTint="#F1F1F1"
-                app:tabIndicatorHeight="0dp"
-                app:tabSelectedTextColor="@color/black"
-                app:tabTextAppearance="@style/MyTabTextAppearance"
-                app:tabTextColor="#808080">
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:clickable="false"
-                    android:minHeight="48dp"
-                    android:text="@string/day" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:clickable="false"
-                    android:minHeight="48dp"
-                    android:text="@string/week" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:clickable="false"
-                    android:minHeight="48dp"
-                    android:text="@string/month" />
-
-            </com.google.android.material.tabs.TabLayout>
 
 
             <TextView
@@ -85,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="111dp"
+                android:layout_marginTop="13dp"
                 android:fontFamily="@font/montserrat_extrabold"
                 android:text="@string/bmi"
                 android:textColor="@color/black"
@@ -181,7 +184,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="250dp"
                 android:background="@color/bg1"
                 app:layout_constraintTop_toBottomOf="@id/sta_chart_view2" />
 

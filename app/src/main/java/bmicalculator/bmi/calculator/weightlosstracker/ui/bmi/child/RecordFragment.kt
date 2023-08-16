@@ -114,11 +114,11 @@ class RecordFragment : DialogFragment() {
 
         binding.rcArrow.alpha = 0.75f
         binding.rcArrow.pivotX = Utils.dip2px(
-            requireContext(), 15f
+            requireContext(), 16f
         ).toFloat()
 
         binding.rcArrow.pivotY = Utils.dip2px(
-            requireContext(), 15f
+            requireContext(), 16f
         ).toFloat()
 
         if (currentBmiInfo.age > 20) {
