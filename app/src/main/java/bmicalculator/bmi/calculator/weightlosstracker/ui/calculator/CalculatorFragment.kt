@@ -1779,7 +1779,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             else binding.htInputFtin2.text.toString().toInt()
 
             cm = if (binding.htInputCm.text.toString().isEmpty()) 1.0
-            else binding.htInputCm.text.toString().toDouble()
+            else binding.htInputCm.text.toString().replace(",",".").toDouble()
 
             type="wtcm"
         }
@@ -1801,7 +1801,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             else binding.htInputFtin2.text.toString().toInt()
 
             cm = if (binding.htInputCm.text.toString().isEmpty()) 1.0
-            else binding.htInputCm.text.toString().toDouble()
+            else binding.htInputCm.text.toString().replace(",",".").toDouble()
 
             type="kgftin"
         }
@@ -1823,7 +1823,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             else binding.htInputFtin2.text.toString().toInt()
 
             cm = if (binding.htInputCm.text.toString().isEmpty()) 1.0
-            else binding.htInputCm.text.toString().toDouble()
+            else binding.htInputCm.text.toString().replace(",",".").toDouble()
 
             type="kgcm"
         }

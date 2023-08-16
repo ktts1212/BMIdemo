@@ -121,9 +121,14 @@ class MainActivity : AppCompatActivity(), RecordFragment.OnDeleteTypeListener {
             currentFragmentTag = idToTag(viewModel.getNavId()!!)
             binding.bottomNavigationView.selectedItemId = viewModel.getNavId()!!
             getFgByTag(currentFragmentTag)
+//            if (mCurrentFragment.isAdded && mCurrentFragment.view!=null){
+//                Toast.makeText(this,"fragment存在",Toast.LENGTH_SHORT).show()
+//            }else{
 //            val transaction = supportFragmentManager.beginTransaction()
 //            transaction.add(R.id.fragment_container, mCurrentFragment, currentFragmentTag)
-//            transaction.show(mCurrentFragment).commit()
+//            transaction.replace(R.id.fragment_container,mCurrentFragment).commit()
+//            }
+
         } else {
             if (!hasData) {
                 currentFragmentTag = "calculator"
