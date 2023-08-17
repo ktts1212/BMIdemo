@@ -97,14 +97,14 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             }
         }
         ft.commit()
-
+        Log.d("whitescreen?","执行了")
         return binding.root
     }
 
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.d("whitescreen?","白屏？")
         viewModel.allInfo.observe(requireActivity()) { info ->
             if (!info.isNullOrEmpty()) {
                 if (isAdded) {
@@ -387,9 +387,11 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         var firstConvert=true
         var htFirstConvert=true
         if (viewModel.getData()!=null){
+            Log.d("binfo","data is not null")
             val info=viewModel.getData()
             firstConvert=false
             htFirstConvert=false
+            Log.d("binfo","wthttype:${info!!.wtHtType}")
             when (info!!.wtHtType) {
                 "lbftin" -> {
                     binding.htCardFtin1.visibility = View.VISIBLE
@@ -1758,7 +1760,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
             cm = 170.0
 
-            type="wtftin"
+            type="lbftin"
 
         }
 
@@ -1781,7 +1783,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             cm = if (binding.htInputCm.text.toString().isEmpty()) 1.0
             else binding.htInputCm.text.toString().replace(",",".").toDouble()
 
-            type="wtcm"
+            type="lbcm"
         }
 
         if (binding.wtTab.getTabAt(1)!!.isSelected &&

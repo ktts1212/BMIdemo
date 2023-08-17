@@ -560,7 +560,7 @@ class StatisticFragment : Fragment() {
             navView.selectedItemId=R.id.menu_calculator
             val fragmentManager=(activity as AppCompatActivity).supportFragmentManager
             val transition=fragmentManager.beginTransaction()
-            transition.replace(R.id.fragment_container,CalculatorFragment())
+            transition.replace(R.id.fragment_container,CalculatorFragment(),"calculator")
             transition.commit()
         }
 
@@ -570,7 +570,7 @@ class StatisticFragment : Fragment() {
             navView.selectedItemId=R.id.menu_calculator
             val fragmentManager=(activity as AppCompatActivity).supportFragmentManager
             val transition=fragmentManager.beginTransaction()
-            transition.replace(R.id.fragment_container,CalculatorFragment())
+            transition.replace(R.id.fragment_container,CalculatorFragment(),"calculator")
             transition.commit()
         }
 
