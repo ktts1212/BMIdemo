@@ -1734,6 +1734,7 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         var ft =5
         var inch =7
         var cm =170.0
+        var bVal=0.0
         val mDate: String=binding.timeInputDate.text.toString()
         val phase: Int=viewModel.selectedPhase.value!!
         val age: Int =viewModel.selectedAge.value!!
@@ -1747,7 +1748,9 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
 
             lb = if (binding.wtInput.text.toString().isEmpty()) 1.0
             else binding.wtInput.text.toString().replace(",", ".").toDouble()
-            kg = 70.0
+            kg = df!!.format(lb!! * Multi_1)
+                .replace(",", ".")
+                .toDouble()
             ft = if (binding.htInputFtin1.text.toString().isEmpty()) 1
             else if (binding.htInputFtin1.text.toString().contains("'"))
                 binding.htInputFtin1.text.toString().dropLast(1).toInt()
@@ -1758,9 +1761,14 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 binding.htInputFtin2.text.toString().dropLast(2).toInt()
             else binding.htInputFtin2.text.toString().toInt()
 
-            cm = 170.0
+            cm = tf!!.format(
+                inch * Multi_tin +
+                        ft * Multi_haft
+            ).replace(",", ".").toDouble()
 
             type="lbftin"
+            bVal=lb / ((ft * 12 +
+                    inch)).toDouble().pow(2.0) * 703
 
         }
 
@@ -1769,29 +1777,35 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
         ) {
             lb = if (binding.wtInput.text.toString().isEmpty()) 1.0
             else binding.wtInput.text.toString().replace(",", ".").toDouble()
-            kg = 70.0
-            ft = if (binding.htInputFtin1.text.toString().isEmpty()) 1
-            else if (binding.htInputFtin1.text.toString().contains("'"))
-                binding.htInputFtin1.text.toString().dropLast(1).toInt()
-            else binding.htInputFtin1.text.toString().toInt()
-
-            inch = if (binding.htInputFtin2.text.toString().isEmpty()) 0
-            else if (binding.htInputFtin2.text.toString().contains("''"))
-                binding.htInputFtin2.text.toString().dropLast(2).toInt()
-            else binding.htInputFtin2.text.toString().toInt()
+            kg = df!!.format(lb!! * Multi_1)
+                .replace(",", ".")
+                .toDouble()
 
             cm = if (binding.htInputCm.text.toString().isEmpty()) 1.0
             else binding.htInputCm.text.toString().replace(",",".").toDouble()
 
+            ft =  ff!!.format((cm / Multi_haft).toInt()).replace(",", ".")
+                .toInt()
+
+            inch =   ff!!.format((cm - ft * Multi_haft) / Multi_tin)
+                .toInt()
+
             type="lbcm"
+
+            bVal =
+                lb * 0.453 / (cm * 0.01).pow(
+                    2.0
+                )
         }
 
         if (binding.wtTab.getTabAt(1)!!.isSelected &&
             binding.htTab.getTabAt(0)!!.isSelected
         ) {
-            lb = 140.0
             kg = if (binding.wtInput.text.toString().isEmpty()) 2.0
             else binding.wtInput.text.toString().replace(",", ".").toDouble()
+            lb = df!!.format(kg / Multi_1)
+                    .replace(",", ".")
+                    .toDouble()
             ft = if (binding.htInputFtin1.text.toString().isEmpty()) 1
             else if (binding.htInputFtin1.text.toString().contains("'"))
                 binding.htInputFtin1.text.toString().dropLast(1).toInt()
@@ -1802,32 +1816,45 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
                 binding.htInputFtin2.text.toString().dropLast(2).toInt()
             else binding.htInputFtin2.text.toString().toInt()
 
-            cm = if (binding.htInputCm.text.toString().isEmpty()) 1.0
-            else binding.htInputCm.text.toString().replace(",",".").toDouble()
+            cm = tf!!.format(
+                inch * Multi_tin +
+                        ft * Multi_haft
+            ).replace(",", ".").toDouble()
+
+            viewModel.wtKg.value!! /
+                    (ft * 0.3048 + inch * 0.0254).pow(
+                        2.0
+                    )
 
             type="kgftin"
+
+            bVal=kg /
+                    (ft * 0.3048 + inch * 0.0254).pow(
+                        2.0
+                    )
         }
 
         if (binding.wtTab.getTabAt(1)!!.isSelected &&
             binding.htTab.getTabAt(1)!!.isSelected
         ) {
-            lb = 140.0
             kg = if (binding.wtInput.text.toString().isEmpty()) 2.0
             else binding.wtInput.text.toString().replace(",", ".").toDouble()
-            ft = if (binding.htInputFtin1.text.toString().isEmpty()) 1
-            else if (binding.htInputFtin1.text.toString().contains("'"))
-                binding.htInputFtin1.text.toString().dropLast(1).toInt()
-            else binding.htInputFtin1.text.toString().toInt()
-
-            inch = if (binding.htInputFtin2.text.toString().isEmpty()) 0
-            else if (binding.htInputFtin2.text.toString().contains("''"))
-                binding.htInputFtin2.text.toString().dropLast(2).toInt()
-            else binding.htInputFtin2.text.toString().toInt()
+            lb = df!!.format(kg / Multi_1)
+                .replace(",", ".")
+                .toDouble()
 
             cm = if (binding.htInputCm.text.toString().isEmpty()) 1.0
             else binding.htInputCm.text.toString().replace(",",".").toDouble()
 
+            ft =  ff!!.format((cm / Multi_haft).toInt()).replace(",", ".")
+                .toInt()
+
+            inch =   ff!!.format((cm - ft * Multi_haft) / Multi_tin)
+                .toInt()
+
             type="kgcm"
+
+            bVal = kg / (cm * 0.01).pow(2.0)
         }
 
         val bInfo = BmiInfo(
@@ -1838,11 +1865,11 @@ class CalculatorFragment : Fragment(), LifecycleOwner {
             mDate, phase,
             age,
             gender,
-            0f,
+            bVal.toFloat(),
             -1,
             -1,
             "null",
-            type,
+            viewModel.bmiType,
             0
         )
         Log.d("binfo","$bInfo")

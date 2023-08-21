@@ -65,7 +65,7 @@
                 android:id="@+id/bmi_arrow"
                 android:layout_width="32dp"
                 android:layout_height="128dp"
-                android:layout_marginTop="-174.5dp"
+                android:layout_marginTop="-176.5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/bmi_dial" />
